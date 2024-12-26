@@ -32,6 +32,7 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --minjee-navbar: 99 27% 22%;
     --radius: 0.5rem;
   }
   .dark {
@@ -59,6 +60,7 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --minjee-navbar: 99 27% 22%;
   }
 }
 
@@ -70,3 +72,28 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: "caveat";
+  src: url("../assets/CaveatBrush-Regular.ttf");
+}
+@font-face {
+  font-family: "inder";
+  src: url("../assets/Inder-Regular.ttf");
+}
+@font-face {
+  font-family: "afacad";
+  src: url("../assets/Afacad-Regular.ttf");
+}
+@font-face {
+  font-family: "afacadsemibold";
+  src: url("../assets/Afacad-SemiBold.ttf");
+}
+/* @font-face {
+  font-family: "Afacad";
+  src: url("../assets/Afacad-Bold.ttf");
+}
+@font-face {
+  font-family: "Afacad";
+  src: url("../assets/Afacad-Italic.ttf");
+} */
