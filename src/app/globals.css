@@ -97,6 +97,10 @@ body {
   font-family: "intersemibold";
   src: url("../assets/Inter_18pt-SemiBold.ttf");
 }
+@font-face {
+  font-family: "interlight";
+  src: url("../assets/Inter_18pt-Light.ttf");
+}
 /* @font-face {
   font-family: "Afacad";
   src: url("../assets/Afacad-Bold.ttf");

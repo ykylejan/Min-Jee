@@ -61,6 +61,7 @@ export default {
 			afacadsemibold: ["afacadsemibold", "sans-serif"],
 			inter: ["inter"],
 			intersemibold: ["intersemibold"],
+			interlight: ["interlight"],
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
