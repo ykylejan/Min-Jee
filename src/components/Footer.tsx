@@ -62,7 +62,7 @@ const Footer = () => {
                 </div>
 
                 <div className="col-span-4 row-span-3 row-start-2 mt-16">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                         <Copyright size={20} strokeWidth={1}/> 2024 Developed
                         by KALMOT
                     </div>

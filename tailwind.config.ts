@@ -59,6 +59,8 @@ export default {
 			inder: ["inder"],
 			afacad: ["afacad", "sans-serif"],
 			afacadsemibold: ["afacadsemibold", "sans-serif"],
+			inter: ["inter"],
+			intersemibold: ["intersemibold"],
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
