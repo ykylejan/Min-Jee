@@ -15,22 +15,22 @@ const page = () => {
                     Create your Min-jee account, and get access to an enhanced
                     ordering experience
                 </h1>
-
+                
                 <Input
                     placeholder="First Name"
-                    className="bg-white  w-[360px] h-[55px] font-inter mt-8 placeholder:text-[#BDC3C9]"
+                    className="bg-white w-[360px] h-[55px] font-inter mt-8 placeholder:text-[#BDC3C9]"
                 />
                 <Input
                     placeholder="Last Name"
-                    className="bg-white  w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
+                    className="bg-white w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
                 />
                 <Input
                     placeholder="Contact Number"
-                    className="bg-white  w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
+                    className="bg-white w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
                 />
                 <Input
                     placeholder="Email"
-                    className="bg-white  w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
+                    className="bg-white w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
                 />
                 <Input
                     type="password"

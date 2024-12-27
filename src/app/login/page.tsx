@@ -1,11 +1,16 @@
+"use client";
+
+import React, { useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const page = () => {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <div className="bg-[#FFFBF5]">
             <Navbar />
@@ -18,11 +23,25 @@ const page = () => {
                     placeholder="Email"
                     className="bg-white  w-[360px] h-[55px] font-inter mt-8 placeholder:text-[#BDC3C9]"
                 />
-                <Input
-                    type="password"
-                    placeholder="Password"
-                    className="bg-white w-[360px] h-[55px] font-inter mt-3 placeholder:text-[#BDC3C9]"
-                />
+                <div className="relative w-[360px] mt-3">
+                    <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        className="bg-white w-full h-[55px] font-inter placeholder:text-[#BDC3C9] pr-10"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-gray-600" 
+                    >
+                        {showPassword ? (
+                            <EyeOff size={20} />
+                        ) : (
+                            <Eye size={20} />
+                        )}
+                    </button>
+                </div>
+
                 <Button className="bg-[#778768] w-[360px] h-[55px] font-bold mt-8">
                     Continue
                 </Button>
