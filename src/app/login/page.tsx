@@ -12,10 +12,10 @@ const page = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="bg-[#FFFBF5]">
+        <div className="bg-[#FFFBF5] pt-[86px]">
             <Navbar />
             <div className="flex flex-col justify-center items-center mt-28">
-                <img src="/leaflogo.svg" alt="logo" />
+                <img src="/leaflogo.svg" alt="logo"/>
                 <h1 className="font-intersemibold text-2xl mt-8">
                     Log in to Min-Jee
                 </h1>

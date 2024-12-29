@@ -7,7 +7,7 @@ import React from "react";
 
 const page = () => {
     return (
-        <div className="bg-[#FFFBF5]">
+        <div className="bg-[#FFFBF5] pt-[86px]">
             <Navbar />
             <div className="flex flex-col justify-center items-center mt-28">
                 <h1 className="font-intersemibold text-2xl">Sign Up</h1>

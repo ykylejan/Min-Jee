@@ -3,7 +3,7 @@ import React from "react";
 
 const Navbar = () => {
     return (
-        <div className="bg-[#334628] opacity-90 h-[112px] text-white flex items-center justify-between px-24 ">
+        <div className="bg-[#334628] opacity-90 h-[86px] text-white flex items-center justify-between px-24 fixed top-0 left-0 w-full z-50">
             <span className="text-4xl font-caveat cursor-pointer">MIN-JEE</span>
 
             <div className="flex space-x-7 font-inder">
