@@ -3,34 +3,42 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <div className="bg-[#778768] h-[508px] font-afacad text-white pl-24 pr-24 pt-10">
-            <div className="grid grid-cols-9 grid-rows-4 gap-3">
-                <div className="col-span-4 font-afacadsemibold text-2xl">
-                    Party Needs and Services
-                </div>
-                <div className="col-span-2 col-start-5 font-afacadsemibold text-2xl">
-                    Shop
-                </div>
-                <div className="col-span-3 col-start-7 font-afacadsemibold text-2xl">
-                    Newsletter
+        <div className="bg-[#778768] font-afacad text-white p-14">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div className="flex flex-col gap-4">
+                    <div className="font-afacadsemibold text-2xl">
+                        Party Needs and Services
+                    </div>
+                    <div className="text-sm md:text-base">
+                        Min-Jee is a quality provider for party supplies and
+                        services located in Bangkal Davao City. We offer quality
+                        rentals and organized events. Come inquire to our services
+                        and commit a memorable celebration!
+                    </div>
                 </div>
 
-                <div className="col-span-4 row-span-3 row-start-2 pr-36">
-                    Min-Jee is a quality provider for party supplies and
-                    services located in Bangkal Davao City. We offer quality
-                    rentals and organized events. Come inquire to our services
-                    and commit a memorable celebration!
-                </div>
-                <div className="col-span-2 row-span-3 col-start-5 row-start-2">
-                    <ul className="space-y-2">
+                
+                <div className="flex flex-col gap-4 items-start md:items-center">
+                    <div className="font-afacadsemibold text-2xl">
+                        Shop
+                    </div>
+                    <ul className="space-y-2 text-sm md:text-base">
                         <li>Rentals</li>
                         <li>Services</li>
                         <li>Events</li>
                     </ul>
                 </div>
-                <div className="col-span-3 row-span-3 col-start-7 row-start-2">
-                    Sign up for our newsletter to only receive good things
-                    <div className="flex gap-2 mt-10">
+
+                
+                <div className="flex flex-col gap-4">
+                    <div className="font-afacadsemibold text-2xl">
+                        Newsletter
+                    </div>
+                    <div className="text-sm md:text-base">
+                        Sign up for our newsletter to only receive good things
+                    </div>
+                    <div className="flex gap-2">
                         <img
                             src="/facebook.svg"
                             alt="logo"
@@ -50,26 +58,27 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-9 grid-rows-4 gap-3 mt-24">
-                <div className="col-span-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 md:mt-24">
+                
+                <div className="flex flex-col gap-4">
                     <span className="text-4xl font-caveat cursor-pointer">
                         MIN-JEE
                     </span>
-                </div>
-                <div className="col-span-2 col-start-5 font-afacadsemibold text-2xl"></div>
-                <div className="col-span-3 col-start-7 font-afacadsemibold text-2xl">
-                    Location
-                </div>
-
-                <div className="col-span-4 row-span-3 row-start-2 mt-16">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center text-sm md:text-base">
                         <Copyright size={20} strokeWidth={1}/> 2024 Developed
                         by KALMOT
                     </div>
                 </div>
-                <div className="col-span-2 row-span-3 col-start-5 row-start-2"></div>
-                <div className="col-span-3 row-span-3 col-start-7 row-start-2">
-                    <ul className="space-y-2">
+
+                
+                <div></div>
+
+                
+                <div className="flex flex-col gap-4">
+                    <div className="font-afacadsemibold text-2xl">
+                        Location
+                    </div>
+                    <ul className="space-y-2 text-sm md:text-base">
                         <li>
                             Door 3 Piquero Complex Hope Avenue, Bangkal D.C.
                         </li>
