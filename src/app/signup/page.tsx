@@ -1,6 +1,14 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React from "react";
@@ -46,13 +54,45 @@ const page = () => {
 
                     <h1 className="font-interlight text-sm text-[#3F454E] leading-tight max-w-[350px] text-center mt-16">
                         By creating an account, you agree to Min-Jee's{" "}
-                        <span className="underline hover:font-bold cursor-pointer">
-                            Privacy Policy
-                        </span>{" "}
-                        and{" "}
-                        <span className="underline hover:font-bold cursor-pointer">
-                            Terms of Use
-                        </span>
+                        <Dialog>
+                            <DialogTrigger>
+                                <span className="underline hover:font-bold cursor-pointer">
+                                    Privacy Policy
+                                </span>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        Are you absolutely sure?
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete your account and
+                                        remove your data from our servers.
+                                    </DialogDescription>
+                                </DialogHeader>
+                            </DialogContent>
+                        </Dialog>
+                        <span> and </span>
+                        <Dialog>
+                            <DialogTrigger>
+                                <span className="underline hover:font-bold cursor-pointer">
+                                    Terms of Use
+                                </span>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        Are you absolutely sure?
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete your account and
+                                        remove your data from our servers.
+                                    </DialogDescription>
+                                </DialogHeader>
+                            </DialogContent>
+                        </Dialog>
                     </h1>
 
                     <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
