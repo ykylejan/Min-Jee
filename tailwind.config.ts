@@ -57,6 +57,7 @@ export default {
 		fontFamily: {
 			caveat: ["caveat"],
 			caveat_semibold: ["caveat-semibold"],
+			caveat_bold: ["caveat-bold"],
 			caveat_brush: ["caveat-brush"],
 			inder: ["inder"],
 			afacad: ["afacad", "sans-serif"],

@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -16,7 +14,6 @@ import React from "react";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
-            <Navbar />
             <div className="flex flex-col justify-center items-center pt-[80px]">
                 <h1 className="font-intersemibold text-2xl">Sign Up</h1>
                 <h1 className="font-interlight text-sm text-[#3F454E] leading-tight max-w-[300px] text-center mt-3">
@@ -111,7 +108,6 @@ const page = () => {
                     </Link>
                 </h1>
             </div>
-            <Footer />
         </div>
     );
 };

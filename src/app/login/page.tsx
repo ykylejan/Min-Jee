@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
@@ -13,7 +11,6 @@ const page = () => {
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
-            <Navbar />
             <div className="flex flex-col justify-center items-center pt-[80px]">
                 <img
                     src="/leaflogo.svg"
@@ -48,7 +45,7 @@ const page = () => {
                     </div>
 
                     <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
-                        Continue
+                        CONTINUE
                     </Button>
                 </div>
 
@@ -63,7 +60,6 @@ const page = () => {
                     </Link>
                 </h1>
             </div>
-            <Footer />
         </div>
     );
 };

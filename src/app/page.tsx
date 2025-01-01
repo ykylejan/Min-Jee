@@ -7,7 +7,6 @@ import React from "react";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
-            <Navbar />
             <div className="relative w-full">
                 <img
                     src="landingimage2.png"
@@ -28,7 +27,6 @@ const page = () => {
                     <Button className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">Discover our Shop</Button>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

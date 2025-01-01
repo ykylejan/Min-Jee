@@ -24,19 +24,19 @@ const Footer = () => {
                         Shop
                     </div>
                     <ul className="space-y-2 text-sm md:text-base">
-                        <li>Rentals</li>
-                        <li>Services</li>
-                        <li>Events</li>
+                        <li className="hover:text-[#334628] cursor-pointer">Rentals</li>
+                        <li className="hover:text-[#334628] cursor-pointer">Services</li>
+                        <li className="hover:text-[#334628] cursor-pointer">Events</li>
                     </ul>
                 </div>
 
                 
                 <div className="flex flex-col gap-4">
                     <div className="font-afacadsemibold text-2xl">
-                        Newsletter
+                        Socials
                     </div>
                     <div className="text-sm md:text-base">
-                        Sign up for our newsletter to only receive good things
+                        Visit our social medias to only receive good things
                     </div>
                     <div className="flex gap-2">
                         <img
@@ -61,7 +61,7 @@ const Footer = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 md:mt-24">
                 
                 <div className="flex flex-col gap-4">
-                    <span className="text-4xl font-caveat cursor-pointer">
+                    <span className="text-4xl font-caveat_brush cursor-pointer">
                         MIN-JEE
                     </span>
                     <div className="flex gap-2 items-center text-sm md:text-base">
@@ -82,7 +82,7 @@ const Footer = () => {
                         <li>
                             Door 3 Piquero Complex Hope Avenue, Bangkal D.C.
                         </li>
-                        <li>Open 12pm - 8pm Daily</li>
+                        <li>Open 10am — 5pm Daily</li>
                     </ul>
                 </div>
             </div>

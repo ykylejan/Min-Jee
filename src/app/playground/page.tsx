@@ -1,4 +1,20 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import {
     Table,
     TableBody,
@@ -59,8 +75,8 @@ const invoices = [
 const page = () => {
     return (
         <div className="p-28">
-            <Card>
-                {/* <Table>
+            {/* <Card>
+                <Table>
                     <TableCaption>A list of your recent invoices.</TableCaption>
                     <TableHeader>
                         <TableRow>
@@ -92,7 +108,10 @@ const page = () => {
                             </TableCell>
                         </TableRow>
                     </TableFooter>
-                </Table> */}
+                </Table>
+            </Card> */}
+
+            {/* <Card>
                 <Table>
                     <TableCaption>A list of your recent invoices.</TableCaption>
                     <TableHeader>
@@ -116,7 +135,59 @@ const page = () => {
                         </TableRow>
                     </TableBody>
                 </Table>
-            </Card>
+            </Card> */}
+
+            {/* <Carousel
+                opts={{
+                    align: "start",
+                }}
+                className="w-full max-w-3xl"
+            >
+                <CarouselContent>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                        <CarouselItem
+                            key={index}
+                            className="md:basis-1/2 lg:basis-1/3"
+                        >
+                            <div className="p-1">
+                                <Card>
+                                    <CardContent className="flex aspect-square items-center justify-center p-0">
+                                        <img src="/placeholderProduct.png" alt="placeholder" className="rounded-lg"/>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel> */}
+
+            {/* <Sheet>
+                <SheetTrigger>Open</SheetTrigger>
+                <SheetContent className="bg-[#778768]/70 border-[#778768]/70">
+                    <SheetHeader>
+                        <SheetTitle>Are you absolutely sure?</SheetTitle>
+                        <SheetDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                        </SheetDescription>
+                    </SheetHeader>
+                </SheetContent>
+            </Sheet> */}
+
+            <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+                Jokester began sneaking into the castle in the middle of the
+                night and leaving jokes all over the place: under the king's
+                pillow, in his soup, even in the royal toilet. The king was
+                furious, but he couldn't seem to stop Jokester. And then, one
+                day, the people of the kingdom discovered that the jokes left by
+                Jokester were so funny that they couldn't help but laugh. And
+                once they started laughing, they couldn't stop.
+            </ScrollArea>
+
+            
         </div>
     );
 };
