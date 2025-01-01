@@ -75,6 +75,14 @@ body {
 
 @font-face {
   font-family: "caveat";
+  src: url("../assets/Caveat-Regular.ttf");
+}
+@font-face {
+  font-family: "caveat-semibold";
+  src: url("../assets/Caveat-SemiBold.ttf");
+}
+@font-face {
+  font-family: "caveat-brush";
   src: url("../assets/CaveatBrush-Regular.ttf");
 }
 @font-face {

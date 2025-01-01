@@ -12,7 +12,7 @@ const Navbar = () => {
 
     return (
         <div className="bg-[#334628] opacity-90 h-[86px] text-white flex items-center justify-between px-14 fixed top-0 left-0 w-full z-50">
-            <span className="text-3xl lg:text-4xl font-caveat cursor-pointer">MIN-JEE</span>
+            <span className="text-3xl lg:text-4xl font-caveat_brush cursor-pointer">MIN-JEE</span>
 
             <div className="lg:hidden" onClick={toggleMenu}>
                 {isMenuOpen ? <X size={25} /> : <Menu size={25} />}
