@@ -3,11 +3,11 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <div className="bg-[#778768] font-afacad text-white p-14">
+        <div className="bg-[#778768] font-afacad text-white px-28 py-14">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <div className="flex flex-col gap-4">
-                    <div className="font-afacadsemibold text-2xl">
+                    <div className="font-afacad_semibold text-2xl">
                         Party Needs and Services
                     </div>
                     <div className="text-sm md:text-base">
@@ -20,7 +20,7 @@ const Footer = () => {
 
                 
                 <div className="flex flex-col gap-4 items-start md:items-center">
-                    <div className="font-afacadsemibold text-2xl">
+                    <div className="font-afacad_semibold text-2xl">
                         Shop
                     </div>
                     <ul className="space-y-2 text-sm md:text-base">
@@ -32,7 +32,7 @@ const Footer = () => {
 
                 
                 <div className="flex flex-col gap-4">
-                    <div className="font-afacadsemibold text-2xl">
+                    <div className="font-afacad_semibold text-2xl">
                         Socials
                     </div>
                     <div className="text-sm md:text-base">
@@ -75,7 +75,7 @@ const Footer = () => {
 
                 
                 <div className="flex flex-col gap-4">
-                    <div className="font-afacadsemibold text-2xl">
+                    <div className="font-afacad_semibold text-2xl">
                         Location
                     </div>
                     <ul className="space-y-2 text-sm md:text-base">

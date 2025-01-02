@@ -98,7 +98,11 @@ body {
   src: url("../assets/Afacad-Regular.ttf");
 }
 @font-face {
-  font-family: "afacadsemibold";
+  font-family: "afacad-medium";
+  src: url("../assets/Afacad-Medium.ttf");
+}
+@font-face {
+  font-family: "afacad-semibold";
   src: url("../assets/Afacad-SemiBold.ttf");
 }
 @font-face {

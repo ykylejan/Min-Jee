@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
@@ -6,6 +8,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 const NotFound = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
+            <Navbar/>
             <section className="text-center flex flex-col justify-center items-center pt-36 pb-48">
                 <FaExclamationTriangle className="text-[#FACC15]" size={70} />
                 <h1 className="font-afacadsemibold text-6xl mt-3">
@@ -20,6 +23,7 @@ const NotFound = () => {
                     </Button>
                 </Link>
             </section>
+            <Footer/>
         </div>
     );
 };

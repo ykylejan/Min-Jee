@@ -1,3 +1,4 @@
+import ProductItem from "@/components/ProductItem";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Carousel,
@@ -6,7 +7,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
     Sheet,
     SheetContent,
@@ -177,7 +178,7 @@ const page = () => {
                 </SheetContent>
             </Sheet> */}
 
-            <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+            {/* <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
                 Jokester began sneaking into the castle in the middle of the
                 night and leaving jokes all over the place: under the king's
                 pillow, in his soup, even in the royal toilet. The king was
@@ -185,9 +186,32 @@ const page = () => {
                 day, the people of the kingdom discovered that the jokes left by
                 Jokester were so funny that they couldn't help but laugh. And
                 once they started laughing, they couldn't stop.
-            </ScrollArea>
+            </ScrollArea> */}
 
-            
+            {/* <div className="bg-slate-300 aspect-square max-w-64 rounded-md mb-3">
+            </div> */}
+            {/* <div className="max-w-64">
+                <img
+                    src="/placeholderProduct.png"
+                    alt="product_image"
+                    className="aspect-square rounded-md mb-3"
+                />
+                <h1 className="text-2xl font-afacad_medium">
+                    Half-Sized Food Warmer
+                </h1>
+                <h1 className="text-lg font-afacad">PHP 7.00 - per day</h1>
+            </div> */}
+
+            <ScrollArea>
+                <div className="flex space-x-8 mb-8">
+                    <ProductItem />
+                    <ProductItem />
+                    <ProductItem />
+                    <ProductItem />
+                    <ProductItem />
+                </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
         </div>
     );
 };
