@@ -8,13 +8,16 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "./ui/sheet";
+import Link from "next/link";
 
 const Navbar = () => {
     return (
-        <div className="bg-[#334628] opacity-90 h-[86px] text-white flex items-center justify-between px-28 fixed top-0 left-0 w-full z-50">
-            <span className="text-3xl lg:text-4xl font-caveat_brush cursor-pointer">
-                MIN-JEE
-            </span>
+        <div className="bg-[#334628] opacity-90 h-[86px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-14 lg:px-28">
+            <Link href="/">
+                <span className="text-3xl lg:text-4xl font-caveat_brush cursor-pointer">
+                    MIN-JEE
+                </span>
+            </Link>
 
             <div className="lg:hidden">
                 <Sheet>
@@ -29,18 +32,18 @@ const Navbar = () => {
                             <SheetTitle className="text-[#778768] opacity-75 text-3xl font-caveat_brush ml-3">
                                 MIN-JEE
                             </SheetTitle>
-                            <SheetDescription className="font-inder text-xl space-y-2 ml-3">
-                                <span className="mt-3 hover:underline text-[#778768] cursor-pointer block">
-                                    Shop
-                                </span>
-                                <span className="hover:underline text-[#778768] cursor-pointer block">
-                                    About Us
-                                </span>
-                                <span className="hover:underline text-[#778768] cursor-pointer block">
-                                    Account
-                                </span>
-                            </SheetDescription>
                         </SheetHeader>
+                        <SheetDescription className="font-inder text-xl space-y-2 ml-3">
+                            <span className="mt-3 hover:underline text-[#778768] cursor-pointer block">
+                                Shop
+                            </span>
+                            <span className="hover:underline text-[#778768] cursor-pointer block">
+                                About Us
+                            </span>
+                            <span className="hover:underline text-[#778768] cursor-pointer block">
+                                Account
+                            </span>
+                        </SheetDescription>
                     </SheetContent>
                 </Sheet>
             </div>
