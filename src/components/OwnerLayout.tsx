@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,19 +27,61 @@ import {
     Tag,
     Users,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface OwnerLayoutProps {
     children: ReactNode;
 }
 
+const navLinks = [
+    {
+        name: "Orders",
+        href: "/orders",
+        icon: <ShoppingCart />,
+    },
+    {
+        name: "Products",
+        href: "/products",
+        icon: <Tag />,
+    },
+    {
+        name: "Customers",
+        href: "/customers",
+        icon: <Users />,
+    },
+    {
+        name: "Partners",
+        href: "/partners",
+        icon: <Contact />,
+    },
+    {
+        name: "Calendar",
+        href: "/calendar",
+        icon: <CalendarDays />,
+    },
+    {
+        name: "History",
+        href: "/history",
+        icon: <History />,
+    },
+];
+
+const activeButton =
+    "bg-[#778768] text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3";
+const inactiveButton =
+    "bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none";
+
 const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
+    const pathname = usePathname();
+
     return (
         <div className="bg-[#FFFBF5] flex">
             <div className="bg-white border border-[#DEE5EC] w-[303px] h-screen">
                 <div className="p-6">
                     <div className="flex items-center mb-6">
                         <img
-                            src="leaflogo.svg"
+                            src="/leaflogo.svg"
                             alt="logo"
                             className="w-12 h-12"
                         />
@@ -53,36 +97,34 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
                         Rita Dellatan
                     </h1>
 
-                    <Button className="bg-[#778768] text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 ">
-                        <ShoppingCart />
-                        <span className="pl-5">Orders</span>
-                    </Button>
-                    <Button className="bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none">
-                        <Tag />
-                        <span className="pl-5">Products</span>
-                    </Button>
-                    <Button className="bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none ">
-                        <Users />
-                        <span className="pl-5">Customers</span>
-                    </Button>
-                    <Button className="bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none ">
-                        <Contact />
-                        <span className="pl-5">Partners</span>
-                    </Button>
-                    <Button className="bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none ">
-                        <CalendarDays />
-                        <span className="pl-5">Calendar</span>
-                    </Button>
-                    <Button className="bg-transparent text-[#778768] text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none ">
-                        <History />
-                        <span className="pl-5">History</span>
-                    </Button>
+                    {navLinks.map((link) => {
+                        const isActive = pathname.startsWith(link.href);
+                        return (
+                            <Link href={link.href} key={link.name}>
+                                <Button
+                                    className={
+                                        isActive ? activeButton : inactiveButton
+                                    }
+                                >
+                                    {link.icon}
+                                    <span className="pl-5">{link.name}</span>
+                                </Button>
+                            </Link>
+                        );
+                    })}
                 </div>
             </div>
 
             <div className="w-screen">
                 <div className="bg-white border border-[#DEE5EC] text-[#778768] h-[76px] flex items-center px-6 text-2xl font-afacad">
-                    <span className="ml-8">Orders</span>
+                    {navLinks.map((link) => {
+                        const isActive = pathname.startsWith(link.href);
+                        return isActive ? (
+                            <span className="ml-8" key={link.name}>
+                                {link.name}
+                            </span>
+                        ) : null;
+                    })}
                 </div>
                 <div className="m-16">{children}</div>
             </div>

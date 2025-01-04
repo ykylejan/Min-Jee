@@ -1,3 +1,5 @@
+"use client";
+
 import ProductItem from "@/components/ProductItem";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -26,6 +28,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const invoices = [
@@ -74,6 +77,11 @@ const invoices = [
 ];
 
 const page = () => {
+    const router = useRouter();
+    const handleRowClick = (id: string) => {
+        router.push(`/playground/${id}`);
+    };
+
     return (
         <div className="p-28">
             {/* <Card>
@@ -112,7 +120,7 @@ const page = () => {
                 </Table>
             </Card> */}
 
-            {/* <Card>
+            <Card>
                 <Table>
                     <TableCaption>A list of your recent invoices.</TableCaption>
                     <TableHeader>
@@ -124,7 +132,10 @@ const page = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow className="hover:cursor-pointer">
+                        <TableRow
+                            className="hover:cursor-pointer"
+                            onClick={() => handleRowClick("park")}
+                        >
                             <TableCell className="font-medium">
                                 INV001
                             </TableCell>
@@ -136,7 +147,7 @@ const page = () => {
                         </TableRow>
                     </TableBody>
                 </Table>
-            </Card> */}
+            </Card>
 
             {/* <Carousel
                 opts={{
@@ -202,7 +213,7 @@ const page = () => {
                 <h1 className="text-lg font-afacad">PHP 7.00 - per day</h1>
             </div> */}
 
-            <ScrollArea>
+            {/* <ScrollArea>
                 <div className="flex space-x-8 mb-8">
                     <ProductItem />
                     <ProductItem />
@@ -211,7 +222,7 @@ const page = () => {
                     <ProductItem />
                 </div>
                 <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+            </ScrollArea> */}
         </div>
     );
 };

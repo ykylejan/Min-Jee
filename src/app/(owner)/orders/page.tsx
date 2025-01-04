@@ -1,3 +1,5 @@
+"use client";
+
 import OwnerLayout from "@/components/OwnerLayout";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -18,52 +20,60 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const page = () => {
+    const router = useRouter();
+    const handleRowClick = (id: string) => {
+        router.push(`/orders/${id}`);
+    };
     return (
         <>
             <OwnerLayout>
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Create project</CardTitle>
+                        <CardTitle>Order List</CardTitle>
                         <CardDescription>
-                            Deploy your new project in one-click.
+                            Click an order row to view its details.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form>
-                            <div className="grid w-full items-center gap-4">
-                                <div className="flex flex-col space-y-1.5">
-                                    <Label htmlFor="name">Name</Label>
-                                    <Input
-                                        id="name"
-                                        placeholder="Name of your project"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-1.5">
-                                    <Label htmlFor="framework">Framework</Label>
-                                    <Select>
-                                        <SelectTrigger id="framework">
-                                            <SelectValue placeholder="Select" />
-                                        </SelectTrigger>
-                                        <SelectContent position="popper">
-                                            <SelectItem value="next">
-                                                Next.js
-                                            </SelectItem>
-                                            <SelectItem value="sveltekit">
-                                                SvelteKit
-                                            </SelectItem>
-                                            <SelectItem value="astro">
-                                                Astro
-                                            </SelectItem>
-                                            <SelectItem value="nuxt">
-                                                Nuxt.js
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </form>
+
+                        <Table>
+                            <TableCaption>
+                                A list of your recent invoices.
+                            </TableCaption>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[100px]">
+                                        Invoice
+                                    </TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead>Method</TableHead>
+                                    <TableHead className="text-right">
+                                        Amount
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow
+                                    className="hover:cursor-pointer"
+                                    onClick={() => handleRowClick("order-item")}
+                                >
+                                    <TableCell className="font-medium">
+                                        INV001
+                                    </TableCell>
+                                    <TableCell>Paid</TableCell>
+                                    <TableCell>Credit Card</TableCell>
+                                    <TableCell className="text-right">
+                                        $250.00
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+
+
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <Button variant="outline">Cancel</Button>

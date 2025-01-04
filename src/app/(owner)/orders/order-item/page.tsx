@@ -5,7 +5,7 @@ const page = () => {
     return (
         <>
             <OwnerLayout>
-                <h1>product page</h1>
+                <h1>order detail stuffs yeah</h1>
             </OwnerLayout>
         </>
     );
