@@ -34,19 +34,19 @@ const page = () => {
                         <TabsList className="bg-transparent">
                             <TabsTrigger
                                 value="rentals"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
                             >
                                 Rentals
                             </TabsTrigger>
                             <TabsTrigger
                                 value="services"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
                             >
                                 Services
                             </TabsTrigger>
                             <TabsTrigger
                                 value="events"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
                             >
                                 Events
                             </TabsTrigger>

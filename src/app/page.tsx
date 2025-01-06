@@ -31,9 +31,11 @@ const page = () => {
                         Seamless rentals, tailored events—bringing your
                         celebration dreams to life with ease.
                     </h1>
-                    <Button className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">
-                        Discover our Shop
-                    </Button>
+                    <Link href="/shop">
+                        <Button className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">
+                            Discover our Shop
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
