@@ -28,6 +28,7 @@ const page = () => {
     const handleRowClick = (id: string) => {
         router.push(`/orders/${id}`);
     };
+    
     return (
         <>
             <OwnerLayout>

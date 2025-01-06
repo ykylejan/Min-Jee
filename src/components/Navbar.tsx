@@ -43,21 +43,30 @@ const Navbar = () => {
                             <span className="hover:underline text-[#778768] cursor-pointer block">
                                 Account
                             </span>
+                            <span className="hover:underline text-[#778768] cursor-pointer flex items-center gap-x-2">
+                                Basket <ShoppingBasket />
+                            </span>
                         </SheetDescription>
                     </SheetContent>
                 </Sheet>
             </div>
 
             <div className="lg:flex space-x-7 font-inder hidden">
-                <span className="text-xl hover:text-[#778768] cursor-pointer">
-                    Shop
-                </span>
-                <span className="text-xl hover:text-[#778768] cursor-pointer">
-                    About Us
-                </span>
-                <span className="text-xl hover:text-[#778768] cursor-pointer">
-                    Account
-                </span>
+                <Link href="/shop">
+                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                        Shop
+                    </span>
+                </Link>
+                <Link href="/*">
+                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                        About Us
+                    </span>
+                </Link>
+                <Link href="/*">
+                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                        Account
+                    </span>
+                </Link>
                 <ShoppingBasket
                     size={30}
                     strokeWidth={1.5}
