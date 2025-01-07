@@ -106,6 +106,10 @@ body {
   src: url("../assets/Afacad-SemiBold.ttf");
 }
 @font-face {
+  font-family: "afacad-bold";
+  src: url("../assets/Afacad-Bold.ttf");
+}
+@font-face {
   font-family: "inter";
   src: url("../assets/Inter_18pt-Regular.ttf");
 }
@@ -116,6 +120,10 @@ body {
 @font-face {
   font-family: "interlight";
   src: url("../assets/Inter_18pt-Light.ttf");
+}
+@font-face {
+  font-family: "poppins-extrabold";
+  src: url("../assets/Poppins-ExtraBold.ttf");
 }
 /* @font-face {
   font-family: "Afacad";

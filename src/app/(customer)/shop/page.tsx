@@ -28,7 +28,7 @@ const page = () => {
             <div className="px-28 py-4">
                 <Tabs
                     defaultValue="rentals"
-                    onValueChange={(value) => setActiveTab(value)} // Update active tab state
+                    onValueChange={(value) => setActiveTab(value)}
                 >
                     <div className="flex justify-center pb-8">
                         <TabsList className="bg-transparent">
@@ -69,7 +69,7 @@ const page = () => {
                     </div>
 
                     <TabsContent value="rentals" className="w-full">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-5 max-h-[500px]">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
                             <ProductItem />
                             <ProductItem />
                             <ProductItem />

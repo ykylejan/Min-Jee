@@ -67,11 +67,26 @@ const Navbar = () => {
                         Account
                     </span>
                 </Link>
-                <ShoppingBasket
-                    size={30}
-                    strokeWidth={1.5}
-                    className="hover:text-[#778768] cursor-pointer"
-                />
+
+                <Sheet>
+                    <SheetTrigger>
+                        <ShoppingBasket
+                            size={30}
+                            strokeWidth={1.5}
+                            className="hover:text-[#778768] cursor-pointer"
+                        />
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Are you absolutely sure?</SheetTitle>
+                            <SheetDescription>
+                                This action cannot be undone. This will
+                                permanently delete your account and remove your
+                                data from our servers.
+                            </SheetDescription>
+                        </SheetHeader>
+                    </SheetContent>
+                </Sheet>
             </div>
         </div>
     );

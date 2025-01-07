@@ -63,9 +63,11 @@ export default {
 			afacad: ["afacad", "sans-serif"],
 			afacad_medium: ["afacad-medium", "sans-serif"],
 			afacad_semibold: ["afacad-semibold", "sans-serif"],
+			afacad_bold: ["afacad-bold", "sans-serif"],
 			inter: ["inter"],
 			intersemibold: ["intersemibold"],
 			interlight: ["interlight"],
+			poppins_extrabold: ["poppins-extrabold"],
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
