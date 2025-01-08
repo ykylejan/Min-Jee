@@ -36,7 +36,7 @@ const Footer = () => {
                         Socials
                     </div>
                     <div className="text-sm md:text-base">
-                        Visit our social medias to only receive good things
+                        Visit our social medias for more information of our business
                     </div>
                     <div className="flex gap-2">
                         <img

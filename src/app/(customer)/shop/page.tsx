@@ -30,23 +30,24 @@ const page = () => {
                     defaultValue="rentals"
                     onValueChange={(value) => setActiveTab(value)}
                 >
+
                     <div className="flex justify-center pb-8">
-                        <TabsList className="bg-transparent">
+                        <TabsList className="">
                             <TabsTrigger
                                 value="rentals"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
                             >
                                 Rentals
                             </TabsTrigger>
                             <TabsTrigger
                                 value="services"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
                             >
                                 Services
                             </TabsTrigger>
                             <TabsTrigger
                                 value="events"
-                                className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold data-[state=active]:bg-transparent"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
                             >
                                 Events
                             </TabsTrigger>
