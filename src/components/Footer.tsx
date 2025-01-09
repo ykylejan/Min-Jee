@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <div className="bg-[#778768] font-afacad text-white px-14 py-14 lg:px-28">
+        <div className="bg-[#778768] font-afacad text-white p-10 lg:px-24">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <div className="flex flex-col gap-4">
@@ -86,6 +86,9 @@ const Footer = () => {
                     </ul>
                 </div>
             </div>
+
+            <div className="py-3"></div>
+            
         </div>
     );
 };

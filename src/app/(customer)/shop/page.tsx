@@ -17,7 +17,7 @@ const page = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5] pt-[180px]">
+        <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
             <Navbar />
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <h1 className="text-8xl font-caveat_semibold mt-5">
@@ -25,7 +25,7 @@ const page = () => {
                 </h1>
             </div>
 
-            <div className="px-28 py-4">
+            <div className="px-24 pt-8 pb-4">
                 <Tabs
                     defaultValue="rentals"
                     onValueChange={(value) => setActiveTab(value)}
@@ -35,19 +35,19 @@ const page = () => {
                         <TabsList className="">
                             <TabsTrigger
                                 value="rentals"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Rentals
                             </TabsTrigger>
                             <TabsTrigger
                                 value="services"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Services
                             </TabsTrigger>
                             <TabsTrigger
                                 value="events"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] data-[state=active]:font-afacad_semibold"
+                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Events
                             </TabsTrigger>

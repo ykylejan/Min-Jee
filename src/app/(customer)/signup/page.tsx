@@ -16,7 +16,7 @@ import React from "react";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
-            <Navbar/>
+            <Navbar />
             <div className="flex flex-col justify-center items-center pt-[80px]">
                 <h1 className="font-intersemibold text-2xl">Sign Up</h1>
                 <h1 className="font-interlight text-sm text-[#3F454E] leading-tight max-w-[300px] text-center mt-3">
@@ -95,9 +95,11 @@ const page = () => {
                         </Dialog>
                     </h1>
 
-                    <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
-                        SIGN UP
-                    </Button>
+                    <Link href="/otp">
+                        <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
+                            SIGN UP
+                        </Button>
+                    </Link>
                 </div>
 
                 <h1 className="font-inter text-[13px] mt-20 mb-28">
@@ -111,7 +113,7 @@ const page = () => {
                     </Link>
                 </h1>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

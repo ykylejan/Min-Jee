@@ -39,7 +39,7 @@ const page = () => {
                 </div>
             </div>
 
-            <div className="px-28 py-16">
+            <div className="px-24 py-16">
                 <section className="mb-24">
                     <h1 className="text-3xl font-afacad_semibold">
                         What We Provide
@@ -92,9 +92,11 @@ const page = () => {
                         <span className="text-3xl font-afacad_semibold">
                             Our Rentals
                         </span>
-                        <span className="text-xl font-afacad_medium flex items-center gap-x-2 hover:text-[#778768] cursor-pointer">
-                            View all <ArrowRight size={20} />
-                        </span>
+                        <Link href="/shop">
+                            <span className="text-xl font-afacad_medium flex items-center gap-x-2 hover:text-[#778768] cursor-pointer">
+                                View all <ArrowRight size={20} />
+                            </span>
+                        </Link>
                     </h1>
                     <ScrollArea>
                         <div className="flex space-x-10 mb-8">

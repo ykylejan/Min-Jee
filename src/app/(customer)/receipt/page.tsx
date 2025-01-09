@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ReceiptItem from "@/components/ReceiptItem";
+import Link from "next/link";
 import React from "react";
 
 const page = () => {
@@ -54,7 +55,7 @@ const page = () => {
 
                     <div className="py-8">
                         <h1 className="flex justify-between font-afacad_semibold">
-                            <span>Total</span>
+                            <span>TOTAL</span>
                             <span>PHP 200.00</span>
                         </h1>
                     </div>
@@ -86,35 +87,47 @@ const page = () => {
                     </div>
                     <hr />
 
-
                     <div className="py-8">
                         <div className="grid grid-cols-1 gap-4">
-                            <h1 className="font-afacad_semibold">Shipping Method</h1>
-                            <h1 className="font-afacad text-[#6B7280]">Standard Shipping</h1>
+                            <h1 className="font-afacad_semibold">
+                                Shipping Method
+                            </h1>
+                            <h1 className="font-afacad text-[#6B7280]">
+                                Standard Shipping
+                            </h1>
                         </div>
                     </div>
                     <hr />
-
 
                     <div className="py-8">
                         <div className="flex space-x-20">
                             <div className="grid grid-cols-1 gap-4 w-[300px]">
-                                <h1 className="font-afacad_semibold">Date of Use</h1>
-                                <h1 className="font-afacad text-[#6B7280]">Jan. 08, 2025</h1>
+                                <h1 className="font-afacad_semibold">
+                                    Date of Use
+                                </h1>
+                                <h1 className="font-afacad text-[#6B7280]">
+                                    Jan. 08, 2025
+                                </h1>
                             </div>
                             <div className="grid grid-cols-1 gap-4 w-[300px]">
-                                <h1 className="font-afacad_semibold">Date of Return</h1>
-                                <h1 className="font-afacad text-[#6B7280]">Jan. 09, 2025</h1>
+                                <h1 className="font-afacad_semibold">
+                                    Date of Return
+                                </h1>
+                                <h1 className="font-afacad text-[#6B7280]">
+                                    Jan. 09, 2025
+                                </h1>
                             </div>
                         </div>
                     </div>
                     <hr />
 
-                    
                     <div className="pt-16">
-                        <h1 className="font-afacad text-[#6B7280] underline text-end hover:font-afacad_semibold cursor-pointer">Continue Shopping</h1>
+                        <Link href="/shop">
+                            <h1 className="font-afacad text-[#6B7280] underline text-end hover:font-afacad_semibold cursor-pointer">
+                                Continue Shopping
+                            </h1>
+                        </Link>
                     </div>
-
                 </div>
             </div>
             <Footer />

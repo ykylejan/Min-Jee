@@ -12,9 +12,9 @@ import Link from "next/link";
 
 const Navbar = () => {
     return (
-        <div className="bg-[#334628] opacity-90 h-[86px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-14 lg:px-28">
+        <div className="bg-[#334628] opacity-90 h-[70px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-10 lg:px-24">
             <Link href="/">
-                <span className="text-3xl lg:text-4xl font-caveat_brush cursor-pointer">
+                <span className="text-3xl lg:text-3xl font-caveat_brush cursor-pointer">
                     MIN-JEE
                 </span>
             </Link>
@@ -53,17 +53,17 @@ const Navbar = () => {
 
             <div className="lg:flex space-x-7 font-inder hidden">
                 <Link href="/shop">
-                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                    <span className="text-lg hover:text-[#778768] cursor-pointer">
                         Shop
                     </span>
                 </Link>
                 <Link href="/*">
-                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                    <span className="text-lg hover:text-[#778768] cursor-pointer">
                         About Us
                     </span>
                 </Link>
                 <Link href="/*">
-                    <span className="text-xl hover:text-[#778768] cursor-pointer">
+                    <span className="text-lg hover:text-[#778768] cursor-pointer">
                         Account
                     </span>
                 </Link>
@@ -71,7 +71,7 @@ const Navbar = () => {
                 <Sheet>
                     <SheetTrigger>
                         <ShoppingBasket
-                            size={30}
+                            size={25}
                             strokeWidth={1.5}
                             className="hover:text-[#778768] cursor-pointer"
                         />
