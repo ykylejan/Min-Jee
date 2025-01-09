@@ -50,9 +50,11 @@ const page = () => {
                     </span>
                 </h1>
 
-                <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
-                    VERIFY
-                </Button>
+                <Link href="/otp-success">
+                    <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
+                        VERIFY
+                    </Button>
+                </Link>
 
                 <Link href="/signup">
                     <h1 className="text-[#50A7FF] text-[13px] hover:underline cursor-pointer mt-8">
