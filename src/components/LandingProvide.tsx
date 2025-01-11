@@ -9,7 +9,7 @@ const LandingProvide = () => {
             <h1 className="text-3xl font-afacad_semibold">What We Provide</h1>
             <hr className="mb-5" />
 
-            <div className="grid grid-cols-3 grid-rows-1 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div className="space-y-2">
                     <MdChair size={60} className="text-[#778768]" />
                     <h1 className="text-xl font-afacad_medium">

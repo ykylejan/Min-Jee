@@ -6,7 +6,7 @@ const ProductItem = ({
     price = "PHP 8.00 - per day",
 }) => {
     return (
-        <div className="w-64 hover:cursor-pointer relative overflow-hidden rounded-md">
+        <div className="w-72 lg:w-64 hover:cursor-pointer relative overflow-hidden rounded-md">
             <div className="relative">
                 <img
                     src={image}

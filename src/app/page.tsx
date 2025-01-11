@@ -4,24 +4,27 @@ import LandingProvide from "@/components/LandingProvide";
 import LandingRentals from "@/components/LandingRentals";
 import LandingGrid from "@/components/LandingGrid";
 import React from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
             <Navbar />
-            <div className="">
+            <div className="h-screen w-full bg-cover bg-center">
                 <img
                     src="landingimage2.png"
                     alt="landing_image"
+                    className="w-full h-full object-cover"
                 />
-                {/* <div className="text-white absolute inset-0 flex flex-col items-center justify-center text-center bg-black bg-opacity-70">
-                    <h1 className="text-2xl font-caveat font-light">
+                <div className="text-white absolute inset-0 flex flex-col items-center justify-center text-center bg-black bg-opacity-70">
+                    <h1 className="text-lg lg:text-2xl font-caveat font-light">
                         PARTY NEEDS AND SERVICES
                     </h1>
-                    <h1 className="text-8xl font-caveat_semibold mt-5">
+                    <h1 className="text-7xl lg:text-8xl font-caveat_semibold mt-5">
                         MIN-JEE
                     </h1>
-                    <h1 className="text-white text-2xl font-sans font-thin px-96 mt-8">
+                    <h1 className="text-white text-lg lg:text-2xl font-sans font-thin px-10 md:px-40 lg:px-96 mt-8">
                         Seamless rentals, tailored events—bringing your
                         celebration dreams to life with ease.
                     </h1>
@@ -30,15 +33,15 @@ const page = () => {
                             Discover our Shop
                         </Button>
                     </Link>
-                </div> */}
+                </div>
             </div>
 
-            <div className="px-24 py-16">
-                {/* <LandingProvide/>
+            <div className="px-10 lg:px-24 py-16">
+                <LandingProvide/>
 
                 <LandingRentals/>
 
-                <LandingGrid/> */}
+                <LandingGrid/>
             </div>
 
             <Footer />

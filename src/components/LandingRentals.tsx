@@ -18,7 +18,7 @@ const LandingRentals = () => {
                 </Link>
             </h1>
             <ScrollArea>
-                <div className="flex space-x-10 mb-8">
+                <div className="flex space-x-5 lg:space-x-10 mb-8">
                     <ProductItem />
                     <ProductItem />
                     <ProductItem />

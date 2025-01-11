@@ -236,7 +236,39 @@ const page = () => {
                 <ScrollBar orientation="horizontal" />
             </ScrollArea> */}
 
-            <img src="landingimage2.png" alt="landing_image" className="bg-cover bg-no-repeat bg-center"/>
+            {/* <img src="landingimage2.png" alt="landing_image" className="bg-auto"/> */}
+
+            <div className="bg-black h-screen w-full bg-cover bg-center">
+                <img
+                    src="/landingimage2.png"
+                    alt="landing"
+                    className="w-full h-full object-cover"
+                />
+            </div>
+            <h1 className="text-green-500 text-8xl font-bold flex justify-center items-center absolute inset-0">
+                Prayge
+            </h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
+            <h1>scroll</h1>
         </div>
     );
 };
