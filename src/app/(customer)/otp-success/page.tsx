@@ -19,7 +19,7 @@ const page = () => {
                 </h1>
 
 
-                <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
+                <Button className="bg-[#778768] w-[260px] lg:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
                     PROCEED
                 </Button>
 

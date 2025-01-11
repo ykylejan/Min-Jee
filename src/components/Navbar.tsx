@@ -29,23 +29,34 @@ const Navbar = () => {
                     </SheetTrigger>
                     <SheetContent className="bg-[#FFFBF5]">
                         <SheetHeader>
-                            <SheetTitle className="text-[#778768] opacity-75 text-3xl font-caveat_brush ml-3">
-                                MIN-JEE
+                            <SheetTitle className="text-[#334628] opacity-75 text-xl font-intersemibold ml-3">
+                                NAVIGATION
                             </SheetTitle>
                         </SheetHeader>
-                        <SheetDescription className="font-inder text-xl space-y-2 ml-3">
-                            <span className="mt-3 hover:underline text-[#778768] cursor-pointer block">
-                                Shop
-                            </span>
-                            <span className="hover:underline text-[#778768] cursor-pointer block">
-                                About Us
-                            </span>
-                            <span className="hover:underline text-[#778768] cursor-pointer block">
-                                Account
-                            </span>
-                            <span className="hover:underline text-[#778768] cursor-pointer flex items-center gap-x-2">
-                                Basket <ShoppingBasket />
-                            </span>
+                        <SheetDescription className="font-inder text-lg space-y-3 ml-5">
+                            <Link href="/shop">
+                                <span className="mt-5 hover:underline text-[#778768] cursor-pointer block">
+                                    Shop
+                                </span>
+                            </Link>
+
+                            <Link href="/*">
+                                <span className="hover:underline text-[#778768] cursor-pointer block">
+                                    About Us
+                                </span>
+                            </Link>
+
+                            <Link href="/*">
+                                <span className="hover:underline text-[#778768] cursor-pointer block">
+                                    Account
+                                </span>
+                            </Link>
+
+                            <Link href="/*">
+                                <span className="hover:underline text-[#778768] cursor-pointer flex items-center gap-x-2">
+                                    Basket <ShoppingBasket />
+                                </span>
+                            </Link>
                         </SheetDescription>
                     </SheetContent>
                 </Sheet>

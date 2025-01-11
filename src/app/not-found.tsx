@@ -11,7 +11,7 @@ const NotFound = () => {
             <Navbar/>
             <section className="text-center flex flex-col justify-center items-center pt-36 pb-48">
                 <FaExclamationTriangle className="text-[#FACC15]" size={70} />
-                <h1 className="font-afacad_semibold text-6xl mt-3">
+                <h1 className="font-afacad_semibold text-5xl lg:text-6xl mt-3">
                     404 Not Found
                 </h1>
                 <h1 className="font-afacad text-xl">

@@ -93,7 +93,7 @@ const page = () => {
     };
 
     return (
-        <div className="p-28">
+        <div className="">
             {/* <Card>
                 <Table>
                     <TableCaption>A list of your recent invoices.</TableCaption>
@@ -236,62 +236,7 @@ const page = () => {
                 <ScrollBar orientation="horizontal" />
             </ScrollArea> */}
 
-            <Tabs defaultValue="rawr">
-                <div className="flex justify-center pb-8">
-                    <TabsList className="bg-transparent">
-                        <TabsTrigger
-                            value="rawr"
-                            className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
-                        >
-                            Rentals
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="account"
-                            className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
-                        >
-                            Services
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="password"
-                            className="text-2xl font-afacad data-[state=active]:text-[#778768] data-[state=active]:font-afacad_semibold"
-                        >
-                            Events
-                        </TabsTrigger>
-                    </TabsList>
-                </div>
-
-                <div className="flex justify-center pb-10">
-                    <div className="relative w-[530px]">
-                        <Input
-                            placeholder="Search for an item"
-                            className="p-6 w-full pl-10"
-                        />
-                        <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"/>
-                    </div>
-                </div>
-
-                <TabsContent value="rawr" className="w-full">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-h-[500px]">
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                        <ProductItem />
-                    </div>
-                </TabsContent>
-
-                <TabsContent value="account">
-                    Make changes to your account here.
-                </TabsContent>
-                <TabsContent value="password">
-                    Change your password here.
-                </TabsContent>
-            </Tabs>
+            <img src="landingimage2.png" alt="landing_image" className="bg-cover bg-no-repeat bg-center"/>
         </div>
     );
 };
