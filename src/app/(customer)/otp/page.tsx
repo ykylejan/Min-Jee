@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/input-otp";
 import { IoIosMailOpen } from "react-icons/io";
 import React from "react";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

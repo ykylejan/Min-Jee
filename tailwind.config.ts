@@ -67,6 +67,7 @@ export default {
 			inter: ["inter"],
 			intersemibold: ["intersemibold"],
 			interlight: ["interlight"],
+			poppins_bold: ["poppins-bold"],
 			poppins_extrabold: ["poppins-extrabold"],
 		},
   		borderRadius: {

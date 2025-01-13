@@ -122,6 +122,10 @@ body {
   src: url("../assets/Inter_18pt-Light.ttf");
 }
 @font-face {
+  font-family: "poppins-bold";
+  src: url("../assets/Poppins-Bold.ttf");
+}
+@font-face {
   font-family: "poppins-extrabold";
   src: url("../assets/Poppins-ExtraBold.ttf");
 }

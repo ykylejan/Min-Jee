@@ -2,7 +2,6 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { BiSolidCheckShield } from "react-icons/bi";
-import Link from "next/link";
 import React from "react";
 
 const page = () => {
