@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import Receipt from "@/components/Receipt";
+import Receipt from "@/components/ReceiptCard/Receipt";
 import React from "react";
 
 const page = () => {

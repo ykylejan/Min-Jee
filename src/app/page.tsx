@@ -1,8 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import LandingProvide from "@/components/LandingProvide";
-import LandingRentals from "@/components/LandingRentals";
-import LandingGrid from "@/components/LandingGrid";
+import LandingProvide from "@/components/LandingPage/LandingProvide";
+import LandingRentals from "@/components/LandingPage/LandingRentals";
+import LandingGrid from "@/components/LandingPage/LandingGrid";
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";

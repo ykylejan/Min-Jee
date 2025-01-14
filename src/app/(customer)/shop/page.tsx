@@ -30,7 +30,6 @@ const page = () => {
                     defaultValue="rentals"
                     onValueChange={(value) => setActiveTab(value)}
                 >
-
                     <div className="flex justify-center pb-8">
                         <TabsList className="">
                             <TabsTrigger
@@ -85,10 +84,16 @@ const page = () => {
                     </TabsContent>
 
                     <TabsContent value="services">
-                        Make changes to your services here.
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
+                            <ProductItem />
+                            <ProductItem />
+                            <ProductItem />
+                        </div>
                     </TabsContent>
                     <TabsContent value="events">
-                        Change your events here.
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
+                            <ProductItem />
+                        </div>
                     </TabsContent>
                 </Tabs>
             </div>

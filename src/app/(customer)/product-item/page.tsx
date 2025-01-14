@@ -24,7 +24,7 @@ const page = () => {
         <div className="min-h-screen bg-[#FFFBF5]">
             <Navbar />
 
-            <div className="flex px-24 py-40 gap-x-28 justify-center">
+            <div className="flex px-24 py-44 gap-x-28 justify-center">
                 <img
                     src="/placeholderProduct2.png"
                     alt="product-item"
