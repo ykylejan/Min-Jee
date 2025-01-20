@@ -1,3 +1,5 @@
+'use client'
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LandingProvide from "@/components/LandingPage/LandingProvide";
@@ -6,8 +8,11 @@ import LandingGrid from "@/components/LandingPage/LandingGrid";
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+
 
 const page = () => {
+    const router = useRouter();
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
             <Navbar />
@@ -28,20 +33,18 @@ const page = () => {
                         Seamless rentals, tailored events—bringing your
                         celebration dreams to life with ease.
                     </h1>
-                    <Link href="/shop">
-                        <Button className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">
-                            Discover our Shop
-                        </Button>
-                    </Link>
+                    <Button onClick={() => router.push("/shop")} className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">
+                        Discover our Shop
+                    </Button>
                 </div>
             </div>
 
             <div className="px-10 lg:px-24 py-16">
-                <LandingProvide/>
+                <LandingProvide />
 
-                <LandingRentals/>
+                <LandingRentals />
 
-                <LandingGrid/>
+                <LandingGrid />
             </div>
 
             <Footer />

@@ -2,6 +2,7 @@
 
 import ProductItem from "@/components/ProductItem";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Carousel,
@@ -11,6 +12,13 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
     Sheet,
@@ -31,7 +39,10 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -91,6 +102,8 @@ const page = () => {
         console.log("button pressed yesyes");
         router.push("/playground/park");
     };
+
+    const [date, setDate] = React.useState<Date>();
 
     return (
         <div className="">
@@ -238,7 +251,7 @@ const page = () => {
 
             {/* <img src="landingimage2.png" alt="landing_image" className="bg-auto"/> */}
 
-            <div className="bg-black h-screen w-full bg-cover bg-center">
+            {/* <div className="bg-black h-screen w-full bg-cover bg-center">
                 <img
                     src="/landingimage2.png"
                     alt="landing"
@@ -268,7 +281,43 @@ const page = () => {
             <h1>scroll</h1>
             <h1>scroll</h1>
             <h1>scroll</h1>
-            <h1>scroll</h1>
+            <h1>scroll</h1> */}
+
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                    >
+                        <CalendarIcon />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                    />
+                </PopoverContent>
+            </Popover>
+
+            <RadioGroup defaultValue="option-one">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="option-one" id="option-one" />
+                    <Label htmlFor="option-one">Option One</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="option-two" id="option-two" />
+                    <Label htmlFor="option-two">Option Two</Label>
+                </div>
+            </RadioGroup>
+
+            <Textarea placeholder="Write here"/>
 
 
         </div>

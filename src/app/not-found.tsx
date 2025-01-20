@@ -7,9 +7,9 @@ import { FaExclamationTriangle } from "react-icons/fa";
 
 const NotFound = () => {
     return (
-        <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
+        <div className="min-h-screen bg-[#FFFBF5]">
             <Navbar/>
-            <section className="text-center flex flex-col justify-center items-center pt-36 pb-48">
+            <section className="text-center flex flex-col justify-center items-center h-screen">
                 <FaExclamationTriangle className="text-[#FACC15]" size={70} />
                 <h1 className="font-afacad_semibold text-5xl lg:text-6xl mt-3">
                     404 Not Found

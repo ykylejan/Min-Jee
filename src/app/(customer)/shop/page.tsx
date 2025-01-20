@@ -68,31 +68,35 @@ const page = () => {
                         </div>
                     </div>
 
+                    {/* image = "/placeholderProduct.png",
+                        name = "Half-Sized Food Warmer",
+                        price = "PHP 8.00 - per day", */}
+
                     <TabsContent value="rentals" className="w-full">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                         </div>
                     </TabsContent>
 
                     <TabsContent value="services">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                         </div>
                     </TabsContent>
                     <TabsContent value="events">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
-                            <ProductItem />
+                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                         </div>
                     </TabsContent>
                 </Tabs>

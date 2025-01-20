@@ -1,11 +1,14 @@
 import Link from "next/link";
 import React from "react";
 
-const ProductItem = ({
-    image = "/placeholderProduct.png",
-    name = "Half-Sized Food Warmer",
-    price = "PHP 8.00 - per day",
-}) => {
+interface Product {
+    image: string,
+    name: string,
+    price: string,
+}
+
+
+const ProductItem = ({image, name, price}: Product) => {
     return (
         <Link href="/product-item">
             <div className="w-72 lg:w-64 hover:cursor-pointer relative overflow-hidden rounded-md">

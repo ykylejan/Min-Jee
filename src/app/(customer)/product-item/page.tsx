@@ -43,7 +43,7 @@ const page = () => {
                                 <Slash />
                             </BreadcrumbSeparator>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href="/components" className="text-lg">
+                                <BreadcrumbLink href="/shop" className="text-lg">
                                     Shop
                                 </BreadcrumbLink>
                             </BreadcrumbItem>

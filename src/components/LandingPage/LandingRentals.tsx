@@ -19,11 +19,11 @@ const LandingRentals = () => {
             </h1>
             <ScrollArea>
                 <div className="flex space-x-5 lg:space-x-10 mb-8">
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
+                    <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                    <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                    <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                    <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                    <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                 </div>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
