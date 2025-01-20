@@ -5,15 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const page = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
-            <Navbar/>
             <div className="flex flex-col justify-center items-center pt-[80px]">
                 <img
                     src="/leaflogo.svg"
@@ -63,7 +60,6 @@ const page = () => {
                     </Link>
                 </h1>
             </div>
-            <Footer/>
         </div>
     );
 };

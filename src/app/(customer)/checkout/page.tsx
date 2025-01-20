@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import ProductItemCheckout from "@/components/CheckoutPage/CheckoutProductItem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
-            <Navbar />
 
             <div className="pb-[80px] px-24">
                 <h1>Checkout</h1>
@@ -162,7 +159,6 @@ const page = () => {
                 </div>
             </div>
 
-            <Footer />
         </div>
     );
 };

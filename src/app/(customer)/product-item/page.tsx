@@ -1,7 +1,5 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import { Badge } from "@/components/ui/badge";
 import {
     Breadcrumb,
@@ -22,7 +20,6 @@ import { MdContentCopy } from "react-icons/md";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
-            <Navbar />
 
             <div className="flex px-24 py-44 gap-x-28 justify-center">
                 <img
@@ -95,7 +92,7 @@ const page = () => {
                     
                 </div>
             </div>
-            <Footer />
+
         </div>
     );
 };

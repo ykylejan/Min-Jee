@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import {
     InputOTP,
     InputOTPGroup,
@@ -14,7 +12,6 @@ import Link from "next/link";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
-            <Navbar />
             <div className="flex flex-col justify-center items-center pt-[80px] pb-[150px]">
                 <IoIosMailOpen className="text-[#778768]" size={90} />
                 <h1 className="text-3xl font-intersemibold mt-5">
@@ -62,7 +59,6 @@ const page = () => {
                 </Link>
             </div>
 
-            <Footer />
         </div>
     );
 };

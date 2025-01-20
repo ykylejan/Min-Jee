@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { BiSolidCheckShield } from "react-icons/bi";
 import React from "react";
@@ -7,7 +5,6 @@ import React from "react";
 const page = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[100px]">
-            <Navbar />
             <div className="flex flex-col justify-center items-center pt-[120px] pb-[250px]">
                 <BiSolidCheckShield className="text-[#778768]" size={90} />
                 <h1 className="text-3xl font-intersemibold mt-5">
@@ -24,7 +21,6 @@ const page = () => {
 
             </div>
 
-            <Footer />
         </div>
     );
 };

@@ -18,7 +18,6 @@ const page = () => {
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
-            <Navbar />
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <h1 className="text-8xl font-caveat_semibold mt-5">
                     {tabTitles[activeTab]}
@@ -103,7 +102,7 @@ const page = () => {
             </div>
 
             <div className="py-96"></div>
-            <Footer />
+
         </div>
     );
 };

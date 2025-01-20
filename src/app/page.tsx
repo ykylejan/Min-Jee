@@ -5,8 +5,6 @@ import Footer from "@/components/Footer";
 import LandingProvide from "@/components/LandingPage/LandingProvide";
 import LandingRentals from "@/components/LandingPage/LandingRentals";
 import LandingGrid from "@/components/LandingPage/LandingGrid";
-import React from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +13,6 @@ const page = () => {
     const router = useRouter();
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
-            <Navbar />
             <div className="h-screen w-full bg-cover bg-center">
                 <img
                     src="landingimage2.png"
@@ -46,8 +43,6 @@ const page = () => {
 
                 <LandingGrid />
             </div>
-
-            <Footer />
         </div>
     );
 };
