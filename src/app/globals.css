@@ -114,12 +114,20 @@ body {
   src: url("../assets/Inter_18pt-Regular.ttf");
 }
 @font-face {
+  font-family: "interlight";
+  src: url("../assets/Inter_18pt-Light.ttf");
+}
+@font-face {
+  font-family: "intermedium";
+  src: url("../assets/Inter_18pt-Medium.ttf");
+}
+@font-face {
   font-family: "intersemibold";
   src: url("../assets/Inter_18pt-SemiBold.ttf");
 }
 @font-face {
-  font-family: "interlight";
-  src: url("../assets/Inter_18pt-Light.ttf");
+  font-family: "interbold";
+  src: url("../assets/Inter_18pt-Bold.ttf");
 }
 @font-face {
   font-family: "poppins-bold";

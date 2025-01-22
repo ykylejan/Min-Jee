@@ -51,12 +51,6 @@ const Navbar = () => {
                                     Account
                                 </span>
                             </Link>
-
-                            <Link href="/*">
-                                <span className="hover:underline text-[#778768] cursor-pointer flex items-center gap-x-2">
-                                    Basket <ShoppingBasket />
-                                </span>
-                            </Link>
                         </SheetDescription>
                     </SheetContent>
                 </Sheet>
