@@ -1,7 +1,5 @@
 'use client'
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import LandingProvide from "@/components/LandingPage/LandingProvide";
 import LandingRentals from "@/components/LandingPage/LandingRentals";
 import LandingGrid from "@/components/LandingPage/LandingGrid";

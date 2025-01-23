@@ -1,12 +1,26 @@
-import React from "react";
-import StatusLabel from "../StatusLabel";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 
-interface ChildLabel {
-    children: any
+interface OrderStatusProps {
+    children: React.ReactNode;
+    label: string;
+    onOrderableChange: (isOrderable: boolean) => void; // Callback prop
 }
 
-const OrderStatus = ({ children }: ChildLabel) => {
+const OrderStatus = ({
+    children,
+    label,
+    onOrderableChange,
+}: OrderStatusProps) => {
+    const [isOrderable, setIsOrderable] = useState(false);
+
+    const handlePlaceOrder = () => {
+        setIsOrderable(true);
+        onOrderableChange(true); // Notify parent about the change
+    };
+
     return (
         <div className="bg-white border border-[#D2D6DA] w-[400px] h-fit rounded-lg font-afacad py-3">
             <div className="flex justify-between px-12 py-6">
@@ -41,7 +55,11 @@ const OrderStatus = ({ children }: ChildLabel) => {
             <hr />
 
             <div className="flex flex-col gap-y-3 px-12 py-6">
-                <Button className="bg-[#0F172A] rounded-full">
+                <Button
+                    onClick={handlePlaceOrder}
+                    disabled={label === "Pending" || label === "Rejected"}
+                    className="bg-[#0F172A] rounded-full"
+                >
                     Place Order
                 </Button>
                 <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA]">

@@ -1,0 +1,29 @@
+import React from "react";
+import { IoIosCheckmark } from "react-icons/io";
+
+const OrderDetailsSet = () => {
+    return (
+        <div>
+            <hr className="mb-3" />
+            <div className="flex items-center">
+                <IoIosCheckmark color="green" size={40} />
+                <h1 className="text-2xl font-afacad_medium">Order Details</h1>
+            </div>
+
+            <div className="flex justify-between pl-10">
+                <div className="font-afacad">
+                    <h1 className="font-afacad_semibold">Shpping Address</h1>
+                    <p>Art Montebon</p>
+                    <p>Red Stone, Calinan</p>
+                    <p>Davao City, 8000</p>
+                </div>
+                <h1 className="text-[#6B7280] text-lg font-afacad underline hover:cursor-pointer">
+                    Edit
+                </h1>
+            </div>
+            <hr className="mt-5" />
+        </div>
+    );
+};
+
+export default OrderDetailsSet;
