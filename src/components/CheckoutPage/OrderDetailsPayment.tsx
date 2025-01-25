@@ -28,36 +28,35 @@ const OrderDetailsPayment = () => {
                     <PaymentButtons
                         text="GCash"
                         image="/gcash-xl.png"
-                        size="h-5"
+                        isActive={paymentOption === "GCash"}
                     />
                 </div>
                 <div onClick={() => setPaymentOption("COD")}>
                     <PaymentButtons
                         text="Cash on Delivery"
                         image="/wallet.png"
-                        size="h-5"
+                        isActive={paymentOption === "COD"}
                     />
                 </div>
             </div>
 
-            {paymentOption == "GCash" ? (
+            {paymentOption === "GCash" && (
                 <PaymentProcess
                     text="GCash Selected"
                     image="/gcash-xl.png"
-                    size="h-9"
                     description="Upload you GCash receipt here"
                     icon={<MdOutlineUploadFile color="#6B7280" size={35} />}
                 />
-            ) : (
+            )}
+
+            {paymentOption === "COD" && (
                 <PaymentProcess
                     text="Cash on delivery Selected"
                     image="/wallet.png"
-                    size="h-8"
                     description="Payment will be done onsite"
                     icon={<FaTruckFast color="#6B7280" size={35} />}
                 />
             )}
-
             <hr className="mt-5" />
         </div>
     );
