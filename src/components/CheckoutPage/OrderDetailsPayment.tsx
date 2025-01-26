@@ -16,7 +16,7 @@ const OrderDetailsPayment = () => {
                 <h1 className="text-2xl font-afacad_medium">Payment Details</h1>
             </div>
 
-            <div className="bg-[#EFF6FF] w-full h-10 rounded-md flex items-center px-5 mt-2 mb-11">
+            <div className="bg-[#EFF6FF] w-full h-10 rounded-md flex items-center px-5 mt-2 mb-5">
                 <FcInfo size={20} />
                 <h1 className="text-[#2196F3] font-afacad pl-5">
                     Choose your payment option
@@ -27,7 +27,8 @@ const OrderDetailsPayment = () => {
                 <div onClick={() => setPaymentOption("GCash")}>
                     <PaymentButtons
                         text="GCash"
-                        image="/gcash-xl.png"
+                        image="/gcash.png"
+                        imageActive="/gcash-active.png"
                         isActive={paymentOption === "GCash"}
                     />
                 </div>
@@ -35,6 +36,7 @@ const OrderDetailsPayment = () => {
                     <PaymentButtons
                         text="Cash on Delivery"
                         image="/wallet.png"
+                        imageActive="/wallet-active.png"
                         isActive={paymentOption === "COD"}
                     />
                 </div>
@@ -43,18 +45,20 @@ const OrderDetailsPayment = () => {
             {paymentOption === "GCash" && (
                 <PaymentProcess
                     text="GCash Selected"
-                    image="/gcash-xl.png"
-                    description="Upload you GCash receipt here"
+                    image="/gcash-active.png"
+                    description="Upload your GCash receipt here"
                     icon={<MdOutlineUploadFile color="#6B7280" size={35} />}
+                    isGcash="GCash"
                 />
             )}
 
             {paymentOption === "COD" && (
                 <PaymentProcess
                     text="Cash on delivery Selected"
-                    image="/wallet.png"
+                    image="/wallet-active.png"
                     description="Payment will be done onsite"
                     icon={<FaTruckFast color="#6B7280" size={35} />}
+                    isGcash="COD"
                 />
             )}
             <hr className="mt-5" />

@@ -6,13 +6,6 @@ import OrderDetails from "@/components/CheckoutPage/OrderDetails";
 import OrderStatus from "@/components/CheckoutPage/OrderStatus";
 import StatusLabel from "@/components/StatusLabel";
 import OrderDetailsSet from "@/components/CheckoutPage/OrderDetailsSet";
-import { Button } from "@/components/ui/button";
-import { IoIosCheckmark } from "react-icons/io";
-import { FcInfo } from "react-icons/fc";
-import { MdOutlineUploadFile } from "react-icons/md";
-import PaymentButtons from "@/components/CheckoutPage/Payment Details/PaymentButtons";
-import { FaTruckFast } from "react-icons/fa6";
-import PaymentProcess from "@/components/CheckoutPage/Payment Details/PaymentProcess";
 import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 
 const page = () => {
@@ -30,18 +23,16 @@ const page = () => {
 
                         {isOrderable ? (
                             <div>
-                                <OrderDetailsSet />
+                                <OrderDetailsSet
+                                    onOrderableChange={(orderable) =>
+                                        setIsOrderable(orderable)
+                                    }
+                                />
                                 <OrderDetailsPayment />
                             </div>
                         ) : (
                             <OrderDetails />
                         )}
-
-
-                        {/* <OrderDetailsSet />
-                        <OrderDetailsPayment /> */}
-
-
                     </div>
 
                     {/* hard but cleaner way. don't erase comments, need it for future references..*/}

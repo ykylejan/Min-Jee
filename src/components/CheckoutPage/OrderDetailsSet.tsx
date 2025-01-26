@@ -1,7 +1,15 @@
 import React from "react";
 import { IoIosCheckmark } from "react-icons/io";
 
-const OrderDetailsSet = () => {
+interface OrderDetailsSetProps {
+    onOrderableChange: (isOrderable: boolean) => void;
+}
+
+const OrderDetailsSet = ({ onOrderableChange }: OrderDetailsSetProps) => {
+    const handleEdit = () => {
+        onOrderableChange(false);
+    }
+
     return (
         <div>
             <hr className=" my-3" />
@@ -17,7 +25,7 @@ const OrderDetailsSet = () => {
                     <p>Red Stone, Calinan</p>
                     <p>Davao City, 8000</p>
                 </div>
-                <h1 className="text-[#6B7280] text-lg font-afacad underline hover:text-black cursor-pointer">
+                <h1 onClick={handleEdit} className="text-[#6B7280] text-lg font-afacad underline hover:text-black cursor-pointer">
                     Edit
                 </h1>
             </div>
