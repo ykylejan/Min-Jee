@@ -1,7 +1,5 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import ProductItem from "@/components/ProductItem";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,19 +31,19 @@ const page = () => {
                         <TabsList className="">
                             <TabsTrigger
                                 value="rentals"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
+                                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Rentals
                             </TabsTrigger>
                             <TabsTrigger
                                 value="services"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
+                                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Services
                             </TabsTrigger>
                             <TabsTrigger
                                 value="events"
-                                className="text-2xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
+                                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
                             >
                                 Events
                             </TabsTrigger>
@@ -66,10 +64,6 @@ const page = () => {
                             />
                         </div>
                     </div>
-
-                    {/* image = "/placeholderProduct.png",
-                        name = "Half-Sized Food Warmer",
-                        price = "PHP 8.00 - per day", */}
 
                     <TabsContent value="rentals" className="w-full">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">

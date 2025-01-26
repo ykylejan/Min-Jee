@@ -20,8 +20,8 @@ const ProductItem = ({image, name, price}: Product) => {
                     />
                     <div className="absolute inset-0 bg-white/30 opacity-0 transition-opacity duration-300 hover:opacity-100 rounded-md"></div>
                 </div>
-                <h1 className="text-xl font-afacad_medium">{name}</h1>
-                <h1 className="text-md font-afacad">{price}</h1>
+                <h1 className="text-lg font-afacad_medium">{name}</h1>
+                <h1 className="text-base font-afacad text-black/70">{price}</h1>
             </div>
         </Link>
     );

@@ -15,7 +15,7 @@ const LandingProvide = () => {
                     <h1 className="text-xl font-afacad_medium">
                         Event Essentials
                     </h1>
-                    <p className="font-afacad">
+                    <p className="font-afacad text-black/65">
                         From tables and chairs to elegant dinnerware, we offer a
                         wide range of rental items to suit any event style.
                     </p>
@@ -25,7 +25,7 @@ const LandingProvide = () => {
                     <h1 className="text-xl font-afacad_medium">
                         Decor and Ambiance
                     </h1>
-                    <p className="font-afacad">
+                    <p className="font-afacad text-black/65">
                         Transform your venue with our curated collection of
                         decor, lighting, and custom backdrops.
                     </p>
@@ -35,7 +35,7 @@ const LandingProvide = () => {
                     <h1 className="text-xl font-afacad_medium">
                         Tailored Event Planning
                     </h1>
-                    <p className="font-afacad">
+                    <p className="font-afacad text-black/65">
                         Need assistance bringing your vision to life? Our
                         experts are here to coordinate every detail.
                     </p>
