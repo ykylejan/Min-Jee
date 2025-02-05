@@ -9,13 +9,13 @@ const LandingRentals = () => {
 
     const scrollLeft = () => {
         if (viewportRef.current) {
-            viewportRef.current.scrollBy({ left: -500, behavior: "smooth" });
+            viewportRef.current.scrollBy({ left: -300, behavior: "smooth" });
         }
     };
 
     const scrollRight = () => {
         if (viewportRef.current) {
-            viewportRef.current.scrollBy({ left: 500, behavior: "smooth" });
+            viewportRef.current.scrollBy({ left: 300, behavior: "smooth" });
         }
     };
 

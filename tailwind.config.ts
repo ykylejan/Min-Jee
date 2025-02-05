@@ -69,6 +69,8 @@ export default {
 			intermedium: ["intermedium"],
 			intersemibold: ["intersemibold"],
 			interbold: ["interbold"],
+			poppins: ["poppins"],
+			poppins_medium: ["poppins-medium"],
 			poppins_bold: ["poppins-bold"],
 			poppins_extrabold: ["poppins-extrabold"],
 		},

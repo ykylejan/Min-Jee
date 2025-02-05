@@ -46,7 +46,7 @@ const Navbar = () => {
                                 </span>
                             </Link>
 
-                            <Link href="/*">
+                            <Link href="/account">
                                 <span className="hover:underline text-[#778768] cursor-pointer block">
                                     Account
                                 </span>
@@ -67,7 +67,7 @@ const Navbar = () => {
                         About Us
                     </span>
                 </Link>
-                <Link href="/*">
+                <Link href="/account">
                     <span className="text-lg hover:text-[#778768] cursor-pointer">
                         Account
                     </span>
