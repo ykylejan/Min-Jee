@@ -24,29 +24,29 @@ const page = () => {
                 <div className="px-8">
                     <Input
                         placeholder="First Name"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-6 sm:mt-8 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-6 sm:mt-8 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <Input
                         placeholder="Last Name"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <Input
                         placeholder="Contact Number"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <Input
                         placeholder="Email"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <Input
                         type="password"
                         placeholder="Password"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <Input
                         type="password"
                         placeholder="Confirm Password"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-2 sm:mt-3 placeholder:text-[#BDC3C9] pl-4"
                     />
 
                     <h1 className="font-interlight text-sm text-[#3F454E] leading-tight max-w-[350px] text-center mt-16">

@@ -3,6 +3,7 @@
 import ProductItem from "@/components/ProductItem";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProductsData } from "@/constants";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 
@@ -13,6 +14,7 @@ const page = () => {
         services: "SERVICES",
         events: "EVENTS",
     };
+    const [searchQuery, setSearchQuery] = useState("");
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
@@ -56,8 +58,11 @@ const page = () => {
                                 placeholder={`Search for ${tabTitles[
                                     activeTab
                                 ].toLowerCase()}`}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="p-6 w-full pl-10"
                             />
+
                             <Search
                                 size={20}
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -65,31 +70,108 @@ const page = () => {
                         </div>
                     </div>
 
-                    <TabsContent value="rentals" className="w-full">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
-                            <ProductItem image="/images/halfsizedFoodWarmer.png" name="Half-Sized Food Warmer" price="50.00" />
-                            <ProductItem image="/images/fullsizedFoodWarmer.png" name="Full-Sized Food Warmer" price="75.00" />
-                            <ProductItem image="/images/ovalFoodWarmer.png" name="Oval Food Warmer" price="70.00" />
-                        </div>
+                    {Object.keys(tabTitles).map((tabKey) => (
+                        <TabsContent
+                            key={tabKey}
+                            value={tabKey}
+                            className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                        >
+                            {ProductsData.filter(
+                                (product) =>
+                                    product.category.toLowerCase() === tabKey &&
+                                    product.name
+                                        .toLowerCase()
+                                        .includes(searchQuery.toLowerCase())
+                            ).map((product) => (
+                                <div key={product.id}>
+                                    <ProductItem
+                                        image={product.image}
+                                        name={product.name}
+                                        price={product.price}
+                                    />
+                                </div>
+                            ))}
+                        </TabsContent>
+                    ))}
+
+                    {/* {ProductsData.map((product) =>
+                        product.category === "Rentals" ? (
+                            <TabsContent
+                                value={product.category}
+                                className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                            >
+                                <div key={product.id}>
+                                    <ProductItem
+                                        image={product.image}
+                                        name={product.name}
+                                        price={product.price}
+                                    />
+                                </div>
+                            </TabsContent>
+                        ) : product.category === "Services" ? (
+                            <TabsContent
+                                value={product.category}
+                                className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                            >
+                                <div key={product.id}>
+                                    <ProductItem
+                                        image={product.image}
+                                        name={product.name}
+                                        price={product.price}
+                                    />
+                                </div>
+                            </TabsContent>
+                        ) : product.category === "Events" ? (
+                            <TabsContent
+                                value={product.category}
+                                className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                            >
+                                <div key={product.id}>
+                                    <ProductItem
+                                        image={product.image}
+                                        name={product.name}
+                                        price={product.price}
+                                    />
+                                </div>
+                            </TabsContent>
+                        ) : (
+                            <div className=""></div>
+                        )
+                    )} */}
+
+                    {/* <TabsContent
+                        value="services"
+                        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                    >
+                        {ProductsData.map((product) => (
+                            <div key={product.id}>
+                                <ProductItem
+                                    image={product.image}
+                                    name={product.name}
+                                    price={product.price}
+                                />
+                            </div>
+                        ))}
                     </TabsContent>
 
-                    <TabsContent value="services">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="events">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                        </div>
-                    </TabsContent>
+                    <TabsContent
+                        value="events"
+                        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+                    >
+                        {ProductsData.map((product) => (
+                            <div key={product.id}>
+                                <ProductItem
+                                    image={product.image}
+                                    name={product.name}
+                                    price={product.price}
+                                />
+                            </div>
+                        ))}
+                    </TabsContent> */}
                 </Tabs>
             </div>
 
-            <div className="mb-40"/>
-
+            <div className="mb-40" />
         </div>
     );
 };

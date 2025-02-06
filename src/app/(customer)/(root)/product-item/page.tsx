@@ -10,7 +10,6 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { QuantityInput } from "@/components/ui/quantity-input";
 import { Slash } from "lucide-react";
 import React from "react";
@@ -73,7 +72,7 @@ const page = () => {
                         </h1>
                         <QuantityInput
                             placeholder="Enter the amount to rent"
-                            className="h-12 text-3xl"
+                            className="h-12 !text-base"
                         />
                     </div>
 

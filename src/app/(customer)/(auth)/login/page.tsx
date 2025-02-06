@@ -23,13 +23,13 @@ const page = () => {
                 <div className="px-8">
                     <Input
                         placeholder="Email"
-                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-6 sm:mt-8 placeholder:text-[#BDC3C9]"
+                        className="bg-white w-full sm:w-[360px] h-[55px] font-inter mt-6 sm:mt-8 placeholder:text-[#BDC3C9] pl-4"
                     />
                     <div className="relative w-full sm:w-[360px] mt-3">
                         <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
-                            className="bg-white w-full h-[55px] font-inter placeholder:text-[#BDC3C9] pr-10"
+                            className="bg-white w-full h-[55px] font-inter placeholder:text-[#BDC3C9] pr-10 pl-4"
                         />
                         <button
                             type="button"
