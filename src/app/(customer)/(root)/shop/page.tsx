@@ -66,36 +66,29 @@ const page = () => {
                     </div>
 
                     <TabsContent value="rentals" className="w-full">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
-                            <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
+                            <ProductItem image="/images/halfsizedFoodWarmer.png" name="Half-Sized Food Warmer" price="50.00" />
+                            <ProductItem image="/images/fullsizedFoodWarmer.png" name="Full-Sized Food Warmer" price="75.00" />
+                            <ProductItem image="/images/ovalFoodWarmer.png" name="Oval Food Warmer" price="70.00" />
                         </div>
                     </TabsContent>
 
                     <TabsContent value="services">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
                             <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                             <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                             <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                         </div>
                     </TabsContent>
                     <TabsContent value="events">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10 max-h-[500px]">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
                             <ProductItem image="/placeholderProduct.png" name="Half-Sized Food Warmer" price="PHP 8.00" />
                         </div>
                     </TabsContent>
                 </Tabs>
             </div>
 
-            <div className="py-96"></div>
+            <div className="mb-40"/>
 
         </div>
     );

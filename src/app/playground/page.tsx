@@ -317,9 +317,11 @@ const page = () => {
                 </div>
             </RadioGroup>
 
-            <Textarea placeholder="Write here"/>
+            <Textarea placeholder="Write here" />
 
-
+            <div className="animate-pulse">
+                <div className="rounded-full bg-slate-700 h-10 w-10"></div>
+            </div>
         </div>
     );
 };
