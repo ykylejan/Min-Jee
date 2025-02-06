@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductsData } from "@/constants";
 import { Search } from "lucide-react";
+import { TbListSearch } from "react-icons/tb";
 import React, { useState } from "react";
 
 const page = () => {
@@ -70,104 +71,45 @@ const page = () => {
                         </div>
                     </div>
 
-                    {Object.keys(tabTitles).map((tabKey) => (
-                        <TabsContent
-                            key={tabKey}
-                            value={tabKey}
-                            className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
-                        >
-                            {ProductsData.filter(
-                                (product) =>
-                                    product.category.toLowerCase() === tabKey &&
-                                    product.name
-                                        .toLowerCase()
-                                        .includes(searchQuery.toLowerCase())
-                            ).map((product) => (
-                                <div key={product.id}>
-                                    <ProductItem
-                                        image={product.image}
-                                        name={product.name}
-                                        price={product.price}
-                                    />
-                                </div>
-                            ))}
-                        </TabsContent>
-                    ))}
+                    {Object.keys(tabTitles).map((tabKey) => {
+                        const filteredProducts = ProductsData.filter(
+                            (product) =>
+                                product.category.toLowerCase() === tabKey &&
+                                product.name
+                                    .toLowerCase()
+                                    .includes(searchQuery.toLowerCase())
+                        );
 
-                    {/* {ProductsData.map((product) =>
-                        product.category === "Rentals" ? (
+                        return (
                             <TabsContent
-                                value={product.category}
+                                key={tabKey}
+                                value={tabKey}
                                 className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
                             >
-                                <div key={product.id}>
-                                    <ProductItem
-                                        image={product.image}
-                                        name={product.name}
-                                        price={product.price}
-                                    />
-                                </div>
+                                {filteredProducts.length > 0 ? (
+                                    filteredProducts.map((product) => (
+                                        <div key={product.id}>
+                                            <ProductItem
+                                                image={product.image}
+                                                name={product.name}
+                                                price={product.price}
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full flex flex-col justify-center items-center text-center mt-10">
+                                        <TbListSearch
+                                            color="#BDC3C9"
+                                            size={65}
+                                        />
+                                        <h1 className="text-neutral-500 text-2xl font-afacad">
+                                            Product not found
+                                        </h1>
+                                    </div>
+                                )}
                             </TabsContent>
-                        ) : product.category === "Services" ? (
-                            <TabsContent
-                                value={product.category}
-                                className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
-                            >
-                                <div key={product.id}>
-                                    <ProductItem
-                                        image={product.image}
-                                        name={product.name}
-                                        price={product.price}
-                                    />
-                                </div>
-                            </TabsContent>
-                        ) : product.category === "Events" ? (
-                            <TabsContent
-                                value={product.category}
-                                className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
-                            >
-                                <div key={product.id}>
-                                    <ProductItem
-                                        image={product.image}
-                                        name={product.name}
-                                        price={product.price}
-                                    />
-                                </div>
-                            </TabsContent>
-                        ) : (
-                            <div className=""></div>
-                        )
-                    )} */}
-
-                    {/* <TabsContent
-                        value="services"
-                        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
-                    >
-                        {ProductsData.map((product) => (
-                            <div key={product.id}>
-                                <ProductItem
-                                    image={product.image}
-                                    name={product.name}
-                                    price={product.price}
-                                />
-                            </div>
-                        ))}
-                    </TabsContent>
-
-                    <TabsContent
-                        value="events"
-                        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
-                    >
-                        {ProductsData.map((product) => (
-                            <div key={product.id}>
-                                <ProductItem
-                                    image={product.image}
-                                    name={product.name}
-                                    price={product.price}
-                                />
-                            </div>
-                        ))}
-                    </TabsContent> */}
+                        );
+                    })}
                 </Tabs>
             </div>
 
