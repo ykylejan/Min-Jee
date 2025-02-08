@@ -1,0 +1,27 @@
+import React from "react";
+import EditName from "./Profile/EditName";
+import EditEmail from "./Profile/EditEmail";
+import EditContactNumber from "./Profile/EditContactNumber";
+import EditPassword from "./Profile/EditPassword";
+import EditBillingAddress from "./Profile/EditBillingAddress";
+
+const ProfileScreen = () => {
+    return (
+        <div className="font-afacad text-2xl">
+            <h1 className="font-afacad_medium">Profile</h1>
+            <p className="text-[#6B7280] text-base mb-10">
+                View and update your profile information, including your name,
+                email, and phone number. You can also update your billing
+                address, or change your password.
+            </p>
+
+            <EditName />
+            <EditEmail />
+            <EditContactNumber />
+            <EditPassword />
+            <EditBillingAddress />
+        </div>
+    );
+};
+
+export default ProfileScreen;
