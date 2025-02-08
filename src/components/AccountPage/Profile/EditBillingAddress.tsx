@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const EditBillingAddress = () => {
     const [isEdit, setIsEdit] = useState(false);
@@ -41,11 +40,10 @@ const EditBillingAddress = () => {
                         <Button
                             onClick={() => {
                                 setIsEdit(false);
-                                toast({
-                                    variant: "success",
-                                    title: "Profile changed!",
+                                toast("Profile Changed", {
                                     description:
-                                        "New billing address saved to account",
+                                        "New billing address is set to the account",
+                                    className: "bg-[#778768]/75 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

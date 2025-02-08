@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const EditContactNumber = () => {
     const [isEdit, setIsEdit] = useState(false);
@@ -38,11 +38,10 @@ const EditContactNumber = () => {
                         <Button
                             onClick={() => {
                                 setIsEdit(false);
-                                toast({
-                                    variant: "success",
-                                    title: "Profile changed!",
+                                toast("Profile Changed", {
                                     description:
-                                        "New contact number saved to account",
+                                        "New contact number is set to the account",
+                                    className: "bg-[#778768]/75 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

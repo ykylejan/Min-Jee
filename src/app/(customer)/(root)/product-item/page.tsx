@@ -23,6 +23,7 @@ const page = () => {
             <div className="flex px-24 py-44 gap-x-28 justify-center">
                 <img
                     src="/placeholderProduct2.png"
+                    // src="/images/balloonArrangement.png"
                     alt="product-item"
                     className="aspect-square h-[500px] rounded-md"
                 />

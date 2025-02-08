@@ -18,7 +18,7 @@ const page = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
+        <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40">
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <h1 className="text-8xl font-caveat_semibold mt-5">
                     {tabTitles[activeTab]}
@@ -61,7 +61,7 @@ const page = () => {
                                 ].toLowerCase()}`}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="p-6 w-full pl-10"
+                                className="bg-white p-6 w-full pl-10"
                             />
 
                             <Search
@@ -112,8 +112,6 @@ const page = () => {
                     })}
                 </Tabs>
             </div>
-
-            <div className="mb-40" />
         </div>
     );
 };
