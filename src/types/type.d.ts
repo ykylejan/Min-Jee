@@ -4,3 +4,10 @@ declare interface ProductProps {
     price: string;
     className?: string;
 }
+
+declare interface OrderItemProps {
+    name: string;
+    date: string;
+    address: string;
+    children?: any;
+}

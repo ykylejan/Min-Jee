@@ -20,7 +20,7 @@ const StatusLabel = ({ label }: StatusProps) => {
 
     return (
         <div
-            className={`border px-5 rounded-full flex items-center`}
+            className={`border px-5 rounded-full flex items-center justify-center w-28 h-7`}
             style={{ backgroundColor: styles.bg, borderColor: styles.border }}
         >
             <h1
