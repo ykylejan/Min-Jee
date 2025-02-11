@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import ProfileScreen from "@/components/AccountPage/ProfileScreen";
 import OrdersScreen from "@/components/AccountPage/OrdersScreen";
+import EventsScreen from "@/components/AccountPage/EventsScreen";
 
 const page = () => {
     const [isScreen, setIsScreen] = useState("Profile");
@@ -45,7 +46,8 @@ const page = () => {
                 ) : isScreen === "Orders" ? (
                     <OrdersScreen />
                 ) : isScreen === "Events" ? (
-                    <div className="">events</div>
+                    // <div className="">events</div>
+                    <EventsScreen />
                 ) : isScreen === "Logout" ? (
                     <div className="">orders</div>
                 ) : (
