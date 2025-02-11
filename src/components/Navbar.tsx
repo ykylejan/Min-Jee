@@ -4,6 +4,7 @@ import {
     Sheet,
     SheetContent,
     SheetDescription,
+    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -83,13 +84,43 @@ const Navbar = () => {
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
-                            <SheetTitle>Are you absolutely sure?</SheetTitle>
-                            <SheetDescription>
-                                This action cannot be undone. This will
-                                permanently delete your account and remove your
-                                data from our servers.
-                            </SheetDescription>
+                            <SheetTitle>My Basket</SheetTitle>
+
+                            <div className="flex">
+                                <img
+                                    src="/images/halfsizedFoodWarmer.png"
+                                    alt="image"
+                                    className="w-20 h-20 rounded-lg"
+                                />
+                                <div className="px-3 w-full">
+                                    <div className="flex justify-between items-center">
+                                        <div className="text-base">
+                                            <h1 className="font-afacad_semibold">
+                                                Half Sized Food Warmer
+                                            </h1>
+                                            <h1 className="font-afacad text-neutral-400">
+                                                Rental
+                                            </h1>
+                                        </div>
+                                        <h1 className="font-afacad underline text-sm text-neutral-400 hover:text-black cursor-pointer">
+                                            Remove
+                                        </h1>
+                                    </div>
+
+                                    <div className="flex justify-between font-afacad text-base mt-3 ">
+                                        <h1 className="text-neutral-400">
+                                            Qty 1
+                                        </h1>
+                                        <h1 className="text-black">PHP 7.00</h1>
+                                    </div>
+                                </div>
+                            </div>
                         </SheetHeader>
+                        <SheetFooter>
+                            <div className="bg-blue-300 w-full flex items-end">
+                                <h1 className="text-9xl">rwar</h1>
+                            </div>
+                        </SheetFooter>
                     </SheetContent>
                 </Sheet>
             </div>
