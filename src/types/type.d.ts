@@ -10,4 +10,5 @@ declare interface OrderItemProps {
     date: string;
     address: string;
     children?: any;
+    onClick?: any;
 }

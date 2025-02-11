@@ -1,9 +1,9 @@
 import React from "react";
 import StatusLabel from "../StatusLabel";
 
-const OrderItem = ({ name, date, address, children  }: OrderItemProps) => {
+const OrderItem = ({ name, date, address, children, onClick }: OrderItemProps) => {
     return (
-        <div className="border border-[#D2D6DA] w-full h-28 rounded-lg px-10 py-5 hover:bg-neutral-200 cursor-pointer mb-4">
+        <div onClick={onClick} className="border border-[#D2D6DA] w-full h-28 rounded-lg px-10 py-5 hover:bg-neutral-200 cursor-pointer mb-4">
             <div className="flex justify-between items-center">
                 <div className="">
                     <h1 className="font-afacad_semibold text-lg">
