@@ -10,6 +10,9 @@ import {
     SheetTrigger,
 } from "./ui/sheet";
 import Link from "next/link";
+import OrderSideItem from "./Basketlist/OrderSideItem";
+import { ScrollArea } from "./ui/scroll-area";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
     return (
@@ -86,39 +89,35 @@ const Navbar = () => {
                         <SheetHeader>
                             <SheetTitle>My Basket</SheetTitle>
 
-                            <div className="flex">
-                                <img
-                                    src="/images/halfsizedFoodWarmer.png"
-                                    alt="image"
-                                    className="w-20 h-20 rounded-lg"
-                                />
-                                <div className="px-3 w-full">
-                                    <div className="flex justify-between items-center">
-                                        <div className="text-base">
-                                            <h1 className="font-afacad_semibold">
-                                                Half Sized Food Warmer
-                                            </h1>
-                                            <h1 className="font-afacad text-neutral-400">
-                                                Rental
-                                            </h1>
-                                        </div>
-                                        <h1 className="font-afacad underline text-sm text-neutral-400 hover:text-black cursor-pointer">
-                                            Remove
-                                        </h1>
-                                    </div>
+                            <ScrollArea className="w-full h-[450px]">
+                                <OrderSideItem />
+                                <OrderSideItem />
+                                <OrderSideItem />
+                                <OrderSideItem />
+                                <OrderSideItem />
+                                <OrderSideItem />
+                                <OrderSideItem />
+                            </ScrollArea>
 
-                                    <div className="flex justify-between font-afacad text-base mt-3 ">
-                                        <h1 className="text-neutral-400">
-                                            Qty 1
-                                        </h1>
-                                        <h1 className="text-black">PHP 7.00</h1>
-                                    </div>
-                                </div>
-                            </div>
                         </SheetHeader>
+
                         <SheetFooter>
-                            <div className="bg-blue-300 w-full flex items-end">
-                                <h1 className="text-9xl">rwar</h1>
+                            <div className="w-full h-[280px] font-afacad">
+                                <hr />
+                                <section className="mt-3 mb-10">
+                                    <div className="flex justify-between items-center">
+                                        <h1 className="text-2xl font-afacad_semibold">Subtotal</h1>
+                                        <h1 className="text-xl font-afacad_semibold">PHP 17.00</h1>
+                                    </div>
+                                    <h1 className="text-xs text-neutral-500 pr-20">Deposit and an optional delivery fee will be calculated at checkout</h1>
+                                </section>
+
+                                <section className="space-y-3">
+                                    <Button className="bg-[#0F172A]  w-full rounded-full">Checkout</Button>
+                                    <h1 className="text-center text-xs text-neutral-500">or {" "}
+                                        <span className="underline hover:text-black cursor-pointer">Continue Shopping</span>
+                                    </h1>
+                                </section>
                             </div>
                         </SheetFooter>
                     </SheetContent>
