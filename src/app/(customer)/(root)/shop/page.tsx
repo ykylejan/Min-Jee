@@ -3,7 +3,7 @@
 import ProductItem from "@/components/ProductItem";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProductsData } from "@/constants";
+import { ProductsDataSample } from "@/constants";
 import { Search } from "lucide-react";
 import { TbListSearch } from "react-icons/tb";
 import React, { useState } from "react";
@@ -72,7 +72,7 @@ const page = () => {
                     </div>
 
                     {Object.keys(tabTitles).map((tabKey) => {
-                        const filteredProducts = ProductsData.filter(
+                        const filteredProducts = ProductsDataSample.filter(
                             (product) =>
                                 product.category.toLowerCase() === tabKey &&
                                 product.name

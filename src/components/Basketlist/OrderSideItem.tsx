@@ -1,10 +1,11 @@
+import { images } from '@/constants'
 import React from 'react'
 
 const OrderSideItem = () => {
     return (
         <div>
             <div className="flex">
-                <img src="/images/halfsizedFoodWarmer.png" className="w-20 h-20 rounded-lg" />
+                <img src={images.ovalFoodWarmer.src} className="w-20 h-20 rounded-lg object-cover"/>
 
                 <div className="px-3 w-full">
                     <div className="flex justify-between items-center">

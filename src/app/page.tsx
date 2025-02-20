@@ -5,6 +5,7 @@ import LandingRentals from "@/components/LandingPage/LandingRentals";
 import LandingGrid from "@/components/LandingPage/LandingGrid";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { images } from "@/constants";
 
 
 const page = () => {
@@ -13,7 +14,7 @@ const page = () => {
         <div className="min-h-screen bg-[#FFFBF5]">
             <div className="h-screen w-full bg-cover bg-center">
                 <img
-                    src="landingimage2.png"
+                    src={images.landingImage.src}
                     alt="landing_image"
                     className="w-full h-full object-cover"
                 />

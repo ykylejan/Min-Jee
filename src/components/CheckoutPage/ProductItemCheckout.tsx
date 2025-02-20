@@ -1,11 +1,12 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { images } from "@/constants";
 
 const ProductItemCheckout = () => {
     return (
         <div className="bg-white border border-[#D2D6DA] w-auto  rounded-lg flex justify-center items-center p-3 my-3">
             <img
-                src="/placeholderProduct.png"
+                src={images.halfsizedFoodWarmer.src}
                 alt="product-item"
                 className="aspect-square h-[70px] rounded-md"
             />

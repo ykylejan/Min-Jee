@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { QuantityInput } from "@/components/ui/quantity-input";
+import { images } from "@/constants";
 import { Slash } from "lucide-react";
 import React from "react";
 import { IoMdHome } from "react-icons/io";
@@ -22,10 +23,9 @@ const page = () => {
 
             <div className="flex px-24 py-44 gap-x-28 justify-center">
                 <img
-                    src="/placeholderProduct2.png"
-                    // src="/images/balloonArrangement.png"
+                    src={images.halfsizedFoodWarmer.src}
                     alt="product-item"
-                    className="aspect-square h-[500px] rounded-md"
+                    className="aspect-square h-[500px] rounded-md object-cover"
                 />
 
                 <div className="font-afacad">

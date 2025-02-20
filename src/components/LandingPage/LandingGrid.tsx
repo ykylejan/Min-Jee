@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { images } from "@/constants";
 
 const LandingGrid = () => {
     return (
@@ -10,7 +11,7 @@ const LandingGrid = () => {
                 </div>
                 <div className="col-start-1 row-start-2">
                     <img
-                        src="/landingPackage1.png"
+                        src={images.landingPackage1.src}
                         alt="package_image"
                         className="w-full h-full opacity-80"
                     />
@@ -34,7 +35,7 @@ const LandingGrid = () => {
 
                 <div className="col-start-4 row-start-1">
                     <img
-                        src="/landingPackage2.png"
+                        src={images.landingPackage2.src}
                         alt="package_image"
                         className="w-full h-full opacity-80"
                     />

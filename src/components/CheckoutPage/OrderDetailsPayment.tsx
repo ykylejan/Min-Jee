@@ -5,6 +5,7 @@ import PaymentButtons from "./Payment Details/PaymentButtons";
 import PaymentProcess from "./Payment Details/PaymentProcess";
 import { MdOutlineUploadFile } from "react-icons/md";
 import { FaTruckFast } from "react-icons/fa6";
+import { icons } from "@/constants";
 
 const OrderDetailsPayment = () => {
     const [paymentOption, setPaymentOption] = useState("GCash");
@@ -27,16 +28,16 @@ const OrderDetailsPayment = () => {
                 <div onClick={() => setPaymentOption("GCash")}>
                     <PaymentButtons
                         text="GCash"
-                        image="/gcash.png"
-                        imageActive="/gcash-active.png"
+                        image={icons.gcash.src}
+                        imageActive={icons.gcashActive.src}
                         isActive={paymentOption === "GCash"}
                     />
                 </div>
                 <div onClick={() => setPaymentOption("COD")}>
                     <PaymentButtons
                         text="Cash on Delivery"
-                        image="/wallet.png"
-                        imageActive="/wallet-active.png"
+                        image={icons.wallet.src}
+                        imageActive={icons.walletActive.src}
                         isActive={paymentOption === "COD"}
                     />
                 </div>
@@ -45,7 +46,7 @@ const OrderDetailsPayment = () => {
             {paymentOption === "GCash" && (
                 <PaymentProcess
                     text="GCash Selected"
-                    image="/gcash-active.png"
+                    image={icons.gcashActive.src}
                     description="Upload your GCash receipt here"
                     icon={<MdOutlineUploadFile color="#6B7280" size={35} />}
                     isGcash="GCash"
@@ -55,7 +56,7 @@ const OrderDetailsPayment = () => {
             {paymentOption === "COD" && (
                 <PaymentProcess
                     text="Cash on delivery Selected"
-                    image="/wallet-active.png"
+                    image={icons.walletActive.src}
                     description="Payment will be done onsite"
                     icon={<FaTruckFast color="#6B7280" size={35} />}
                     isGcash="COD"

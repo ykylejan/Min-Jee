@@ -1,3 +1,4 @@
+import { images } from "@/constants";
 import React from "react";
 
 const ReceiptItem = () => {
@@ -5,9 +6,9 @@ const ReceiptItem = () => {
         <>
             <div className="flex py-6">
                 <img
-                    src="/placeholderProduct.png"
+                    src={images.halfsizedFoodWarmer.src}
                     alt="product"
-                    className="h-[103px] aspect-square rounded-md"
+                    className="h-[103px] aspect-square rounded-md object-cover"
                 />
                 <div className="w-full pl-4">
                     <div className="flex justify-between w-full font-afacad_medium">

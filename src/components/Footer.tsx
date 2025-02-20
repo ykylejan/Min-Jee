@@ -1,11 +1,13 @@
 import { Copyright } from "lucide-react";
 import React from "react";
+import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { AiFillInstagram } from "react-icons/ai";
 
 const Footer = () => {
     return (
         <div className="bg-[#778768] font-afacad text-white p-10 lg:px-24">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
+
                 <div className="flex flex-col gap-4">
                     <div className="font-afacad_semibold text-2xl">
                         Party Needs and Services
@@ -18,7 +20,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                
+
                 <div className="flex flex-col gap-4 items-start md:items-center">
                     <div className="font-afacad_semibold text-2xl">
                         Shop
@@ -30,7 +32,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                
+
                 <div className="flex flex-col gap-4">
                     <div className="font-afacad_semibold text-2xl">
                         Socials
@@ -38,42 +40,30 @@ const Footer = () => {
                     <div className="text-sm md:text-base">
                         Visit our social medias for more information of our business
                     </div>
-                    <div className="flex gap-2">
-                        <img
-                            src="/facebook.svg"
-                            alt="logo"
-                            className="w-8 h-8 hover:cursor-pointer"
-                        />
-                        <img
-                            src="/instagram.svg"
-                            alt="logo"
-                            className="w-8 h-8 hover:cursor-pointer"
-                        />
-                        <img
-                            src="/twitter.svg"
-                            alt="logo"
-                            className="w-8 h-8 hover:cursor-pointer"
-                        />
+                    <div className="flex items-center gap-x-3">
+                        <FaFacebook color="white" className="w-7 h-7 cursor-pointer" />
+                        <AiFillInstagram color="white" className="w-8 h-8 cursor-pointer" />
+                        <FaTwitter color="white" className="w-7 h-7 cursor-pointer" />
                     </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 md:mt-24">
-                
+
                 <div className="flex flex-col gap-4">
                     <span className="text-4xl font-caveat_brush cursor-pointer">
                         MIN-JEE
                     </span>
                     <div className="flex gap-2 items-center text-sm md:text-base">
-                        <Copyright size={20} strokeWidth={1}/> 2024 Developed
+                        <Copyright size={20} strokeWidth={1} /> 2024 Developed
                         by KALMOT
                     </div>
                 </div>
 
-                
+
                 <div></div>
 
-                
+
                 <div className="flex flex-col gap-4">
                     <div className="font-afacad_semibold text-2xl">
                         Location
@@ -88,7 +78,7 @@ const Footer = () => {
             </div>
 
             <div className="py-3"></div>
-            
+
         </div>
     );
 };

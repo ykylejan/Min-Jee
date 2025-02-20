@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useRef } from "react";
 import ProductItem from "../ProductItem";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ProductsDataSample } from "@/constants";
 
 const LandingRentals = () => {
     const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -37,41 +38,22 @@ const LandingRentals = () => {
                 onClick={scrollLeft}
                 aria-label="Scroll Left"
             >
-                <ArrowLeft size={20} color="black"/>
+                <ArrowLeft size={20} color="black" />
             </button>
 
             <ScrollArea ref={viewportRef}>
                 <div className="flex space-x-5 lg:space-x-10 mb-8">
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
-                    <ProductItem
-                        image="/placeholderProduct.png"
-                        name="Half-Sized Food Warmer"
-                        price="PHP 8.00"
-                    />
+
+                    {ProductsDataSample.map((sample) => (
+                        <ProductItem
+                            key={sample.id}
+                            image={sample.image}
+                            name={sample.name}
+                            price={`PHP ${sample.price}`}
+                        />
+                    ))}
+
+
                 </div>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
@@ -82,7 +64,7 @@ const LandingRentals = () => {
                 onClick={scrollRight}
                 aria-label="Scroll Right"
             >
-                <ArrowRight size={20} color="black"/>
+                <ArrowRight size={20} color="black" />
             </button>
         </section>
     );

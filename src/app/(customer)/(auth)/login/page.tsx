@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { icons } from "@/constants";
 
 const page = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +14,7 @@ const page = () => {
         <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
             <div className="flex flex-col justify-center items-center pt-[80px]">
                 <img
-                    src="/leaflogo.svg"
+                    src={icons.logoleaf.src}
                     alt="logo"
                     className="w-24 h-24 sm:w-auto sm:h-auto"
                 />

@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { images } from "@/constants";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Search } from "lucide-react";
@@ -322,6 +323,7 @@ const page = () => {
             <div className="animate-pulse">
                 <div className="rounded-full bg-slate-700 h-10 w-10"></div>
             </div>
+
         </div>
     );
 };
