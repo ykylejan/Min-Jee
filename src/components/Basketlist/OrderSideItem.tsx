@@ -1,20 +1,19 @@
-import { images } from '@/constants'
 import React from 'react'
 
-const OrderSideItem = () => {
+const OrderSideItem = ({ name, category, quantity, price, image }: OrderSideItemProps) => {
     return (
         <div>
             <div className="flex">
-                <img src={images.ovalFoodWarmer.src} className="w-20 h-20 rounded-lg object-cover"/>
+                <img src={image} className="w-20 h-20 rounded-lg object-cover"/>
 
                 <div className="px-3 w-full">
                     <div className="flex justify-between items-center">
                         <div className="text-base">
                             <h1 className="font-afacad_semibold">
-                                Half Sized Food Warmer
+                                {name}
                             </h1>
                             <h1 className="font-afacad text-neutral-500">
-                                Rental
+                                {category}
                             </h1>
                         </div>
                         <h1 className="font-afacad underline text-sm text-neutral-500 hover:text-black cursor-pointer">
@@ -24,9 +23,9 @@ const OrderSideItem = () => {
 
                     <div className="flex justify-between font-afacad text-base mt-3 ">
                         <h1 className="text-neutral-500">
-                            Qty 1
+                            Qty {quantity}
                         </h1>
-                        <h1 className="text-black">PHP 7.00</h1>
+                        <h1 className="text-black">PHP {price.toFixed(2)}</h1>
                     </div>
                 </div>
             </div>

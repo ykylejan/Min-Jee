@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, ShoppingBasket, X } from "lucide-react";
+import { Bird, Menu, ShoppingBasket, X } from "lucide-react";
 import {
     Sheet,
     SheetContent,
@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import OrderSideItem from "./Basketlist/OrderSideItem";
 import { ScrollArea } from "./ui/scroll-area";
+import Subtotal from "./Basketlist/Subtotal";
+import { BasketlistSample } from "@/constants";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
@@ -89,36 +91,43 @@ const Navbar = () => {
                         <SheetHeader>
                             <SheetTitle>My Basket</SheetTitle>
 
-                            <ScrollArea className="w-full h-[450px]">
-                                <OrderSideItem />
-                                <OrderSideItem />
-                                <OrderSideItem />
-                                <OrderSideItem />
-                                <OrderSideItem />
-                                <OrderSideItem />
-                                <OrderSideItem />
-                            </ScrollArea>
+                            {BasketlistSample.length <= 0 ? (
+                                <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
+                                    <Bird className="text-neutral-400" size={60} />
+                                    <h1 className="text-neutral-500 text-xl">Basket is currently empty</h1>
+                                    <h1 className="text-neutral-500 text-xs mb-5">It is looking real empty at the moment, care to browse the shops?</h1>
+                                    <a href="/shop">
+                                        <Button className="bg-[#0F172A] text-white w-full rounded-full">Browse Catalog</Button>
+                                    </a>
+                                </div>
+                            ) : (
+                                <ScrollArea className="w-full h-[450px]">
+                                    {BasketlistSample.map((sample) => (
+                                        <OrderSideItem
+                                            key={sample.id}
+                                            name={sample.name}
+                                            category={sample.category}
+                                            quantity={sample.quantity}
+                                            price={sample.price * sample.quantity}
+                                            image={sample.image.src} />
+                                    ))}
+                                </ScrollArea>
+                            )}
+
 
                         </SheetHeader>
 
                         <SheetFooter>
-                            <div className="w-full h-[280px] font-afacad">
-                                <hr />
-                                <section className="mt-3 mb-10">
-                                    <div className="flex justify-between items-center">
-                                        <h1 className="text-2xl font-afacad_semibold">Subtotal</h1>
-                                        <h1 className="text-xl font-afacad_semibold">PHP 17.00</h1>
-                                    </div>
-                                    <h1 className="text-xs text-neutral-500 pr-20">Deposit and an optional delivery fee will be calculated at checkout</h1>
-                                </section>
+                            {BasketlistSample.length <= 0 ? ("") : (
+                                <Subtotal
+                                    amount={BasketlistSample.reduce(
+                                        (total, item) => total + (item.price * item.quantity),
+                                        0
+                                    )}
+                                />
+                            )}
 
-                                <section className="space-y-3">
-                                    <Button className="bg-[#0F172A]  w-full rounded-full">Checkout</Button>
-                                    <h1 className="text-center text-xs text-neutral-500">or {" "}
-                                        <span className="underline hover:text-black cursor-pointer">Continue Shopping</span>
-                                    </h1>
-                                </section>
-                            </div>
+
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
