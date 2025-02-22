@@ -24,3 +24,12 @@ declare interface OrderSideItemProps {
 declare interface SubtotalProps {
     amount: number;
 }
+
+declare interface EditAccountProps {
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    contactNumber?: string;
+    password?: string;
+    address?: string;
+}

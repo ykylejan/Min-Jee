@@ -4,6 +4,7 @@ import EditEmail from "./Profile/EditEmail";
 import EditContactNumber from "./Profile/EditContactNumber";
 import EditPassword from "./Profile/EditPassword";
 import EditBillingAddress from "./Profile/EditBillingAddress";
+import { AccountSample } from "@/constants";
 
 const ProfileScreen = () => {
     return (
@@ -15,11 +16,15 @@ const ProfileScreen = () => {
                 address, or change your password.
             </p>
 
-            <EditName />
-            <EditEmail />
-            <EditContactNumber />
-            <EditPassword />
-            <EditBillingAddress />
+            {AccountSample.map((sample) => (
+                <div key={sample.id}>
+                    <EditName firstname={sample.firstName} lastname={sample.lastName} />
+                    <EditEmail email={sample.email} />
+                    <EditContactNumber contactNumber={sample.contactNumber} />
+                    <EditPassword password={sample.password} />
+                    <EditBillingAddress address={sample.address} />
+                </div>
+            ))}
         </div>
     );
 };

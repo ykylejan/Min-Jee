@@ -8,6 +8,7 @@ import foodCatering from "../assets/images/foodCatering.png";
 import christmasParty from "../assets/images/christmasParty.png";
 
 import landingImage from "../assets/images/landingimage.png";
+import landingDim from "../assets/images/landingdim.png";
 import landingPackage1 from "../assets/images/landingPackage1.png";
 import landingPackage2 from "../assets/images/landingPackage2.png";
 
@@ -24,6 +25,7 @@ export const images = {
     ovalFoodWarmer,
 
     landingImage,
+    landingDim,
     landingPackage1,
     landingPackage2,
 };
@@ -122,3 +124,15 @@ export const BasketlistSample = [
     },
 
 ];
+
+export const AccountSample = [
+    {
+        id: 1,
+        firstName: "Art",
+        lastName: "Montebon",
+        email: "arkiart@gmail.com",
+        contactNumber: "09963355454",
+        password: "Test123!",
+        address: "No location addresss",
+    },
+]

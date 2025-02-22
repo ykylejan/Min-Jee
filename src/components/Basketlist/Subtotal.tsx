@@ -14,9 +14,13 @@ const Subtotal = ({ amount }: SubtotalProps) => {
             </section>
 
             <section className="space-y-3">
-                <Button className="bg-[#0F172A] w-full rounded-full">Checkout</Button>
+                <a href="/checkout">
+                    <Button className="bg-[#0F172A] w-full rounded-full">Checkout</Button>
+                </a>
                 <h1 className="text-center text-xs text-neutral-500">or {" "}
-                    <span className="underline hover:text-black cursor-pointer">Continue Shopping</span>
+                    <a href="/shop">
+                        <span className="underline hover:text-black cursor-pointer">Continue Shopping</span>
+                    </a>
                 </h1>
             </section>
         </div>

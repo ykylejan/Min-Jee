@@ -3,8 +3,13 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const EditName = () => {
+const EditName = ({ firstname, lastname }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
+    // const [firstName, setFirstName] = ("Raniel");
+    // const handleEdit = {
+
+    // }
+
     return (
         <div>
             {!isEdit ? (
@@ -13,7 +18,7 @@ const EditName = () => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Name</h1>
                             <h1 className="font-poppins_medium">
-                                Art Montebon
+                                {firstname + " " + lastname}
                             </h1>
                         </div>
                         <Button
@@ -33,6 +38,7 @@ const EditName = () => {
                             <Input
                                 placeholder="First Name"
                                 className="w-1/2 shadow-none h-10"
+                                defaultValue={"Testing"}
                             />
                             <Input
                                 placeholder="Last Name"
@@ -45,7 +51,7 @@ const EditName = () => {
                                 toast("Profile Changed", {
                                     description:
                                         "New name is set to the account",
-                                    className: "bg-[#778768]/75 border border-none text-white"
+                                    className: "bg-camouflage-800/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

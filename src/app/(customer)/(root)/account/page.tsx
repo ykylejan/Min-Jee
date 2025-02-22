@@ -46,7 +46,6 @@ const page = () => {
                 ) : isScreen === "Orders" ? (
                     <OrdersScreen />
                 ) : isScreen === "Events" ? (
-                    // <div className="">events</div>
                     <EventsScreen />
                 ) : isScreen === "Logout" ? (
                     <div className="">orders</div>

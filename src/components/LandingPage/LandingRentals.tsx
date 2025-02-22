@@ -49,7 +49,7 @@ const LandingRentals = () => {
                             key={sample.id}
                             image={sample.image}
                             name={sample.name}
-                            price={`PHP ${sample.price}`}
+                            price={sample.price}
                         />
                     ))}
 

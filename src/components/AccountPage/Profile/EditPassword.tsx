@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const EditPassword = () => {
+const EditPassword = ({password}: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
     return (
         <div className="mt-10">
@@ -13,7 +13,7 @@ const EditPassword = () => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Password</h1>
                             <h1 className="font-poppins_medium">
-                                ••••••••••••
+                                {Array(password?.length).fill('•').join('')}
                             </h1>
                         </div>
                         <Button
@@ -54,7 +54,7 @@ const EditPassword = () => {
                                 toast("Profile Changed", {
                                     description:
                                         "New password is set to the account",
-                                    className: "bg-[#778768]/75 border border-none text-white"
+                                    className: "bg-camouflage-800/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

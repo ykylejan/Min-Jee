@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const EditContactNumber = () => {
+const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
     return (
         <div className="mt-10">
@@ -12,7 +12,7 @@ const EditContactNumber = () => {
                     <div className="flex items-center justify-between">
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Contact Number</h1>
-                            <h1 className="font-poppins_medium">09963355454</h1>
+                            <h1 className="font-poppins_medium">{contactNumber}</h1>
                         </div>
                         <Button
                             onClick={() => setIsEdit(true)}
@@ -41,7 +41,7 @@ const EditContactNumber = () => {
                                 toast("Profile Changed", {
                                     description:
                                         "New contact number is set to the account",
-                                    className: "bg-[#778768]/75 border border-none text-white"
+                                    className: "bg-camouflage-800/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

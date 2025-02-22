@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const EditBillingAddress = () => {
+const EditBillingAddress = ({address}: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
     return (
         <div className="mt-10">
@@ -13,7 +13,7 @@ const EditBillingAddress = () => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Billing Address</h1>
                             <h1 className="font-poppins_medium">
-                                No billing address
+                                {address}
                             </h1>
                         </div>
                         <Button
@@ -43,7 +43,7 @@ const EditBillingAddress = () => {
                                 toast("Profile Changed", {
                                     description:
                                         "New billing address is set to the account",
-                                    className: "bg-[#778768]/75 border border-none text-white"
+                                    className: "bg-camouflage-800/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"

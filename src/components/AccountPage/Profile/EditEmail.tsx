@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const EditEmail = () => {
+const EditEmail = ({ email }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
     return (
         <div className="mt-10">
@@ -13,7 +13,7 @@ const EditEmail = () => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Email</h1>
                             <h1 className="font-poppins_medium">
-                                arkiart@gmail.com
+                                {email}
                             </h1>
                         </div>
                         <Button
@@ -41,7 +41,7 @@ const EditEmail = () => {
                                 toast("Profile Changed", {
                                     description:
                                         "New email is set to the account",
-                                    className: "bg-[#778768]/75 border border-none text-white"
+                                    className: "bg-camouflage-800/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"
