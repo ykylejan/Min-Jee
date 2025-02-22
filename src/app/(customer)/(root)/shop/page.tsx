@@ -6,32 +6,39 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductsDataSample } from "@/constants";
 import { Search } from "lucide-react";
 import { TbListSearch } from "react-icons/tb";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const page = () => {
-    const [activeTab, setActiveTab] = useState("rentals");
-    const tabTitles: Record<string, string> = {
-        rentals: "RENTALS",
-        services: "SERVICES",
-        events: "EVENTS",
-    };
+    const [isTitle, setIsTitle] = useState(() => {
+        // Try to get stored value on initial render
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('selectedTab') || 'rentals';
+        }
+        return 'rentals';
+    });
+    useEffect(() => {
+        localStorage.setItem('selectedTab', isTitle);
+    }, [isTitle]);
     const [searchQuery, setSearchQuery] = useState("");
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40">
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <h1 className="text-8xl font-caveat_semibold mt-5">
-                    {tabTitles[activeTab]}
+                    {isTitle.toUpperCase()}
                 </h1>
             </div>
 
             <div className="px-24 pt-8 pb-4">
                 <Tabs
-                    defaultValue="rentals"
-                    onValueChange={(value) => setActiveTab(value)}
+                    defaultValue={isTitle} // for this
+                    onValueChange={(value) => {
+                        setIsTitle(value)
+                    }}
                 >
                     <div className="flex justify-center pb-8">
-                        <TabsList className="">
+                        <TabsList>
                             <TabsTrigger
                                 value="rentals"
                                 className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-[#778768] /recedata-[state=active]:font-afacad_semibold"
@@ -56,9 +63,7 @@ const page = () => {
                     <div className="flex justify-center pb-10">
                         <div className="relative w-[530px]">
                             <Input
-                                placeholder={`Search for ${tabTitles[
-                                    activeTab
-                                ].toLowerCase()}`}
+                                placeholder={`Search for ${isTitle.toLowerCase()}`}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="bg-white p-6 w-full pl-10"
@@ -71,7 +76,7 @@ const page = () => {
                         </div>
                     </div>
 
-                    {Object.keys(tabTitles).map((tabKey) => {
+                    {[isTitle].map((tabKey) => {
                         const filteredProducts = ProductsDataSample.filter(
                             (product) =>
                                 product.category.toLowerCase() === tabKey &&
@@ -88,13 +93,13 @@ const page = () => {
                             >
                                 {filteredProducts.length > 0 ? (
                                     filteredProducts.map((product) => (
-                                        <div key={product.id}>
+                                        <Link key={product.id} href={`/shop/${product.id}`} onClick={() => setIsTitle(product.category.toLowerCase())}>
                                             <ProductItem
                                                 image={product.image}
                                                 name={product.name}
                                                 price={product.price}
                                             />
-                                        </div>
+                                        </Link>
                                     ))
                                 ) : (
                                     <div className="col-span-full flex flex-col justify-center items-center text-center mt-10">

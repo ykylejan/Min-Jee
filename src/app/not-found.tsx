@@ -1,11 +1,11 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+'use client';
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const NotFound = () => {
+    const router = useRouter();
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
             <section className="text-center flex flex-col justify-center items-center h-screen">
@@ -16,11 +16,9 @@ const NotFound = () => {
                 <h1 className="font-afacad text-xl">
                     This page does not exist
                 </h1>
-                <Link href="/">
-                    <Button className="bg-[#778768] font-inter mt-12 w-36">
-                        Go back
-                    </Button>
-                </Link>
+                <Button onClick={() => router.back()} className="bg-[#778768] font-inter mt-12 w-36">
+                    Go back
+                </Button>
             </section>
         </div>
     );
