@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { QuantityInput } from "@/components/ui/quantity-input";
 import { images, ProductsDataSample } from "@/constants";
 import { Slash } from "lucide-react";
+import Link from "next/link";
 import React, { Fragment } from "react";
 import { IoMdHome } from "react-icons/io";
 import { MdContentCopy } from "react-icons/md";
@@ -27,16 +28,18 @@ const page = ({ params }: PageProps) => {
     return (
         <div className="min-h-screen bg-[#FFFBF5]">
 
-            <div className="flex px-24 py-44 gap-x-28 justify-center">
+            <div className="flex px-24 py-44 gap-x-12 justify-center">
                 {ProductsDataSample.filter((product) => product.id === id).map((product) => (
                     <Fragment key={product.id}>
-                        <img
-                            src={product.image.src}
-                            alt="product-item"
-                            className="aspect-square h-[500px] rounded-md object-cover"
-                        />
+                        <div className="">
+                            <img
+                                src={product.image.src}
+                                alt="product-item"
+                                className="aspect-square h-[500px] rounded-md object-cover"
+                            />
+                        </div>
 
-                        <div className="font-afacad">
+                        <div className="font-afacad w-1/2 px-10">
                             <Breadcrumb>
                                 <BreadcrumbList>
                                     <BreadcrumbItem>
@@ -48,9 +51,9 @@ const page = ({ params }: PageProps) => {
                                         <Slash />
                                     </BreadcrumbSeparator>
                                     <BreadcrumbItem>
-                                        <BreadcrumbLink href="/shop" className="text-lg">
+                                        <Link href={"/shop"}>
                                             Shop
-                                        </BreadcrumbLink>
+                                        </Link>
                                     </BreadcrumbItem>
                                     <BreadcrumbSeparator>
                                         <Slash />
@@ -63,7 +66,7 @@ const page = ({ params }: PageProps) => {
 
 
 
-                            <div className="flex items-center space-x-8 mt-3">
+                            <div className="flex items-center space-x-8 mt-3 justify-between">
                                 <div>
                                     <h1 className="text-5xl font-afacad_semibold">{product.name} </h1>
                                     <h1 className="text-3xl font-afacad">PHP {product.price.toFixed(2)} </h1>

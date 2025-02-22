@@ -1,22 +1,22 @@
 import { ArrowRight, ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import React, { useRef } from "react";
 import ProductItem from "../ProductItem";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { ProductsDataSample } from "@/constants";
+import Link from "next/link";
 
 const LandingRentals = () => {
     const viewportRef = useRef<HTMLDivElement | null>(null);
 
     const scrollLeft = () => {
         if (viewportRef.current) {
-            viewportRef.current.scrollBy({ left: -300, behavior: "smooth" });
+            viewportRef.current.scrollBy({ left: -600, behavior: "smooth" });
         }
     };
 
     const scrollRight = () => {
         if (viewportRef.current) {
-            viewportRef.current.scrollBy({ left: 300, behavior: "smooth" });
+            viewportRef.current.scrollBy({ left: 600, behavior: "smooth" });
         }
     };
 
@@ -45,12 +45,13 @@ const LandingRentals = () => {
                 <div className="flex space-x-5 lg:space-x-10 mb-8">
 
                     {ProductsDataSample.map((sample) => (
-                        <ProductItem
-                            key={sample.id}
-                            image={sample.image}
-                            name={sample.name}
-                            price={sample.price}
-                        />
+                        <Link key={sample.id} href={`/shop/${sample.id}`}>
+                            <ProductItem
+                                image={sample.image}
+                                name={sample.name}
+                                price={sample.price}
+                            />
+                        </Link>
                     ))}
 
 
