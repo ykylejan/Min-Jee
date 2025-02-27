@@ -11,28 +11,29 @@ import Link from "next/link";
 
 const page = () => {
     const [isTitle, setIsTitle] = useState(() => {
-        // Try to get stored value on initial render
         if (typeof window !== 'undefined') {
             return localStorage.getItem('selectedTab') || 'rentals';
         }
         return 'rentals';
     });
+
     useEffect(() => {
         localStorage.setItem('selectedTab', isTitle);
     }, [isTitle]);
+    
     const [searchQuery, setSearchQuery] = useState("");
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40">
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <h1 className="text-8xl font-caveat_semibold mt-5">
-                    {isTitle.toUpperCase()}
+                    {isTitle.charAt(0).toUpperCase() + isTitle.slice(1).toLowerCase()}
                 </h1>
             </div>
 
             <div className="px-24 pt-8 pb-4">
                 <Tabs
-                    defaultValue={isTitle} // for this
+                    defaultValue={isTitle}
                     onValueChange={(value) => {
                         setIsTitle(value)
                     }}

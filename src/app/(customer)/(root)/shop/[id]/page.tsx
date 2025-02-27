@@ -51,9 +51,7 @@ const page = ({ params }: PageProps) => {
                                         <Slash />
                                     </BreadcrumbSeparator>
                                     <BreadcrumbItem>
-                                        <Link href={"/shop"}>
-                                            Shop
-                                        </Link>
+                                        <Link href={"/shop"}>Shop</Link>
                                     </BreadcrumbItem>
                                     <BreadcrumbSeparator>
                                         <Slash />
