@@ -2,7 +2,10 @@ import React from "react";
 import ReceiptItem from "./ReceiptItem";
 import Link from "next/link";
 
-const Receipt = () => {
+const Receipt = ({data}: any) => {
+    // console.log("data: ", data)
+    // console.log("customer name: ", data.customerName)
+    
     return (
         <div className="flex justify-center pb-40">
             <div className="bg-white border border-[##D2D6DA] w-[750px] h-auto rounded-lg px-24 py-20">
@@ -26,13 +29,13 @@ const Receipt = () => {
                         <span className="text-[#6B7280] font-afacad_bold">
                             Subtotal
                         </span>
-                        <span className="font-afacad_semibold">PHP 150.00</span>
+                        <span className="font-afacad_semibold">PHP {data.subtotal} </span>
                     </h1>
                     <h1 className="flex justify-between">
                         <span className="text-[#6B7280] font-afacad_bold">
                             Delivery Fee
                         </span>
-                        <span className="font-afacad_semibold">PHP 50.00</span>
+                        <span className="font-afacad_semibold">PHP {data.deliveryfee} </span>
                     </h1>
                     <h1 className="flex justify-between">
                         <span className="text-[#6B7280] font-afacad_bold">
@@ -58,7 +61,7 @@ const Receipt = () => {
                                 Customer Details
                             </h1>
                             <div className="font-afacad text-[#6B7280]">
-                                <h1>Art Montebon</h1>
+                                <h1>{data.customerName} </h1>
                                 <h1>arkiart@gmail.com</h1>
                                 <h1>+63 909-509-5019</h1>
                             </div>

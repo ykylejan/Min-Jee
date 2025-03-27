@@ -48,6 +48,7 @@ const page = () => {
                     <Button className="bg-[#778768] w-full sm:w-[360px] h-[55px] font-bold mt-6 sm:mt-8">
                         CONTINUE
                     </Button>
+                    {/* <Button className="bg-blue-500 w-80">RAWR</Button> */}
                 </div>
 
                 <h1 className="font-inter text-[13px] mt-16 sm:mt-20 mb-16 sm:mb-28 text-center">

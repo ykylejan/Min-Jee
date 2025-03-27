@@ -22,22 +22,19 @@ const page = () => {
                 <div className="font-poppins space-y-8 pr-48">
                     <h1
                         onClick={() => setIsScreen("Profile")}
-                        className={`hover:cursor-pointer ${isScreen == "Profile" ? "font-poppins_bold" : ""
-                            }`}
+                        className={`hover:cursor-pointer ${isScreen == "Profile" ? "font-poppins_bold" : ""}`}
                     >
                         Profile
                     </h1>
                     <h1
                         onClick={() => setIsScreen("Orders")}
-                        className={`hover:cursor-pointer ${isScreen == "Orders" ? "font-poppins_bold" : ""
-                            }`}
+                        className={`hover:cursor-pointer ${isScreen == "Orders" ? "font-poppins_bold" : ""}`}
                     >
                         Orders
                     </h1>
                     <h1
                         onClick={() => setIsScreen("Events")}
-                        className={`hover:cursor-pointer ${isScreen == "Events" ? "font-poppins_bold" : ""
-                            }`}
+                        className={`hover:cursor-pointer ${isScreen == "Events" ? "font-poppins_bold" : ""}`}
                     >
                         Events
                     </h1>
