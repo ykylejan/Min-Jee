@@ -103,7 +103,7 @@ export const BasketlistSample = [
         name: "Half-Sized Food Warmer",
         category: "Rental",
         quantity: 1,
-        price: 50.00,
+        price: 70.00,
         image: halfsizedFoodWarmer,
     },
     {
