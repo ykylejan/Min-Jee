@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { icons } from "@/constants";
 
 interface OwnerLayoutProps {
     children: ReactNode;
@@ -60,11 +61,12 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
 
     return (
         <div className="bg-[#FFFBF5] flex">
-            <div className="bg-white border border-[#DEE5EC] w-[303px] h-screen">
+            {/* sidebar */}
+            <div className="bg-white border border-[#DEE5EC] w-[303px] h-screen ">
                 <div className="p-6">
                     <div className="flex items-center mb-6">
                         <img
-                            src="/leaflogo.svg"
+                            src={icons.logoleaf.src}
                             alt="logo"
                             className="w-12 h-12"
                         />
@@ -98,6 +100,7 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
                 </div>
             </div>
 
+            {/* navbar */}
             <div className="w-screen">
                 <div className="bg-white border border-[#DEE5EC] text-[#778768] h-[76px] flex items-center px-6 text-2xl font-afacad">
                     {navLinks.map((link) => {

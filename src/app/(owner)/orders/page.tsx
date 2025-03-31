@@ -35,14 +35,11 @@ const page = () => {
                         </TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">
-                                    Invoice
-                                </TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Method</TableHead>
-                                <TableHead className="text-right">
-                                    Amount
-                                </TableHead>
+                                <TableHead className="w-[150px]">Order ID</TableHead>
+                                <TableHead>Customer Name</TableHead>
+                                <TableHead>Date Ordered</TableHead>
+                                <TableHead>Quantity</TableHead>
+                                <TableHead className="text-center">Status</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -50,13 +47,16 @@ const page = () => {
                                 className="hover:cursor-pointer"
                                 onClick={() => handleRowClick("order-item")}
                             >
-                                <TableCell className="font-medium">
-                                    INV001
-                                </TableCell>
-                                <TableCell>Paid</TableCell>
-                                <TableCell>Credit Card</TableCell>
-                                <TableCell className="text-right">
-                                    $250.00
+                                <TableCell className="font-medium">REF 10223</TableCell>
+                                <TableCell>Kyle Dellatan</TableCell>
+                                <TableCell>Dec. 15, 2024</TableCell>
+                                <TableCell>164/200</TableCell>
+                                <TableCell className="flex justify-center">
+                                
+                                    <div className="bg-[#FFE4B9] border border-[#FEC15F] w-fit px-4 py-2 rounded-lg">
+                                        <h1 className="text-[#FF9D00] font-interbold">Pending</h1>
+                                    </div>
+                                
                                 </TableCell>
                             </TableRow>
                         </TableBody>
