@@ -4,6 +4,7 @@ import OrderStatus from "@/components/OwnerPage/OrderStatus";
 import PaymentDetailsItem from "@/components/OwnerPage/PaymentDetailsItem";
 import ProductDetailsItem from "@/components/OwnerPage/ProductDetailsItem";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 
 const page = () => {
@@ -16,7 +17,7 @@ const page = () => {
                     <OrderStatus />
                 </div>
 
-                <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-lg text-white">
+                <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-lg text-white hover:bg-camouflage-400/80">
                     Verify Status
                 </Button>
             </div>
@@ -34,8 +35,23 @@ const page = () => {
             <div className="mt-10">
                 <div className="font-afacad_medium text-2xl">Payment Details</div>
 
-                <PaymentDetailsItem/>
+                <PaymentDetailsItem />
             </div>
+
+            <div className="mt-10">
+                <div className="font-afacad_medium text-2xl">Customer Notes</div>
+
+                <Textarea
+                    placeholder="Customer's notes seems empty..."
+                    className="min-h-32 mt-5"
+                    value={"Need three of your 8 seater buffet table, with blue table cloths"}
+                    readOnly={true}
+                />
+            </div>
+
+            <Button className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
+                View Receipt
+            </Button>
 
 
         </div>
