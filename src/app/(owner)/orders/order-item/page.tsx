@@ -1,6 +1,7 @@
 
 import OrderDetailsSection from "@/components/OwnerPage/OrderDetailsSection";
 import OrderStatus from "@/components/OwnerPage/OrderStatus";
+import PaymentDetailsItem from "@/components/OwnerPage/PaymentDetailsItem";
 import ProductDetailsItem from "@/components/OwnerPage/ProductDetailsItem";
 import { Button } from "@/components/ui/button";
 import React from "react";
@@ -11,6 +12,7 @@ const page = () => {
             <div className="flex justify-between">
                 <div className="flex flex-row gap-x-4">
                     <h1 className="font-afacad_medium text-2xl">Order Details: </h1>
+                    {/* other statuses wip */}
                     <OrderStatus />
                 </div>
 
@@ -26,6 +28,13 @@ const page = () => {
 
                 <ProductDetailsItem />
                 <ProductDetailsItem />
+            </div>
+
+
+            <div className="mt-10">
+                <div className="font-afacad_medium text-2xl">Payment Details</div>
+
+                <PaymentDetailsItem/>
             </div>
 
 

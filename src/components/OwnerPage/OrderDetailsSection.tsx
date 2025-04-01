@@ -2,7 +2,7 @@ import React from 'react'
 
 const OrderDetailsSection = () => {
     return (
-        <div className="flex flex-row gap-x-10 mt-5 font-afacad text-neutral-500">
+        <div className="flex flex-row gap-x-10 mt-5 font-afacad text-neutral-600">
             <div className="space-y-3">
                 <h1 className="flex justify-between gap-x-7">
                     <span>Order Number:</span>
