@@ -7,7 +7,7 @@ const Receipt = ({data}: any) => {
     // console.log("customer name: ", data.customerName)
     
     return (
-        <div className="flex justify-center pb-40">
+        <div className="">
             <div className="bg-white border border-[##D2D6DA] w-[750px] h-auto rounded-lg px-24 py-20">
                 <h1 className="text-[#6B7280] font-afacad_bold">
                     Order Successful

@@ -10,7 +10,7 @@ const page = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5] pt-[120px]">
+        <div className="min-h-screen bg-[#FFFBF5] pt-[120px] flex justify-center pb-40">
             <Receipt data={data} />
         </div>
     );

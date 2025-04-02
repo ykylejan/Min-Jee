@@ -15,7 +15,7 @@ const PaymentDetailsItem = () => {
             <div className="flex justify-between mt-3">
                 <div className="flex items-center gap-x-3">
                     <Download width={16} height={16} />
-                    <h1>Receipt.png</h1>
+                    <h1 className='underline'>Receipt.png</h1>
                 </div>
 
                 <img src={icons.gcashActive.src} width={30} height={25} />

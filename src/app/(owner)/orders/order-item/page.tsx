@@ -5,6 +5,7 @@ import PaymentDetailsItem from "@/components/OwnerPage/PaymentDetailsItem";
 import ProductDetailsItem from "@/components/OwnerPage/ProductDetailsItem";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
 import React from "react";
 
 const page = () => {
@@ -49,9 +50,12 @@ const page = () => {
                 />
             </div>
 
-            <Button className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
-                View Receipt
-            </Button>
+            <Link href={"/orders/order-item/receipt"}>
+                <Button
+                    className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
+                    View Receipt
+                </Button>
+            </Link>
 
 
         </div>

@@ -42,9 +42,6 @@ const page = () => {
                 <CardContent>
 
                     <Table>
-                        <TableCaption>
-                            A list of your recent invoices.
-                        </TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[150px]">Order ID</TableHead>
@@ -55,6 +52,7 @@ const page = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
+                            {/* 5 rows is ideal */}
                             <TableRow
                                 className="hover:cursor-pointer"
                                 onClick={() => handleRowClick("order-item")}
