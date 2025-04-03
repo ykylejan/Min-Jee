@@ -5,11 +5,18 @@ import { Button } from "@/components/ui/button";
 import {
     CalendarDays,
     Contact,
+    DoorOpen,
     History,
     ShoppingCart,
     Tag,
     Users,
 } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { icons } from "@/constants";
@@ -60,9 +67,9 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
     const pathname = usePathname();
 
     return (
-        <div className="bg-[#FFFBF5] flex">
-            {/* sidebar */}
-            <div className="bg-white border border-[#DEE5EC] w-[303px] h-screen ">
+        <div className="bg-[#FFFBF5] min-h-screen flex">
+            {/* sidebar - fixed */}
+            <div className="bg-white border border-[#DEE5EC] w-[303px] fixed left-0 top-0 h-screen overflow-y-auto">
                 <div className="p-6">
                     <div className="flex items-center mb-6">
                         <img
@@ -100,9 +107,10 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
                 </div>
             </div>
 
-            {/* navbar */}
-            <div className="w-screen">
-                <div className="bg-white border border-[#DEE5EC] text-[#778768] h-[76px] flex items-center px-6 text-2xl font-afacad">
+            {/* main content - with margin to offset the fixed sidebar */}
+            <div className="w-full ml-[303px] min-h-screen flex flex-col">
+                {/* navbar - fixed at the top of the content area */}
+                <div className="bg-white border border-[#DEE5EC] text-[#778768] h-[76px] flex justify-between items-center px-6 pr-12 text-2xl font-afacad sticky top-0 z-10">
                     {navLinks.map((link) => {
                         const isActive = pathname.startsWith(link.href);
                         return isActive ? (
@@ -111,8 +119,20 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
                             </span>
                         ) : null;
                     })}
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <DoorOpen />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>Settings</DropdownMenuItem>
+                            <DropdownMenuItem>Logout</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
-                <div className="m-16">{children}</div>
+
+                {/* scrollable content */}
+                <div className="m-16 flex-grow bg-[#FFFBF5]">{children}</div>
             </div>
         </div>
     );

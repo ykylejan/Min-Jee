@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import OrderStatusTable from "@/components/OwnerPage/Order/OrderStatusTable";
 
 const page = () => {
     const router = useRouter();
@@ -52,6 +53,8 @@ const page = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
+
+
                             {/* 5 rows is ideal */}
                             <TableRow
                                 className="hover:cursor-pointer"
@@ -63,12 +66,13 @@ const page = () => {
                                 <TableCell>164/200</TableCell>
                                 <TableCell className="flex justify-center">
 
-                                    <div className="bg-[#FFE4B9] border border-[#FEC15F] w-fit px-4 py-2 rounded-lg">
-                                        <h1 className="text-[#FF9D00] font-interbold">Pending</h1>
-                                    </div>
+                                    <OrderStatusTable label="Pending"/>
 
                                 </TableCell>
                             </TableRow>
+                            
+
+
                         </TableBody>
                     </Table>
 

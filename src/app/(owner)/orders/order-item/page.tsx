@@ -1,8 +1,8 @@
 
-import OrderDetailsSection from "@/components/OwnerPage/OrderDetailsSection";
-import OrderStatus from "@/components/OwnerPage/OrderStatus";
-import PaymentDetailsItem from "@/components/OwnerPage/PaymentDetailsItem";
-import ProductDetailsItem from "@/components/OwnerPage/ProductDetailsItem";
+import OrderDetailsSection from "@/components/OwnerPage/Order/OrderDetailsSection";
+import PaymentDetailsItem from "@/components/OwnerPage/Order/PaymentDetailsItem";
+import ProductDetailsItem from "@/components/OwnerPage/Order/ProductDetailsItem";
+import StatusLabel from "@/components/StatusLabel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
@@ -12,10 +12,9 @@ const page = () => {
     return (
         <div className="bg-white min-h-screen rounded-lg border border-neutral-200 px-12 py-8">
             <div className="flex justify-between">
-                <div className="flex flex-row gap-x-4">
+                <div className="flex flex-row gap-x-6 items-center">
                     <h1 className="font-afacad_medium text-2xl">Order Details: </h1>
-                    {/* other statuses wip */}
-                    <OrderStatus />
+                    <StatusLabel label="Verified" />
                 </div>
 
                 <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-lg text-white hover:bg-camouflage-400/80">
