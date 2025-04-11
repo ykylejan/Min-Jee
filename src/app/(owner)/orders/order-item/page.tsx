@@ -13,8 +13,8 @@ const page = () => {
         <div className="bg-white min-h-screen rounded-lg border border-neutral-200 px-12 py-8">
             <div className="flex justify-between">
                 <div className="flex flex-row gap-x-6 items-center">
-                    <h1 className="font-afacad_medium text-2xl">Order Details: </h1>
-                    <StatusLabel label="Verified" />
+                    <h1 className="font-afacad_medium text-3xl">Order Details: </h1>
+                    <StatusLabel label="Completed" />
                 </div>
 
                 <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-lg text-white hover:bg-camouflage-400/80">

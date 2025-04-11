@@ -18,12 +18,12 @@ const page = () => {
         <div className='flex justify-center'>
             <div className='space-y-3'>
 
-                <div onClick={() => router.back()}>
-                    <MoveLeft
-                        width={25} height={25}
-                        className='hover:cursor-pointer'
-                    />
-                </div>
+                <button 
+                    onClick={() => router.back()} 
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors py-2"
+                >
+                    <MoveLeft width={20} height={20} />
+                </button>
 
                 <Receipt data={data} />
             </div>
