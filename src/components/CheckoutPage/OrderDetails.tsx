@@ -39,10 +39,10 @@ const OrderDetails = () => {
                     <Input placeholder="Enter Date" />
                 </div>
 
-                <div className="w-full">
+                {/* <div className="w-full">
                     <h1>Phone Number</h1>
                     <Input placeholder="909-876-5432" />
-                </div>
+                </div> */}
 
                 <div className="space-y-3 pb-3">
                     <h1>Order Obtainment Method</h1>
