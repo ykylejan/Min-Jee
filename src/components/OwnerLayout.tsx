@@ -59,9 +59,9 @@ const navLinks = [
 ];
 
 const activeButton =
-    "bg-[#778768] text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3";
+    "bg-camouflage-400 hover:bg-camouflage-400 text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3";
 const inactiveButton =
-    "bg-transparent hover:bg-[#778768]/70 text-[#778768] hover:text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none";
+    "bg-transparent hover:bg-camouflage-400/70 text-camouflage-400 hover:text-white text-base font-medium font-inter w-[247px] h-[46px] rounded-md flex items-center justify-start mb-3 shadow-none";
 
 const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
     const pathname = usePathname();

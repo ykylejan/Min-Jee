@@ -12,8 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
-import OrderStatusTable from "@/components/OwnerPage/Order/OrderStatusTable";
+import { Plus, Search, TrendingDown, TrendingUp } from "lucide-react";
+import StockStatus from "@/components/OwnerPage/Products/StockStatus";
+import { AllProductsSample } from "@/constants";
 
 
 const page = () => {
@@ -41,7 +42,7 @@ const page = () => {
                             </div>
 
                             <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
-                                <Plus  />
+                                <Plus />
                                 Add Product
                             </Button>
                         </div>
@@ -57,7 +58,7 @@ const page = () => {
                                 <TableHead>Category</TableHead>
                                 <TableHead>Price</TableHead>
                                 <TableHead>Quantity</TableHead>
-                                <TableHead className="text-center">Status</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead> </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -65,23 +66,25 @@ const page = () => {
 
 
                             {/* 5 rows is ideal */}
-                            <TableRow
-                                className="hover:cursor-pointer"
-                                onClick={() => handleRowClick("edit-product")}
-                            >
-                                <TableCell className="font-medium">Plastic Chair</TableCell>
-                                <TableCell>Rental</TableCell>
-                                <TableCell>PHP 5.00</TableCell>
-                                <TableCell>164/200</TableCell>
-                                <TableCell className="flex justify-center">
-
-                                    <OrderStatusTable label="Pending" />
-
-                                </TableCell>
-                                <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
-                            </TableRow>
-
-
+                            {AllProductsSample.map((data) => (
+                                <TableRow
+                                    key={data.id}
+                                    className="hover:cursor-pointer"
+                                    onClick={() => handleRowClick("edit-product")}
+                                >
+                                    <TableCell className="font-medium">{data.productName}</TableCell>
+                                    <TableCell>{data.category} </TableCell>
+                                    <TableCell>PHP {data.price} </TableCell>
+                                    <TableCell>{data.currentQuantity} / {data.maxQuantity} </TableCell>
+                                    <TableCell>
+                                        {(() => {
+                                            const percentage = (data.currentQuantity / data.maxQuantity) * 100;
+                                            return <StockStatus status={percentage < 10 ? "Out of Stock" : "In Stock"} />;
+                                        })()}
+                                    </TableCell>
+                                    <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
+                                </TableRow>
+                            ))}
 
                         </TableBody>
                     </Table>

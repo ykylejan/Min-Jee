@@ -136,3 +136,23 @@ export const AccountSample = [
         address: "No location addresss",
     },
 ]
+
+
+export const AllProductsSample = [
+    {
+        id: 1,
+        productName: "Plastic Chair",
+        category: "Rental",
+        price: "5.00",
+        currentQuantity: 120,
+        maxQuantity: 200 
+    },
+    {
+        id: 2,
+        productName: "Square Table",
+        category: "Rental",
+        price: "35.00",
+        currentQuantity: 9,
+        maxQuantity: 165 
+    },
+]
