@@ -12,8 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
-import OrderStatusTable from "@/components/OwnerPage/Order/OrderStatusTable";
+import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
 
 
 const page = () => {
@@ -28,10 +27,10 @@ const page = () => {
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         <div className="font-afacad font-light text-2xl">
-                            All Products
-                            <CardDescription className="text-base">
-                                Filter out categories (Rentals, Services, Events)
-                            </CardDescription>
+                            Customer Lists
+                            {/* <CardDescription className="text-base">
+                                Click an order row to view its details.
+                            </CardDescription> */}
                         </div>
 
                         <div className="flex gap-x-3">
@@ -41,8 +40,8 @@ const page = () => {
                             </div>
 
                             <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
-                                <Plus  />
-                                Add Product
+                                <UserRoundPlus />
+                                Add Customer
                             </Button>
                         </div>
 
@@ -53,11 +52,11 @@ const page = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="">Product Name</TableHead>
-                                <TableHead>Category</TableHead>
-                                <TableHead>Price</TableHead>
-                                <TableHead>Quantity</TableHead>
-                                <TableHead className="text-center">Status</TableHead>
+                                <TableHead className="">Customer Name</TableHead>
+                                <TableHead>Phone</TableHead>
+                                <TableHead>Bookings</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead> </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -67,18 +66,25 @@ const page = () => {
                             {/* 5 rows is ideal */}
                             <TableRow
                                 className="hover:cursor-pointer"
-                                onClick={() => handleRowClick("edit-product")}
+                            // onClick={() => handleRowClick("edit-product")}
                             >
-                                <TableCell className="font-medium">Plastic Chair</TableCell>
-                                <TableCell>Rental</TableCell>
-                                <TableCell>PHP 5.00</TableCell>
-                                <TableCell>164/200</TableCell>
-                                <TableCell className="flex justify-center">
-
-                                    <OrderStatusTable label="Pending" />
-
+                                <TableCell className="font-medium">Mario Inguito</TableCell>
+                                <TableCell>0998 765 4321</TableCell>
+                                <TableCell>
+                                    <div className="flex items-center gap-x-3 text-neutral-500">
+                                        <Tags size={18} />
+                                        <h1>5</h1>
+                                    </div>
+                                </TableCell>
+                                <TableCell>mario@gmail.com</TableCell>
+                                <TableCell>
+                                    <div className="flex items-center gap-x-3">
+                                        <div className="rounded-full bg-[#A6E7D8] border border-[#008767] w-2 h-2" />
+                                        <h1>Active</h1>
+                                    </div>
                                 </TableCell>
                                 <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
+
                             </TableRow>
 
 
