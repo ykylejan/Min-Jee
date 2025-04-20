@@ -1,5 +1,6 @@
 "use client";
 
+import RentalsSection from "@/components/RentalsSection";
 import { Badge } from "@/components/ui/badge";
 import {
     Breadcrumb,
@@ -26,76 +27,86 @@ const page = ({ params }: PageProps) => {
     const { id } = React.use(params);
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5]">
+        <div className="min-h-screen bg-[#FFFBF5] px-24 pt-44">
 
-            <div className="flex px-24 py-44 gap-x-12 justify-center">
-                {ProductsDataSample.filter((product) => product.id === id).map((product) => (
-                    <Fragment key={product.id}>
-                        <div className="">
-                            <img
-                                src={product.image.src}
-                                alt="product-item"
-                                className="aspect-square h-[500px] rounded-md object-cover"
-                            />
-                        </div>
+            <div className="">
+                <div className="flex gap-x-12 justify-center">
+                    {ProductsDataSample.filter((product) => product.id === id).map((product) => (
+                        <Fragment key={product.id}>
+                            <div className="">
+                                <img
+                                    src={product.image.src}
+                                    alt="product-item"
+                                    className="aspect-square h-[500px] rounded-md object-cover"
+                                />
+                            </div>
 
-                        <div className="font-afacad w-1/2 px-10">
-                            <Breadcrumb>
-                                <BreadcrumbList>
-                                    <BreadcrumbItem>
-                                        <BreadcrumbLink href="/" className="text-lg">
-                                            <IoMdHome />
-                                        </BreadcrumbLink>
-                                    </BreadcrumbItem>
-                                    <BreadcrumbSeparator>
-                                        <Slash />
-                                    </BreadcrumbSeparator>
-                                    <BreadcrumbItem>
-                                        <Link href={"/shop"}>Shop</Link>
-                                    </BreadcrumbItem>
-                                    <BreadcrumbSeparator>
-                                        <Slash />
-                                    </BreadcrumbSeparator>
-                                    <BreadcrumbItem>
-                                        <BreadcrumbPage className="text-lg">{product.category} </BreadcrumbPage>
-                                    </BreadcrumbItem>
-                                </BreadcrumbList>
-                            </Breadcrumb>
+                            <div className="font-afacad w-1/2 px-10">
+                                <Breadcrumb>
+                                    <BreadcrumbList>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbLink href="/" className="text-lg">
+                                                <IoMdHome />
+                                            </BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                        <BreadcrumbSeparator>
+                                            <Slash />
+                                        </BreadcrumbSeparator>
+                                        <BreadcrumbItem>
+                                            <Link href={"/shop"}>Shop</Link>
+                                        </BreadcrumbItem>
+                                        <BreadcrumbSeparator>
+                                            <Slash />
+                                        </BreadcrumbSeparator>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbPage className="text-lg">{product.category} </BreadcrumbPage>
+                                        </BreadcrumbItem>
+                                    </BreadcrumbList>
+                                </Breadcrumb>
 
 
 
-                            <div className="flex items-center space-x-8 mt-3 justify-between">
-                                <div>
-                                    <h1 className="text-5xl font-afacad_semibold">{product.name} </h1>
-                                    <h1 className="text-3xl font-afacad">PHP {product.price.toFixed(2)} </h1>
+                                <div className="flex items-center space-x-8 mt-3 justify-between">
+                                    <div>
+                                        <h1 className="text-5xl font-afacad_semibold">{product.name} </h1>
+                                        <h1 className="text-3xl font-afacad">PHP {product.price.toFixed(2)} </h1>
+                                    </div>
+
+                                    <MdContentCopy
+                                        size={25}
+                                        className="text-[#6B7280] hover:text-black cursor-pointer"
+                                    />
                                 </div>
 
-                                <MdContentCopy
-                                    size={25}
-                                    className="text-[#6B7280] hover:text-black cursor-pointer"
-                                />
+                                <div className="mt-16">
+                                    <h1 className="text-[#6B7280] font-afacad_semibold text-md">Quantity</h1>
+                                    <QuantityInput
+                                        placeholder="Enter the amount to rent"
+                                        className="h-12 !text-base"
+                                    />
+                                </div>
+
+                                <Button className="bg-[#0F172A] font-poppins_bold w-full rounded-3xl h-12 mt-5">Add to basket</Button>
+
+                                <div className="mt-16">
+                                    <h1 className="text-[#6B7280] font-afacad_semibold text-md">Categories</h1>
+                                    <Badge variant="outline" className="text-[#6B7280] font-afacad" >{product.category} </Badge>
+                                </div>
+
                             </div>
+                        </Fragment>
+                    ))}
+                </div>
 
-                            <div className="mt-16">
-                                <h1 className="text-[#6B7280] font-afacad_semibold text-md">Quantity</h1>
-                                <QuantityInput
-                                    placeholder="Enter the amount to rent"
-                                    className="h-12 !text-base"
-                                />
-                            </div>
+                <div className="px-12 pt-32">
+                    <RentalsSection label="Related Items" />
+                </div>
 
-                            <Button className="bg-[#0F172A] font-poppins_bold w-full rounded-3xl h-12 mt-5">Add to basket</Button>
-
-                            <div className="mt-16">
-                                <h1 className="text-[#6B7280] font-afacad_semibold text-md">Categories</h1>
-                                <Badge variant="outline" className="text-[#6B7280] font-afacad" >{product.category} </Badge>
-                            </div>
-
-                        </div>
-                    </Fragment>
-                ))}
 
             </div>
+
+
+
 
         </div>
     );

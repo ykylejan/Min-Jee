@@ -18,7 +18,7 @@ import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
 const page = () => {
     const router = useRouter();
     const handleRowClick = (id: string) => {
-        router.push(`/products/${id}`);
+        router.push(`/customers/${id}`);
     };
 
     return (
@@ -28,9 +28,9 @@ const page = () => {
                     <CardTitle className="flex justify-between items-center">
                         <div className="font-afacad font-light text-2xl">
                             Customer Lists
-                            {/* <CardDescription className="text-base">
-                                Click an order row to view its details.
-                            </CardDescription> */}
+                            <CardDescription className="text-base">
+                                Click an order row to view/edit a customer details.
+                            </CardDescription>
                         </div>
 
                         <div className="flex gap-x-3">

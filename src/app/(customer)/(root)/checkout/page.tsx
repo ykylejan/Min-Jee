@@ -9,7 +9,7 @@ import OrderDetailsSet from "@/components/CheckoutPage/OrderDetailsSet";
 import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 
 const page = () => {
-    const [isVerified, setIsVerified] = useState("Pending");
+    const [isVerified, setIsVerified] = useState("Verified");
     const [isOrderable, setIsOrderable] = useState(false); // State to track orderable status
 
     return (

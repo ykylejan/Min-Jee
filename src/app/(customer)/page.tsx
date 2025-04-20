@@ -1,7 +1,7 @@
 'use client'
 
 import LandingProvide from "@/components/LandingPage/LandingProvide";
-import LandingRentals from "@/components/LandingPage/LandingRentals";
+import RentalsSection from "@/components/RentalsSection";
 import LandingGrid from "@/components/LandingPage/LandingGrid";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -40,7 +40,7 @@ const page = () => {
             <div className="px-10 lg:px-24 py-16">
                 <LandingProvide />
 
-                <LandingRentals />
+                <RentalsSection />
 
                 <LandingGrid />
             </div>
