@@ -16,7 +16,7 @@ const statusStyles: Record<
 };
 
 const StatusLabel = ({ label }: StatusProps) => {
-    const styles = statusStyles[label.toLowerCase()] || statusStyles["pending"]; // Default to "pending" if the label doesn't match
+    const styles = statusStyles[label.toLowerCase()] || statusStyles["pending"]; // Default if the label doesn't match (aka customer didnt place order yet)
 
     return (
         <div

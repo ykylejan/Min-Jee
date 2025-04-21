@@ -4,7 +4,7 @@ import OrderItem from "./OrderItem";
 import StatusLabel from "../StatusLabel";
 
 const EventsScreen = () => {
-    const [isPossess, setIsPosses] = useState(true);
+    const [isPossess, setIsPosses] = useState(false);
     const [isCurrentOrder, setIsCurrentOrder] = useState(true);
     const [isRecentOrder, setIsRecentOrder] = useState(true);
 

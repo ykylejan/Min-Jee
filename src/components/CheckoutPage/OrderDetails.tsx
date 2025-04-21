@@ -39,7 +39,7 @@ const OrderDetails = () => {
                 </div>
 
 
-                <div className="pt-8">
+                <div className="pt-16">
                     <div className="flex items-center gap-x-3">
                         <NotebookIcon size={20} />
                         <h1 className="text-xl">Booking Schedule</h1>
@@ -76,7 +76,7 @@ const OrderDetails = () => {
 
                 </div>
 
-                <div className="pt-8">
+                <div className="pt-16">
                     <div className="flex items-center gap-x-3">
                         <Truck size={20} />
                         <h1 className="text-xl">Delivery Option</h1>
@@ -121,9 +121,9 @@ const OrderDetails = () => {
 
 
 
-                <div className="pt-6">
+                {/* <div className="pt-6">
                     <Button className="bg-camouflage-400 text-white hover:bg-camouflage-400/80">Submit Order</Button>
-                </div>
+                </div> */}
 
 
             </div>

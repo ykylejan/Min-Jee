@@ -8,9 +8,22 @@ import StatusLabel from "@/components/StatusLabel";
 import OrderDetailsSet from "@/components/CheckoutPage/OrderDetailsSet";
 import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 
-const page = () => {
-    const [isVerified, setIsVerified] = useState("Verified");
-    const [isOrderable, setIsOrderable] = useState(false); // State to track orderable status
+const Page = () => {
+    // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
+    const [orderStatus, setOrderStatus] = useState("");
+    
+    // Controls which form to show (order details or payment)
+    const [showPaymentForm, setShowPaymentForm] = useState(false);
+    
+    // Function to handle status changes - can be passed to child components
+    const updateOrderStatus = (status: React.SetStateAction<string>) => {
+        setOrderStatus(status);
+    };
+
+    // Handle going back from payment to order details
+    const handleBackToOrderDetails = () => {
+        setShowPaymentForm(false);
+    };
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px] flex justify-center">
@@ -21,12 +34,10 @@ const page = () => {
                     <div className="space-y-10">
                         <BasketList />
 
-                        {isOrderable ? (
+                        {showPaymentForm ? (
                             <div>
-                                <OrderDetailsSet
-                                    onOrderableChange={(orderable) =>
-                                        setIsOrderable(orderable)
-                                    }
+                                <OrderDetailsSet 
+                                    onOrderableChange={handleBackToOrderDetails} 
                                 />
                                 <OrderDetailsPayment />
                             </div>
@@ -35,14 +46,13 @@ const page = () => {
                         )}
                     </div>
 
-                    {/* hard but cleaner way. don't erase comments, need it for future references..*/}
                     <OrderStatus
-                        label={isVerified}
-                        onOrderableChange={(orderable) =>
-                            setIsOrderable(orderable)
-                        } // Pass callback
+                        orderStatus={orderStatus}
+                        updateOrderStatus={updateOrderStatus}
+                        showPaymentForm={showPaymentForm}
+                        setShowPaymentForm={setShowPaymentForm}
                     >
-                        <StatusLabel label={isVerified} />
+                        {orderStatus && <StatusLabel label={orderStatus} />}
                     </OrderStatus>
                 </div>
             </div>
@@ -50,4 +60,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

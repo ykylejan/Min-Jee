@@ -30,7 +30,7 @@ const page = () => {
                             Seamless rentals, tailored events—bringing your
                             celebration dreams to life with ease.
                         </h1>
-                        <Button onClick={() => router.push("/shop")} className="bg-[#D9D9D9] text-[#3F454E] w-52 h-12 rounded-full font-inder mt-16">
+                        <Button onClick={() => router.push("/shop")} className="bg-[#D9D9D9] text-[#3F454E] hover:text-white w-52 h-12 rounded-full font-inder mt-16">
                             Discover our Shop
                         </Button>
                     </div>
