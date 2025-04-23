@@ -156,3 +156,40 @@ export const AllProductsSample = [
         maxQuantity: 165 
     },
 ]
+
+export const AllCustomerSample = [
+    {
+        id: 1,
+        customerName: "Aurram Blade",
+        phoneNumber: "0998 765 4321",
+        bookings: 8,
+        email: "kyldellatan@gmail.com",
+        status: "Active"
+    },
+    {
+        id: 2,
+        customerName: "Arboria Blade",
+        phoneNumber: "0999 999 9999",
+        bookings: 3,
+        email: "arboria@gmail.com",
+        status: "Active"
+    },
+    {
+        id: 3,
+        customerName: "Catasia Blade",
+        phoneNumber: "0999 999 9999",
+        bookings: 17,
+        email: "arboria@gmail.com",
+        status: "Inactive"
+    },
+]
+
+export const AllPartnerSample = [
+    {
+        id: 1,
+        partnerName: "Meteor Light",
+        phoneNumber: "09987654321",
+        category: "Catering",
+        email: "meteor@gmail.com",
+    }
+]

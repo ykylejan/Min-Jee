@@ -13,14 +13,14 @@ import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
-import { AllCustomerSample } from "@/constants";
+import { AllCustomerSample, AllPartnerSample } from "@/constants";
 import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
 
 
 const page = () => {
     const router = useRouter();
     const handleRowClick = (id: string) => {
-        router.push(`/customers/${id}`);
+        router.push(`/parnters/${id}`);
     };
 
     return (
@@ -29,9 +29,9 @@ const page = () => {
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         <div className="font-afacad font-light text-2xl">
-                            Customer Lists
+                            Parnter List
                             <CardDescription className="text-base">
-                                Click an order row to view/edit a customer details.
+                                Click an order row to view/edit a partner details.
                             </CardDescription>
                         </div>
 
@@ -43,7 +43,7 @@ const page = () => {
 
                             <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
                                 <UserRoundPlus />
-                                Add Customer
+                                Add Partner
                             </Button>
                         </div>
 
@@ -54,11 +54,10 @@ const page = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="">Customer Name</TableHead>
+                                <TableHead className="">Partner Name</TableHead>
                                 <TableHead>Phone</TableHead>
-                                <TableHead>Bookings</TableHead>
+                                <TableHead>Category</TableHead>
                                 <TableHead>Email</TableHead>
-                                <TableHead>Status</TableHead>
                                 <TableHead> </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -66,24 +65,16 @@ const page = () => {
 
 
                             {/* 5 rows is ideal */}
-                            {AllCustomerSample.map((data) => (
+                            {AllPartnerSample.map((data) => (
                                 <TableRow
                                     key={data.id}
                                     className="hover:cursor-pointer"
                                     onClick={() => handleRowClick("edit-customer")}
                                 >
-                                    <TableCell className="font-medium">{data.customerName}</TableCell>
+                                    <TableCell className="font-medium">{data.partnerName}</TableCell>
                                     <TableCell>{data.phoneNumber}</TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-x-3 text-neutral-500">
-                                            <Tags size={18} />
-                                            <h1>{data.bookings}</h1>
-                                        </div>
-                                    </TableCell>
+                                    <TableCell>{data.category}</TableCell>
                                     <TableCell>{data.email}</TableCell>
-                                    <TableCell>
-                                        <OnlineStatus status={data.status} />
-                                    </TableCell>
                                     <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
 
                                 </TableRow>

@@ -66,12 +66,11 @@ const page = () => {
                                 <TableCell>164/200</TableCell>
                                 <TableCell className="flex justify-center">
 
-                                    <OrderStatusTable label="Pending"/>
+                                    <OrderStatusTable label="Verified"/>
 
                                 </TableCell>
                             </TableRow>
                             
-
 
                         </TableBody>
                     </Table>

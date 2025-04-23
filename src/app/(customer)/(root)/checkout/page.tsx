@@ -10,7 +10,7 @@ import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 
 const Page = () => {
     // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
-    const [orderStatus, setOrderStatus] = useState("");
+    const [orderStatus, setOrderStatus] = useState("Rejected");
     
     // Controls which form to show (order details or payment)
     const [showPaymentForm, setShowPaymentForm] = useState(false);
