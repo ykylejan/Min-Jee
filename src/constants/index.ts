@@ -193,3 +193,20 @@ export const AllPartnerSample = [
         email: "meteor@gmail.com",
     }
 ]
+
+export const AllHistorySample = [
+    {
+        id: 1,
+        customerName: "Sean Arnado",
+        phoneNumber: "099876565655",
+        catergory: "Event",
+        paymentStatus: "Completed",
+    },
+    {
+        id: 2,
+        customerName: "Sean Arnado",
+        phoneNumber: "099876565655",
+        catergory: "Event",
+        paymentStatus: "Pending",
+    },
+]

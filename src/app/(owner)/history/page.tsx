@@ -13,14 +13,15 @@ import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
-import { AllCustomerSample, AllPartnerSample } from "@/constants";
+import { AllCustomerSample, AllHistorySample, AllPartnerSample } from "@/constants";
 import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
+import PaymentStatus from "@/components/OwnerPage/History/PaymentStatus";
 
 
 const page = () => {
     const router = useRouter();
     const handleRowClick = (id: string) => {
-        router.push(`/parnters/${id}`);
+        router.push(`/history/${id}`);
     };
 
     return (
@@ -29,9 +30,9 @@ const page = () => {
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         <div className="font-afacad font-light text-2xl">
-                            Parnter List
+                            History List
                             <CardDescription className="text-base">
-                                Click an order row to view/edit a partner details.
+                                Click a row to expand the a customer's order history.
                             </CardDescription>
                         </div>
 
@@ -40,11 +41,6 @@ const page = () => {
                                 <Input placeholder="Search an order item" className="w-fit font-light pr-8" />
                                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                             </div>
-
-                            <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
-                                <UserRoundPlus />
-                                Add Partner
-                            </Button>
                         </div>
 
                     </CardTitle>
@@ -54,28 +50,29 @@ const page = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="">Partner Name</TableHead>
+                                <TableHead className="">Customer Name</TableHead>
                                 <TableHead>Phone</TableHead>
                                 <TableHead>Category</TableHead>
-                                <TableHead>Email</TableHead>
+                                <TableHead>Payment Status</TableHead>
                                 <TableHead> </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
 
-
                             {/* 5 rows is ideal */}
-                            {AllPartnerSample.map((data) => (
+                            {AllHistorySample.map((data) => (
                                 <TableRow
                                     key={data.id}
                                     className="hover:cursor-pointer"
-                                    onClick={() => handleRowClick("edit-partner")}
+                                    onClick={() => handleRowClick("edit-customer")}
                                 >
-                                    <TableCell className="font-medium">{data.partnerName}</TableCell>
+                                    <TableCell className="font-medium">{data.customerName}</TableCell>
                                     <TableCell>{data.phoneNumber}</TableCell>
-                                    <TableCell>{data.category}</TableCell>
-                                    <TableCell>{data.email}</TableCell>
-                                    <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
+                                    <TableCell>{data.catergory}</TableCell>
+                                    <TableCell>
+                                        <PaymentStatus status={data.paymentStatus} />
+                                    </TableCell>
+                                    <TableCell className="hover:underline cursor-pointer">View</TableCell>
 
                                 </TableRow>
                             ))}
