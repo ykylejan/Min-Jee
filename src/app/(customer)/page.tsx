@@ -36,7 +36,7 @@ const page = () => {
                     </div>
                 </div>
             </div>
-
+            
             <div className="px-10 lg:px-24 py-16">
                 <LandingProvide />
 
