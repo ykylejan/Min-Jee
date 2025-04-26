@@ -16,8 +16,8 @@ import * as z from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import 'dotenv/config'
-
+import "dotenv/config";
+import axios from "axios";
 
 const formSchema = z
   .object({
@@ -56,53 +56,68 @@ const SignUpPage = () => {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     setError("");
-    setSuccess("");
-    console.log("DATA:", data);
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `${API_URL}/auth/register`,
         {
-          method: "POST",
+          first_name: data.first_name,
+          last_name: data.last_name,
+          contact_number: data.contact_number,
+          email: data.email,
+          address: data.address,
+          password: data.password,
+          password_confirmation: data.passwordConf, // Changed to match common backend expectations
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            contact_number: data.contact_number,
-            email: data.email,
-            address: data.address,
-            password: data.password,
-            passwordConf: data.passwordConf,
-          }),
         }
       );
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        toast("Registration Unsuccessfull", {
-            description:
-                "Your registration is unsuccessful. Please try again.",
-            className: "bg-camouflage-800/80 border border-none text-white"
-        });
-        throw new Error(result.message || "Registration failed");
-      }
-
-      toast("Registration Successfull", {
+      toast("Registration Successful", {
         description:
-            "You have successfully registered. Please log in to your account.",
-        className: "bg-camouflage-800/80 border border-none text-white"
-    });
+          "You have successfully registered. Please log in to your account.",
+        className: "bg-camouflage-800/80 border border-none text-white",
+      });
 
-    //   setSuccess("Registration successful! Redirecting to login...");
       reset();
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      console.error("Registration error:", err);
+
+      if (err.response) {
+        // Handle server response errors
+        if (err.response.status === 422) {
+          // Handle validation errors
+          const errorMessages = Object.values(err.response.data.errors)
+            .flat()
+            .join(", ");
+          setError(errorMessages);
+          toast("Registration Unsuccessful", {
+            description:
+              errorMessages || "Please check your input and try again.",
+            className: "bg-camouflage-800/80 border border-none text-white",
+          });
+        } else {
+          setError(err.response.data.message || "Registration failed");
+          toast("Registration Unsuccessful", {
+            description:
+              err.response.data.message ||
+              "Your registration is unsuccessful. Please try again.",
+            className: "bg-camouflage-800/80 border border-none text-white",
+          });
+        }
+      } else {
+        setError(err.message || "Something went wrong");
+        toast("Error", {
+          description: "Network error occurred. Please try again.",
+          className: "bg-camouflage-800/80 border border-none text-white",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -245,7 +260,7 @@ const SignUpPage = () => {
           <Button
             type="submit"
             className="bg-[#778768] w-full h-[55px] font-bold mt-6 sm:mt-8"
-            disabled={isLoading} 
+            disabled={isLoading}
           >
             {isLoading ? "Processing..." : "SIGN UP"}
           </Button>
