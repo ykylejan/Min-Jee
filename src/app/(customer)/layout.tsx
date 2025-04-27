@@ -3,25 +3,27 @@ import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
-
+import OwnerAuthRedirect from "@/components/OwnerAuthRedirect";
 export const metadata: Metadata = {
-    title: "Min-Jee",
-    description: "A party needs and services website",
+  title: "Min-Jee",
+  description: "A party needs and services website",
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
-            <body>
-                <Navbar/>
-                {children}
-                <Toaster />
-                <Footer/>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <body>
+        <OwnerAuthRedirect>
+          <Navbar />
+          {children}
+          <Toaster />
+          <Footer />
+        </OwnerAuthRedirect>
+      </body>
+    </html>
+  );
 }
