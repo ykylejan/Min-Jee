@@ -16,12 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <OwnerAuthRedirect> */}
+        <OwnerAuthRedirect>
           <OwnerLayout>
             {children}
             <Toaster />
           </OwnerLayout>
-        {/* </OwnerAuthRedirect> */}
+        </OwnerAuthRedirect>
       </body>
     </html>
   );

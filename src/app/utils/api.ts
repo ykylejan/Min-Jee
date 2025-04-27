@@ -4,7 +4,7 @@ import { store } from "@/redux/store";
 import { refreshAccessToken, logout } from "@/redux/slices/authSlice";
 import "dotenv/config";
 const api = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:8000/api/v1", 
+  baseURL: process.env.API_URL || "http://localhost:8000/api/v1", // example: 'https://your-api.com/api'
   withCredentials: true, // Important if tokens are in httpOnly cookies
 });
 
@@ -13,8 +13,7 @@ api.interceptors.request.use(
   (config) => {
     const state = store.getState();
     const token = state.auth.accessToken;
-    console.log("Token from Redux:", token); // Debugging line
-    
+
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

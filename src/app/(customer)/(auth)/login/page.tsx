@@ -64,7 +64,7 @@ const LoginPage = () => {
         exp: number;
         iat: number;
       } = jwtDecode(access_token);
-
+      
       // Dispatch login success to Redux
       dispatch(
         loginSuccess({
@@ -73,7 +73,7 @@ const LoginPage = () => {
             email: data.email,
           },
           accessToken: access_token,
-          role: decodedToken.role,
+          role: "owner",
         })
       );
 
@@ -82,11 +82,7 @@ const LoginPage = () => {
         className: "bg-camouflage-800/80 border border-none text-white",
       });
 
-      if (decodedToken.role === "owner") {
-        router.push("/orders");
-      } else if (decodedToken.role === "customer") {
-        router.push("/account");
-      }
+      router.push("/orders");
     } catch (err: any) {
       console.error("Login error:", err);
 

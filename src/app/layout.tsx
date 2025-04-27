@@ -1,19 +1,15 @@
-"use client";
+'use client';
 
-import { ReduxProvider } from "@/redux/provider";
 import "./globals.css";
-// import { store } from "../redux/store";
-// import { Provider } from "react-redux";
-import OwnerAuthRedirect from "@/components/OwnerAuthRedirect";
+import { store } from "../redux/store";
+import { Provider } from "react-redux";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <ReduxProvider>
-          <OwnerAuthRedirect>{children}</OwnerAuthRedirect>
-        </ReduxProvider>
-      </body>
-    </html>
+    <Provider store={store}>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </Provider>
   );
 }
