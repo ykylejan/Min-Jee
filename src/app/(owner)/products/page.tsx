@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search, TrendingDown, TrendingUp } from "lucide-react";
 import StockStatus from "@/components/OwnerPage/Products/StockStatus";
 import { AllProductsSample } from "@/constants";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 
 const page = () => {
@@ -41,10 +42,21 @@ const page = () => {
                                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                             </div>
 
-                            <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
-                                <Plus />
-                                Add Product
-                            </Button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                                        <Plus />
+                                        Add Product
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="font-afacad">
+                                    <DropdownMenuItem onClick={() => router.push("/products/add-rental")}>Rentals</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => router.push("/products/add-service")}>Service</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => router.push("/products/add-event")}>Event</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+
                         </div>
 
                     </CardTitle>

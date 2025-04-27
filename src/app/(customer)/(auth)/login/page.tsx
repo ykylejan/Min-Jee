@@ -111,7 +111,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
+    <div className="min-h-screen bg-[#FFFBF5] pt-16">
       <div className="flex flex-col justify-center items-center pt-[80px]">
         <img
           src={icons.logoleaf.src}
