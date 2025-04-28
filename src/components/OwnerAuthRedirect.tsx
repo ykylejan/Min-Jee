@@ -15,7 +15,8 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   
     const publicPaths = ["/login", "/register", "/forgot-password"];
     const customerPaths = ["/account", "/checkout", "/receipt"]; // Add any other customer paths here
-  
+
+    
     if (publicPaths.includes(pathname)) {
       // If logged in and on a public page, redirect properly
       if (accessToken && role === "owner") {
@@ -29,7 +30,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
         router.replace("/account");
         return;
       }
-  
+      
       // Not logged in, allow access to public page
       setIsAuthorized(true);
       return;

@@ -39,6 +39,22 @@ const navLinks = [
     icon: <Tag />,
   },
   {
+    name: "Rentals",
+    href: "/rentals",
+    icon: <Tag />,
+  },
+  {
+    name: "Events",
+    href: "/events",
+    icon: <Tag />,
+    
+  },
+  {
+    name: "Services",
+    href: "/services",
+    icon: <Tag />,
+  },
+  {
     name: "Customers",
     href: "/customers",
     icon: <Users />,
