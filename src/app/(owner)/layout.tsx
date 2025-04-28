@@ -14,15 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        {/* <OwnerAuthRedirect> */}
-          <OwnerLayout>
-            {children}
-            <Toaster />
-          </OwnerLayout>
-        {/* </OwnerAuthRedirect> */}
-      </body>
-    </html>
+    <div>
+      {/* <OwnerAuthRedirect> */}
+      <OwnerLayout>
+        {children}
+        <Toaster />
+      </OwnerLayout>
+      {/* </OwnerAuthRedirect> */}
+    </div>
   );
 }
