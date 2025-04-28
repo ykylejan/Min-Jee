@@ -13,7 +13,6 @@ api.interceptors.request.use(
   (config) => {
     const state = store.getState();
     const token = state.auth.accessToken;
-    console.log("Token from Redux:", token); // Debugging line
     
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
