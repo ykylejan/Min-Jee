@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import StockStatus from "@/components/OwnerPage/Products/StockStatus";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_RENTALS } from "@/graphql/products";
+import { GET_ALL_CATEGORIES, GET_ALL_RENTALS } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
 
 interface RentalTypes {
@@ -38,17 +38,33 @@ interface RentalTypes {
 const Page = () => {
   const router = useRouter();
   const [rentals, setRentals] = useState<RentalTypes[]>([]);
+
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const { loading, error, data } = useQuery(GET_ALL_RENTALS, {
     client: apolloClient,
   });
-  
-  useEffect(() => {
-    if (data?.getRentals) {
-      console.log("DATA:", data.getRentals);
 
+  const {
+    loading: categoryLoading,
+    error: categoryError,
+    data: categoryData,
+  } = useQuery(GET_ALL_CATEGORIES, {
+    client: apolloClient,
+  });
+
+  useEffect(() => {
+    if (data?.getRentals && categoryData?.getCategories) {
+      // console.log("DATA:", data.getRentals);
+      setCategories(categoryData.getCategories);
       setRentals(data.getRentals);
     }
-  }, [data]);
+  }, [data, categoryData]);
+
+  const getCategoryName = (categoryId: string): string => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
 
   const handleRowClick = (id: string) => {
     router.push(`/rentals/${id}`);
@@ -107,7 +123,7 @@ const Page = () => {
                 onClick={() => handleRowClick(rental.id)}
               >
                 <TableCell className="font-medium">{rental.name}</TableCell>
-                <TableCell>{rental.categoryId}</TableCell>
+                <TableCell>{getCategoryName(rental.categoryId)}</TableCell>
                 <TableCell>PHP {rental.price}</TableCell>
                 <TableCell>{rental.quantity}</TableCell>
                 <TableCell>

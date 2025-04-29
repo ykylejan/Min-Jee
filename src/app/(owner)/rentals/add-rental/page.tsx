@@ -1,5 +1,5 @@
 "use client";
-
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,8 +21,10 @@ import { toast } from "sonner";
 // Define validation schema
 const rentalSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
+  description: z.string().optional(),
+
   quantity: z.number().min(1, "Quantity must be at least 1"),
-  price: z.number().min(0, "Price cannot be negative"),
+  price: z.number().min(1, "Price must be at least 1 Pesos"),
   categoryId: z.string().min(1, "Category is required"),
 });
 
@@ -37,7 +39,6 @@ const page = () => {
     register,
     handleSubmit,
     control,
-    setValue,
     watch,
     formState: { errors },
   } = useForm<RentalFormValues>({
@@ -47,6 +48,7 @@ const page = () => {
       quantity: 0,
       price: 0,
       categoryId: "",
+      description: "",
     },
   });
 
@@ -65,6 +67,7 @@ const page = () => {
 
       // Add form data
       formData.append("name", data.name);
+      formData.append("description", data.description || "");
       formData.append("quantity", data.quantity.toString());
       formData.append("price", data.price.toString());
       formData.append("category_id", data.categoryId);
@@ -86,12 +89,20 @@ const page = () => {
         className: "bg-camouflage-800/80 border border-none text-white",
       });
       router.push("/rentals"); // Redirect to rentals page
-    } catch (error) {
-      let errorMessage = "Something went wrong. Please try again.";
-      toast("Login Failed", {
-        description: errorMessage,
-        className: "bg-red-500/80 border border-none text-white",
-      });
+    } catch (error: any) {
+      // console.log("ERROR:", error.response.data.detail[0].msg);
+      if (error.response.data.detail[0].msg == "Field required") {
+        toast("All fields are required", {
+          description: "Please fill in all the required fields.",
+          className: "bg-red-500/80 border border-none text-white",
+        });
+      } else {
+        let errorMessage = "Something went wrong. Please try again.";
+        toast("All fields are required", {
+          description: errorMessage,
+          className: "bg-red-500/80 border border-none text-white",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -225,6 +236,20 @@ const page = () => {
             )}
           </div>
 
+          <div>
+            <h1 className="font-afacad text-neutral-500">Extras</h1>
+            <hr />
+          </div>
+          <div className="pt-6 pb-10 space-y-6">
+            <div>
+              <h1 className="text-sm text-neutral-500">Description</h1>
+              <Textarea
+                placeholder={"Write the product's description here.."}
+                className="bg-neutral-100/50 w-full h-28 px-5 py-3"
+                {...register("description")}
+              />
+            </div>
+          </div>
           <div>
             <h1 className="font-afacad text-neutral-500">Media</h1>
             <hr />
