@@ -8,7 +8,7 @@ import axios from 'axios';
 import 'dotenv/config';
 
 const httpLink = createHttpLink({
-  uri: process.env.GRAPHQL_URL || 'http://localhost:8000/api/v1/graphql',
+  uri: process.env.API_URL || 'http://localhost:8000/api/v1/graphql',
   credentials: 'include', // Important for httpOnly cookies
 });
 
@@ -16,7 +16,7 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, { headers }) => {
   const state = store.getState();
   const token = state.auth.accessToken;
-
+    
   return {
     headers: {
       ...headers,

@@ -12,3 +12,27 @@ export const GET_ALL_RENTALS = gql`
     }
   }
 `;
+
+export const GET_ALL_CATEGORIES = gql`
+  query getAllCategories {
+    getCategories {
+      name
+      id
+      type
+    }
+  }
+`;
+
+export const GET_RENTAL_BY_ID = gql`
+  query getIndividualRental($id: UUID!) {
+    getRentalsById(id: $id) {
+      categoryId
+      description
+      id
+      img
+      name
+      price
+      quantity
+    }
+  }
+`;
