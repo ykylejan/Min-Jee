@@ -44,10 +44,10 @@ const page = () => {
 
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                                    {/* <div className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
                                         <Plus />
                                         Add Product
-                                    </Button>
+                                    </Button> */}
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="font-afacad">
                                     <DropdownMenuItem onClick={() => router.push("/products/add-rental")}>Rentals</DropdownMenuItem>

@@ -91,30 +91,15 @@ const EditRentalPage = () => {
     setIsSubmitting(true);
     try {
       const formPayload = new FormData();
-      // formPayload.append("name", formData.name);
-      // formPayload.append("description", formData.description || "");
-      // formPayload.append("quantity", formData.quantity.toString());
-      // formPayload.append("price", formData.price.toString());
-      // formPayload.append("category_id", formData.categoryId);
 
       if (selectedImage) {
         formPayload.append("file", selectedImage);
       }
 
-      // const formPayload = {
-      //   name: data.name,
-      //   description: data.description || "",
-      //   quantity: data.quantity,
-      //   price: data.price,
-      //   category_id: data.categoryId,
-      // };
-
-      // console.log("Form Payload:", formPayload);
-
       await api.patch(`/o/rental/${rentalId}/img`, formPayload, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
+
       await api.patch(
         `/o/rental/${rentalId}`,
         {
@@ -123,7 +108,6 @@ const EditRentalPage = () => {
           quantity: data.quantity,
           price: data.price,
           category_id: data.categoryId,
-          // file: selectedImage || null,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -277,7 +261,7 @@ const EditRentalPage = () => {
                       "b62f5333-2e7e-4510-ae3d-36fcabfd12ed": "Electronics",
                     }[field.value] || ""
                   : "";
-
+                    
                 return (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

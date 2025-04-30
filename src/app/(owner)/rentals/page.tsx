@@ -32,7 +32,8 @@ interface RentalTypes {
   img: string;
   name: string;
   price: number;
-  quantity: number;
+  currentQuantity: number;
+  totalQuantity: number;
 }
 
 const Page = () => {
@@ -125,10 +126,10 @@ const Page = () => {
                 <TableCell className="font-medium">{rental.name}</TableCell>
                 <TableCell>{getCategoryName(rental.categoryId)}</TableCell>
                 <TableCell>PHP {rental.price}</TableCell>
-                <TableCell>{rental.quantity}</TableCell>
+                <TableCell>{rental.currentQuantity}/{rental.totalQuantity}</TableCell>
                 <TableCell>
                   <StockStatus
-                    status={rental.quantity > 0 ? "In Stock" : "Out of Stock"}
+                    status={rental.currentQuantity > 0 ? "In Stock" : "Out of Stock"}
                   />
                 </TableCell>
                 <TableCell className="hover:underline cursor-pointer">
