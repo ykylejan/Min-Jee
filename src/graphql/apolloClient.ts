@@ -8,7 +8,7 @@ import axios from 'axios';
 import 'dotenv/config';
 
 const httpLink = createHttpLink({
-  uri: process.env.API_URL || 'http://localhost:8000/api/v1/graphql',
+  uri: process.env.API_URL || 'http://localhost:8000/api/v1/catalog',
   credentials: 'include', // Important for httpOnly cookies
 });
 
