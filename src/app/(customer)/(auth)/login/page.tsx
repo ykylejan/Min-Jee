@@ -79,7 +79,7 @@ const LoginPage = () => {
 
       toast("Login Successful", {
         description: "You have been logged in successfully.",
-        className: "bg-camouflage-800/80 border border-none text-white",
+        className: "bg-green-500/80 border border-none text-white",
       });
 
       if (decodedToken.role === "owner") {

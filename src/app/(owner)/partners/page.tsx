@@ -20,7 +20,7 @@ import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
 const page = () => {
     const router = useRouter();
     const handleRowClick = (id: string) => {
-        router.push(`/parnters/${id}`);
+        router.push(`/partners/${id}`);
     };
 
     return (
@@ -41,7 +41,10 @@ const page = () => {
                                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                             </div>
 
-                            <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                            <Button
+                                onClick={() => router.push("/partners/add-partner")}
+                                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
+                            >
                                 <UserRoundPlus />
                                 Add Partner
                             </Button>
@@ -55,9 +58,9 @@ const page = () => {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="">Partner Name</TableHead>
-                                <TableHead>Phone</TableHead>
+                                <TableHead>Address</TableHead>
+                                <TableHead>Phone Number</TableHead>
                                 <TableHead>Category</TableHead>
-                                <TableHead>Email</TableHead>
                                 <TableHead> </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -72,9 +75,9 @@ const page = () => {
                                     onClick={() => handleRowClick("edit-partner")}
                                 >
                                     <TableCell className="font-medium">{data.partnerName}</TableCell>
+                                    <TableCell>{data.address}</TableCell>
                                     <TableCell>{data.phoneNumber}</TableCell>
                                     <TableCell>{data.category}</TableCell>
-                                    <TableCell>{data.email}</TableCell>
                                     <TableCell className="hover:underline cursor-pointer">Edit</TableCell>
 
                                 </TableRow>

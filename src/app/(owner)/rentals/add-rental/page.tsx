@@ -86,7 +86,7 @@ const page = () => {
 
       toast("Rental Added Successfuly", {
         description: "You have added a rental item successfully.",
-        className: "bg-camouflage-800/80 border border-none text-white",
+        className: "bg-green-500/80 border border-none text-white",
       });
       router.push("/rentals"); // Redirect to rentals page
     } catch (error: any) {

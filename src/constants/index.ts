@@ -190,7 +190,14 @@ export const AllPartnerSample = [
         partnerName: "Meteor Light",
         phoneNumber: "09987654321",
         category: "Catering",
-        email: "meteor@gmail.com",
+        address: "03 Black Shroud, New Gridania, Aldenard",
+    },
+    {
+        id: 2,
+        partnerName: "Azem Crystal",
+        phoneNumber: "09977545412",
+        category: "Technicals",
+        address: "The Mother Crystal, ???",
     }
 ]
 

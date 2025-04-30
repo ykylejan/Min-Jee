@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react'
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const page = () => {
     const router = useRouter();
@@ -21,50 +22,50 @@ const page = () => {
                         <MoveLeft width={20} height={20} className="text-neutral-600" />
                     </button>
                     <div className="flex justify-between items-center w-full">
-                        <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Edit Customer</h1>
-
-                        <div className="flex items-center gap-x-3">
-                            <div className="rounded-full bg-[#A6E7D8] border border-[#008767] w-2 h-2" />
-                            <h1 className='font-afacad pr-5'>Active</h1>
-                        </div>
+                        <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Add Partner</h1>
 
                     </div>
                 </div>
 
                 <div>
-                    <h1 className='font-afacad text-neutral-500'>Customer Information</h1>
+                    <h1 className='font-afacad text-neutral-500'>Partner Information</h1>
                     <hr />
                 </div>
 
                 <div className="pt-6 pb-10 space-y-6">
                     <div className="flex justify-between">
                         <div>
-                            <h1 className='text-sm text-neutral-500'>First Name</h1>
-                            <Input placeholder='John' className='bg-neutral-100/50 min-w-80 h-12 px-5' defaultValue={"Art"} />
-                        </div>
-
-                        <div>
-                            <h1 className='text-sm text-neutral-500'>Last Name</h1>
-                            <Input placeholder='Doe' className='bg-neutral-100/50 min-w-80 h-12 px-5' defaultValue={"Montebon"} />
-                        </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                        <div>
-                            <h1 className='text-sm text-neutral-500'>Email</h1>
-                            <Input placeholder='johndoe@gmail.com' className='bg-neutral-100/50 min-w-80 h-12 px-5' defaultValue={"arkiart@gmail.com"} />
+                            <h1 className='text-sm text-neutral-500'>Name</h1>
+                            <Input placeholder='John Doe' className='bg-neutral-100/50 min-w-80 h-12 px-5' />
                         </div>
 
                         <div>
                             <h1 className='text-sm text-neutral-500'>Contact Number</h1>
-                            <Input placeholder='09123456789' className='bg-neutral-100/50 min-w-80 h-12 px-5' defaultValue={"09987654321"} />
+                            <Input placeholder='09123456789' className='bg-neutral-100/50 min-w-80 h-12 px-5' />
                         </div>
                     </div>
 
                     <div className="flex justify-between">
                         <div>
                             <h1 className='text-sm text-neutral-500'>Address</h1>
-                            <Input placeholder='33 Countryside, Bangkal, D.C' className='bg-neutral-100/50 min-w-80 h-12 px-5' defaultValue={"03 Red Stone, Calinan, Davao City"} />
+                            <Input placeholder='Bangkal, Davao City' className='bg-neutral-100/50 min-w-80 h-12 px-5' />
+                        </div>
+
+                        <div className="">
+                            <h1 className='text-sm text-neutral-500'>Category</h1>
+                            <Select>
+                                <SelectTrigger className="min-w-80 h-12 bg-neutral-100/50 px-5">
+                                    <SelectValue placeholder="Select their category type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="apple">Food Catering</SelectItem>
+                                        <SelectItem value="banana">Entertainment</SelectItem>
+                                        <SelectItem value="blueberry">Music</SelectItem>
+                                        <SelectItem value="blueberry">Technicals</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 
@@ -75,15 +76,15 @@ const page = () => {
                     <Button
                         className='bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6'
                         onClick={() => {
-                            toast("Customer Updated", {
+                            toast("Partner Added Successfully", {
                                 description:
-                                    "Customer & their details is successfully updated",
+                                    "New partner is added to the repository",
                                 className: "bg-green-500/80 border border-none text-white",
                             });
-                            router.push('/customers');
+                            router.push('/partners');
                         }}
                     >
-                        Update
+                        Add
                     </Button>
                 </div>
 

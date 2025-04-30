@@ -41,7 +41,10 @@ const page = () => {
                                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                             </div>
 
-                            <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                            <Button
+                                onClick={() => router.push("/customers/add-customer")}
+                                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
+                            >
                                 <UserRoundPlus />
                                 Add Customer
                             </Button>
