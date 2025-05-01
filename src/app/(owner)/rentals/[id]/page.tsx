@@ -225,7 +225,7 @@ const EditRentalPage = () => {
                     render={({ field }) => (
                       <Input
                         placeholder="Set the rental's current quantity"
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-neutral-100/50 w-80 h-12 px-5 "
                         type="number"
                         value={field.value}
                         onChange={(e) =>
@@ -291,7 +291,7 @@ const EditRentalPage = () => {
                       <Input
                         placeholder="Select the category"
                         value={categoryName}
-                        className=" bg-neutral-100/50 w-80 h-12 px-5 flex "
+                        className=" bg-neutral-100/50 w-80 h-12 px-5"
                         readOnly
                       />
                     </DropdownMenuTrigger>

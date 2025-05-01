@@ -13,10 +13,10 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (accessToken === undefined || role === undefined) return;
   
-    const publicPaths = ["/login", "/register", "/forgot-password"];
+    const publicPaths = ["/login", "/signup", "/forgot-password"];
     const customerPaths = ["/account", "/checkout", "/receipt"]; // Add any other customer paths here
-
     
+
     if (publicPaths.includes(pathname)) {
       // If logged in and on a public page, redirect properly
       if (accessToken && role === "owner") {
@@ -55,6 +55,11 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   
     // If token exists and roles match, allow access to protected pages
     if (accessToken && role === "owner") {
+      setIsAuthorized(true);  //  Allow to view /orders, /inventory, /admin/settings, etc.
+      return;
+    }
+
+    if (accessToken && role === "customer") {
       setIsAuthorized(true);  //  Allow to view /orders, /inventory, /admin/settings, etc.
       return;
     }
