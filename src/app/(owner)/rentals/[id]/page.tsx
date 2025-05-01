@@ -25,7 +25,8 @@ import apolloClient from "@/graphql/apolloClient";
 const rentalSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
   description: z.string().optional(),
-  quantity: z.number().min(1, "Quantity must be at least 1"),
+  currentQuantity: z.number().min(1, "Quantity must be at least 1"),
+  totalQuantity: z.number().min(1, "Quantity must be at least 1"),
   price: z.number().min(1, "Price must be at least 1 Pesos"),
   categoryId: z.string().min(1, "Category is required"),
 });
@@ -39,13 +40,6 @@ const EditRentalPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
-
-  // const [rentalName, setRentalName] = useState<string>("");
-  // const [rentalDescription, setRentalDescription] = useState<string>("");
-  // const [rentalQuantity, setRentalQuantity] = useState<number>(0);
-  // const [rentalPrice, setRentalPrice] = useState<number>(0);
-  // const [rentalCategoryId, setRentalCategoryId] = useState<string>("");
-  // const [rentalCategoryName, setRentalCategoryName] = useState<string>("");
 
   const { data, loading, error } = useQuery(GET_RENTAL_BY_ID, {
     variables: { id: rentalId },
@@ -62,7 +56,8 @@ const EditRentalPage = () => {
     resolver: zodResolver(rentalSchema),
     defaultValues: {
       name: "",
-      quantity: 0,
+      currentQuantity: 0,
+      totalQuantity: 0,
       price: 0,
       categoryId: "",
       description: "",
@@ -74,7 +69,8 @@ const EditRentalPage = () => {
       const rental = data.getRentalsById;
       reset({
         name: rental.name,
-        quantity: rental.quantity,
+        currentQuantity: rental.currentQuantity,
+        totalQuantity: rental.totalQuantity,
         price: parseFloat(rental.price.toString()),
         categoryId: rental.categoryId,
         description: rental.description || "",
@@ -105,7 +101,8 @@ const EditRentalPage = () => {
         {
           name: data.name,
           description: data.description || "",
-          quantity: data.quantity,
+          currentQuantity: data.currentQuantity,
+          totalQuantity: data.totalQuantity,
           price: data.price,
           category_id: data.categoryId,
         },
@@ -185,62 +182,88 @@ const EditRentalPage = () => {
                 )}
               </div>
 
-              <div>
-                <h1 className="text-sm text-neutral-500">Quantity</h1>
-                <Controller
-                  name="quantity"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      placeholder="Set the rental's quantity"
-                      className="bg-neutral-100/50 w-80 h-12 px-5"
-                      type="number"
-                      value={field.value}
-                      onChange={(e) =>
-                        field.onChange(parseInt(e.target.value) || 0)
-                      }
+              <div className="">
+                <div className="flex justify-between w-full">
+                  <div>
+                    <h1 className="text-sm text-neutral-500">Pricing</h1>
+                    <Controller
+                      name="price"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          placeholder="Set the price"
+                          className="bg-neutral-100/50 w-80 h-12 px-5"
+                          type="number"
+                          value={field.value}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      )}
                     />
-                  )}
-                />
-                {errors.quantity && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.quantity.message}
-                  </p>
-                )}
+                    {errors.price && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.price.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div>
-            <h1 className="font-afacad text-neutral-500">
-              Pricing Information
-            </h1>
+            <h1 className="font-afacad text-neutral-500">Quantity</h1>
             <hr />
-          </div>
-          <div className="pt-6 pb-10 space-y-6">
-            <div className="flex justify-between w-full">
-              <div>
-                <h1 className="text-sm text-neutral-500">Pricing</h1>
-                <Controller
-                  name="price"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      placeholder="Set the price"
-                      className="bg-neutral-100/50 w-80 h-12 px-5"
-                      type="number"
-                      value={field.value}
-                      onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value) || 0)
-                      }
-                    />
+            <div className="pt-6 pb-10 space-y-6 ">
+              <div className="flex justify-between w-full">
+                <div>
+                  <h1 className="text-sm text-neutral-500">Current Quantity</h1>
+                  <Controller
+                    name="currentQuantity"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        placeholder="Set the rental's current quantity"
+                        className="bg-neutral-100/50 w-80 h-12 px-5 "
+                        type="number"
+                        value={field.value}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value) || 0)
+                        }
+                      />
+                    )}
+                  />
+                  {errors.currentQuantity && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.currentQuantity.message}
+                    </p>
                   )}
-                />
-                {errors.price && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.price.message}
-                  </p>
-                )}
+                </div>
+
+                <div>
+                  <h1 className="text-sm text-neutral-500">Total Quantity</h1>
+                  <Controller
+                    name="totalQuantity"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        placeholder="Set the rental's total quantity"
+                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        type="number"
+                        value={field.value}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value) || 0)
+                        }
+                      />
+                    )}
+                  />
+                  {errors.totalQuantity && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.totalQuantity.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -261,14 +284,14 @@ const EditRentalPage = () => {
                       "b62f5333-2e7e-4510-ae3d-36fcabfd12ed": "Electronics",
                     }[field.value] || ""
                   : "";
-                    
+
                 return (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Input
                         placeholder="Select the category"
                         value={categoryName}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className=" bg-neutral-100/50 w-80 h-12 px-5"
                         readOnly
                       />
                     </DropdownMenuTrigger>

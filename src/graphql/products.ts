@@ -33,7 +33,8 @@ export const GET_RENTAL_BY_ID = gql`
       img
       name
       price
-      quantity
+      currentQuantity
+      totalQuantity
     }
   }
 `;
