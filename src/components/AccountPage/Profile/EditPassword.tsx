@@ -54,7 +54,7 @@ const EditPassword = ({password}: EditAccountProps) => {
                                 toast("Profile Changed", {
                                     description:
                                         "New password is set to the account",
-                                    className: "bg-green-600/80 border border-none text-white"
+                                    className: "bg-green-500/80 border border-none text-white"
                                 });
                             }}
                             className="bg-[#778768] shadow-none text-white px-10 py-5"
