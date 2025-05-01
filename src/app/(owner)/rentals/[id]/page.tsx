@@ -90,11 +90,10 @@ const EditRentalPage = () => {
 
       if (selectedImage) {
         formPayload.append("file", selectedImage);
+        await api.patch(`/o/rental/${rentalId}/img`, formPayload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
-
-      await api.patch(`/o/rental/${rentalId}/img`, formPayload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
 
       await api.patch(
         `/o/rental/${rentalId}`,
