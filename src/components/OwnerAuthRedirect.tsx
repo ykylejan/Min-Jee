@@ -15,7 +15,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   
     const publicPaths = ["/", "/login", "/signup", "/forgot-password", "/shop", "/about-us"];
     const customerPaths = ["/account", "/checkout", "/receipt"]; // Add any other customer paths here
-    
+      
 
     if (publicPaths.includes(pathname)) {
       // If logged in and on a public page, redirect properly
@@ -60,7 +60,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
     }
 
     if (accessToken && role === "customer") {
-      setIsAuthorized(true);  //  Allow to view /orders, /inventory, /admin/settings, etc.
+      setIsAuthorized(true);  //  Allow to view customer routes.
       return;
     }
   
