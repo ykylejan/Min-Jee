@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { MoveLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -39,6 +39,7 @@ type PartnerFormValues = z.infer<typeof partnerSchema>;
 const page = () => {
   const router = useRouter();
 
+  const { id } = useParams();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [categories, setCategories] = useState<
@@ -85,8 +86,8 @@ const page = () => {
 
   const onSubmit = async (data: PartnerFormValues) => {
     try {
-      const response = await api.post(
-        "o/partners",
+      const response = await api.patch(
+        `o/partners/${id}`,
         {
           name: data.name,
           address: data.address,
@@ -100,14 +101,12 @@ const page = () => {
         }
       );
 
-      toast("Partner Added Successfully", {
+      toast("Partner Updated Successfully", {
         description: "New partner is added to the repository",
         className: "bg-green-500/80 border border-none text-white",
       });
       router.push("/partners");
     } catch (error) {
-
-
       toast.error("Failed to add partner. Please try again.");
     }
   };
@@ -124,7 +123,7 @@ const page = () => {
           </button>
           <div className="flex justify-between items-center w-full">
             <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
-              Add Partner
+              Edit Partner
             </h1>
           </div>
         </div>
@@ -138,47 +137,74 @@ const page = () => {
           <div className="flex justify-between">
             <div>
               <h1 className="text-sm text-neutral-500">Name</h1>
-              <Input
-                placeholder="John Doe"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("name")}
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: "Name is required" }}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      placeholder="John Doe"
+                      className="bg-neutral-100/50 min-w-80 h-12 px-5"
+                      {...field}
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
+                  </div>
+                )}
               />
-              {errors.name && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.name.message}
-                </p>
-              )}
             </div>
 
             <div>
               <h1 className="text-sm text-neutral-500">Contact Number</h1>
-              <Input
-                placeholder="09123456789"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("contactNumber")}
-                type="number"
+              <Controller
+                name="contactNumber"
+                control={control}
+                rules={{ required: "Contact Number is required" }}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      placeholder="09972736782"
+                      className="bg-neutral-100/50 min-w-80 h-12 px-5"
+                      {...field}
+                      type="number"
+                    />
+                    {errors.address && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.address.message}
+                      </p>
+                    )}
+                  </div>
+                )}
               />
-              {errors.contactNumber && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.contactNumber.message}
-                </p>
-              )}
             </div>
           </div>
 
           <div className="flex justify-between">
             <div>
               <h1 className="text-sm text-neutral-500">Address</h1>
-              <Input
-                placeholder="Bangkal, Davao City"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("address")}
+              <Controller
+                name="address"
+                control={control}
+                rules={{ required: "Address is required" }}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      placeholder="Bangkal, Davao City"
+                      className="bg-neutral-100/50 min-w-80 h-12 px-5"
+                      {...field}
+                    />
+                    {errors.address && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.address.message}
+                      </p>
+                    )}
+                  </div>
+                )}
               />
-              {errors.address && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.address.message}
-                </p>
-              )}
             </div>
 
             <div className="">
@@ -228,7 +254,7 @@ const page = () => {
             className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
             onClick={handleSubmit(onSubmit)}
           >
-            Add Partner
+            Update Partner
           </Button>
         </div>
       </div>
