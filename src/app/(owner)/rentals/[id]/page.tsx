@@ -94,7 +94,7 @@ const EditRentalPage = () => {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
-
+      
       await api.patch(
         `/o/rental/${rentalId}`,
         {
