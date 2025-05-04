@@ -159,7 +159,7 @@ export const AllProductsSample = [
 
 export const AllCustomerSample = [
     {
-        id: 1,
+        id: "2552fc27-9126-4c84-b341-8ddb580d13a1",
         customerName: "Aurram Blade",
         phoneNumber: "0998 765 4321",
         bookings: 8,

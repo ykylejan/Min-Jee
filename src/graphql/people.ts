@@ -22,15 +22,45 @@ export const GET_PARTNER_BY_ID = gql`
   }
 `;
 
-
 export const GET_ALL_PARTNERS = gql`
   query getAllPartners {
-    getPartner{
+    getPartner {
       id
       name
       address
       contactNumber
       categoryId
+    }
+  }
+`;
+
+export const GET_CUSTOMER_BY_ID = gql`
+  query getIndividualCustomerById($id: UUID!) {
+    getCustomersById(id: $id) {
+      address
+      bookings
+      contactNumber
+      email
+      firstName
+      id
+      isActive
+      lastName
+      userId
+    }
+  }
+`;
+
+export const GET_ALL_CUSTOMERS = gql`
+  query getAllCustomers {
+    getCustomers {
+      address
+      bookings
+      contactNumber
+      email
+      firstName
+      id
+      isActive
+      lastName
     }
   }
 `;
