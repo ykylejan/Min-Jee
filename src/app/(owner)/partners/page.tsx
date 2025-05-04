@@ -28,6 +28,7 @@ import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import { GET_ALL_PARTNERS } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
 import apolloClient from "@/graphql/apolloClient";
+import { toast } from "sonner";
 
 interface PartnerTypes {
   id: string;
@@ -76,14 +77,20 @@ const page = () => {
   };
 
   useEffect(() => {
-    if (partnersData?.getPartner && categoriesData?.getCategories) {
-      const partnerCategories = getPartnerCategories(
-        categoriesData.getCategories
+    try {
+      if (partnersData?.getPartner && categoriesData?.getCategories) {
+        const partnerCategories = getPartnerCategories(
+          categoriesData.getCategories
+        );
+        setCategories(partnerCategories);
+        setPartners(partnersData.getPartner);
+        console.log("DATA:", partnersData.getPartner);
+        console.log("Categories:", categoriesData.getCategories);
+      }
+    } catch (error) {
+      toast.error(
+        "An error occurred while fetching data. Please try again later."
       );
-      setCategories(partnerCategories);
-      setPartners(partnersData.getPartner);
-      console.log("DATA:", partnersData.getPartner);
-      console.log("Categories:", categoriesData.getCategories);
     }
   }, [partnersData, partnersLoading, categoriesData, categoriesLoading]);
 
