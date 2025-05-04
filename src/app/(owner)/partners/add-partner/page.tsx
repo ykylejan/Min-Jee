@@ -91,7 +91,7 @@ const page = () => {
           name: data.name,
           address: data.address,
           contact_number: data.contactNumber,
-          categories: [selectedCategory],
+          category_id: selectedCategory,
         },
         {
           headers: {

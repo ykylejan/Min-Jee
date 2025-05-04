@@ -100,8 +100,8 @@ const EditRentalPage = () => {
         {
           name: data.name,
           description: data.description || "",
-          currentQuantity: data.currentQuantity,
-          totalQuantity: data.totalQuantity,
+          current_quantity: data.currentQuantity,
+          total_quantity: data.totalQuantity,
           price: data.price,
           category_id: data.categoryId,
         },

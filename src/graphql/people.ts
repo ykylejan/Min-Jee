@@ -10,3 +10,27 @@ export const GET_ALL_RENTALS = gql`
   }
 `;
 
+export const GET_PARTNER_BY_ID = gql`
+  query getIndividualPartnerById($id: UUID!) {
+    getPartnerById(id: $id) {
+      address
+      categoryId
+      contactNumber
+      id
+      name
+    }
+  }
+`;
+
+
+export const GET_ALL_PARTNERS = gql`
+  query getAllPartners {
+    getPartner{
+      id
+      name
+      address
+      contactNumber
+      categoryId
+    }
+  }
+`;
