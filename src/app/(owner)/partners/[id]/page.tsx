@@ -20,7 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import apolloClient from "@/graphql/apolloClient";
 import { useQuery } from "@apollo/client";
+import apolloClientPartner from "@/graphql/apolloClientPartners";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
+import { GET_PARTNER_BY_ID } from "@/graphql/people";
 
 const partnerSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
@@ -39,7 +41,8 @@ type PartnerFormValues = z.infer<typeof partnerSchema>;
 const page = () => {
   const router = useRouter();
 
-  const { id } = useParams();
+  const params = useParams();
+  const partnerId = params.id as string;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [categories, setCategories] = useState<
@@ -51,9 +54,11 @@ const page = () => {
   >([]);
 
   const {
-    register,
     control,
     handleSubmit,
+    watch,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<PartnerFormValues>({
     resolver: zodResolver(partnerSchema),
@@ -65,34 +70,87 @@ const page = () => {
     },
   });
 
-  const { loading, error, data } = useQuery(GET_ALL_CATEGORIES, {
+  const watchedCategoryId = watch("categoryId");
+  // Use apolloClientPartner for partner query
+  const {
+    loading: partnerLoading,
+    error: partnerError,
+    data: partnerData,
+  } = useQuery(GET_PARTNER_BY_ID, {
+    variables: { id: partnerId },
+    client: apolloClientPartner,
+    fetchPolicy: "network-only", // Force fresh data
+  });
+
+  // Use apolloClient for categories query
+  const {
+    loading: categoriesLoading,
+    error: categoriesError,
+    data: categoriesData,
+  } = useQuery(GET_ALL_CATEGORIES, {
     client: apolloClient,
+    fetchPolicy: "cache-and-network",
   });
 
   const getPartnerCategories = (
-    categories: { id: string; name: string; type: string }[]
+    categories: { id: string; name: string; type: string }[] = []
   ) => {
     return categories.filter((category) => category.type === "Partner");
   };
 
   useEffect(() => {
-    if (data?.getCategories) {
-      //   setCategory(data.getCategories);
-      const partnerCategories = getPartnerCategories(data.getCategories);
-      setCategories(partnerCategories);
-      console.log("Categories:", partnerCategories);
+    console.log("Partner query status:", {
+      loading: partnerLoading,
+      error: partnerError,
+      data: partnerData,
+    });
+
+    if (partnerError) {
+      console.error("Partner query error:", partnerError);
+      toast.error("Failed to load partner data");
+      return;
     }
-  }, [data, loading, error]);
+
+    if (categoriesError) {
+      console.error("Categories query error:", categoriesError);
+      toast.error("Failed to load categories");
+      return;
+    }
+
+    if (categoriesData?.getCategories) {
+      const partnerCategories = getPartnerCategories(
+        categoriesData.getCategories
+      );
+      setCategories(partnerCategories);
+    }
+
+    if (partnerData?.getPartnerById) {
+      const partner = partnerData.getPartnerById;
+      console.log("Partner data received:", partner);
+
+      // const firstCategoryId = partner.partnerCategories?.[0]?.categoryId || "";
+
+      reset({
+        name: partner.name || "",
+        address: partner.address || "",
+        contactNumber: partner.contactNumber || "",
+        categoryId: partner.categoryId,
+      });
+
+      //   setSelectedCategory(firstCategoryId);
+    }
+  }, [partnerData, categoriesData, partnerError, categoriesError, reset]);
 
   const onSubmit = async (data: PartnerFormValues) => {
+    console.log("Submitting form data:", data); // Add this line
     try {
       const response = await api.patch(
-        `o/partners/${id}`,
+        `o/partners/${partnerId}`,
         {
           name: data.name,
           address: data.address,
           contact_number: data.contactNumber,
-          categories: [selectedCategory],
+          category_id: data.categoryId,
         },
         {
           headers: {
@@ -100,16 +158,26 @@ const page = () => {
           },
         }
       );
-
-      toast("Partner Updated Successfully", {
-        description: "New partner is added to the repository",
-        className: "bg-green-500/80 border border-none text-white",
-      });
+      console.log("Update response:", response); // Add this line
+      toast.success("Partner Updated Successfully");
       router.push("/partners");
     } catch (error) {
-      toast.error("Failed to add partner. Please try again.");
+      console.error("Update error:", error); // Add this line
+      toast.error("Failed to update partner. Please try again.");
     }
   };
+
+  //   const populatePartnerCategory = (
+  //     categoryId: string,
+  //     categories: { id: string; name: string; type: string }[]
+  //   ) => {
+  //     const matchingCategory = categories.find(
+  //       (category) => category.id === categoryId
+  //     );
+  //     if (matchingCategory) {
+  //       setSelectedCategory(matchingCategory.id);
+  //     }
+  //   };
 
   return (
     <div className="flex justify-center">
@@ -214,23 +282,41 @@ const page = () => {
                 control={control}
                 rules={{ required: "Category is required" }}
                 render={({ field }) => (
-                  <>
+                  <div>
                     <Select
+                      value={field.value}
                       onValueChange={(value) => {
                         field.onChange(value);
-                        setSelectedCategory(value);
+                        setValue("categoryId", value); // This updates the form state
+                        // console.log("Selected category:", value); // Add this for debugging
                       }}
+                      defaultValue={field.value} // Ensure initial value is set
                     >
                       <SelectTrigger className="min-w-80 h-12 bg-neutral-100/50 px-5">
-                        <SelectValue
-                          placeholder="Select their category type"
-                          className="text-gray-500"
-                        />
+                        <SelectValue placeholder="Select their category type" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
+                            <SelectItem
+                              key={category.id}
+                              value={category.id}
+                              onClick={() => {
+                                setValue("categoryId", category.id, {
+                                  shouldValidate: true,
+                                });
+                                console.log(
+                                  "Watched Category ID:",
+                                  watchedCategoryId
+                                ); // Add this for debugging
+
+                                setSelectedCategory(watchedCategoryId);
+                                console.log(
+                                  "Selected category:",
+                                  selectedCategory
+                                ); // Add this for debugging
+                              }}
+                            >
                               {category.name}
                             </SelectItem>
                           ))}
@@ -242,7 +328,7 @@ const page = () => {
                         {errors.categoryId.message}
                       </p>
                     )}
-                  </>
+                  </div>
                 )}
               />
             </div>

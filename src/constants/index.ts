@@ -186,7 +186,7 @@ export const AllCustomerSample = [
 
 export const AllPartnerSample = [
     {
-        id: 1,
+        id: "0697f676-9049-4325-83a8-41b87674b4bc",
         partnerName: "Meteor Light",
         phoneNumber: "09987654321",
         category: "Catering",
