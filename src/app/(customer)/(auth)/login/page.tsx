@@ -162,7 +162,7 @@ const LoginPage = () => {
 
           <Button
             type="submit"
-            className="bg-[#778768] w-full h-[55px] font-bold mt-6 sm:mt-8"
+            className="bg-camouflage-400 w-full h-[55px] font-bold mt-6 sm:mt-8"
             disabled={isLoading}
           >
             {isLoading ? "Logging in..." : "CONTINUE"}

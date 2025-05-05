@@ -7,7 +7,7 @@ const LandingGrid = () => {
         <section className="mb-24">
             <div className="grid grid-cols-4 grid-rows-2 gap-4">
                 <div>
-                    <div className="bg-[#778768] opacity-80 w-full h-full p-3"></div>
+                    <div className="bg-camouflage-400 opacity-80 w-full h-full p-3"></div>
                 </div>
                 <div className="col-start-1 row-start-2">
                     <img
@@ -41,7 +41,7 @@ const LandingGrid = () => {
                     />
                 </div>
                 <div className="col-start-4 row-start-2">
-                    <div className="bg-[#778768] opacity-80 w-full h-full p-3"></div>
+                    <div className="bg-camouflage-400 opacity-80 w-full h-full p-3"></div>
                 </div>
             </div>
         </section>

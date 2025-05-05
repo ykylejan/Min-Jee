@@ -16,7 +16,7 @@ const NotFound = () => {
                 <h1 className="font-afacad text-xl">
                     This page does not exist
                 </h1>
-                <Button onClick={() => router.back()} className="bg-[#778768] font-inter mt-12 w-36">
+                <Button onClick={() => router.back()} className="bg-camouflage-400 font-inter mt-12 w-36">
                     Go back
                 </Button>
             </section>
