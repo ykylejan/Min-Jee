@@ -67,7 +67,9 @@ const SignUpPage = () => {
           email: data.email,
           address: data.address,
           password: data.password,
-          password_confirmation: data.passwordConf, // Changed to match common backend expectations
+          isActive: true,
+          bookings: 0,
+          passwordConf: data.passwordConf, // Changed to match common backend expectations
         },
         {
           headers: {
@@ -100,7 +102,7 @@ const SignUpPage = () => {
           toast("Registration Unsuccessful", {
             description:
               errorMessages || "Please check your input and try again.",
-            className: "bg-green-500/80 border border-none text-white",
+            className: "bg-red-500/80 border border-none text-white ",
           });
         } else {
           setError(err.response.data.message || "Registration failed");
@@ -108,14 +110,14 @@ const SignUpPage = () => {
             description:
               err.response.data.message ||
               "Your registration is unsuccessful. Please try again.",
-            className: "bg-green-500/80 border border-none text-white",
+            className: "bg-red-500/80 border border-none text-white",
           });
         }
       } else {
         setError(err.message || "Something went wrong");
         toast("Error", {
           description: "Network error occurred. Please try again.",
-          className: "bg-green-500/80 border border-none text-white",
+          className: "bg-red-500/80 border border-none text-white",
         });
       }
     } finally {
