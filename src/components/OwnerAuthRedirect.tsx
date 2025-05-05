@@ -13,10 +13,10 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (accessToken === undefined || role === undefined) return;
   
-    const publicPaths = ["/", "/login", "/signup", "/forgot-password", "/shop", "/account", "/about-us"];
-    const customerPaths = ["/account", "/checkout", "/receipt"]; // Add any other customer paths here
+    const publicPaths = ["/login", "/signup", "/forgot-password", "/", "/shop", "/shop/halfsized-food-warmer"]; // Add any other public paths here
+    const customerPaths = ["/account", "/checkout", "/receipt", "/", "/shop"]; // Add any other customer paths here
       
-
+    
     if (publicPaths.includes(pathname)) {
       // If logged in and on a public page, redirect properly
       if (accessToken && role === "owner") {
@@ -45,8 +45,8 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
     }
   
     // Now user is on a protected page (not public)
-  
-    if (!accessToken) {
+    
+    if (!accessToken && !publicPaths.includes(pathname)) {
       console.log("No access token, redirecting to login...");
       router.replace("/login");
       setIsAuthorized(false);

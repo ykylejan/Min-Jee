@@ -42,7 +42,7 @@ const Navbar = () => {
                         <SheetDescription className="font-inder text-lg space-y-3 ml-5">
                             <Link href="/shop">
                                 <span className="mt-5 hover:underline text-[#778768] cursor-pointer block">
-                                    Shop
+                                    Shopppppppppppppppppppp
                                 </span>
                             </Link>
 

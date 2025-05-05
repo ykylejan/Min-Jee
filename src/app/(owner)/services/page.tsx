@@ -26,6 +26,8 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES, GET_ALL_RENTALS } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
 
+import ProductItem from "@/components/ProductItem";
+
 interface RentalTypes {
   id: string;
   categoryId: string;
@@ -104,11 +106,10 @@ const Page = () => {
           </div>
         </CardTitle>
       </CardHeader>
-      
-      
-      <CardContent>
-
         
+      <CardContent>
+        <ProductItem image={undefined} name={""} price={0} />
+
         {/* <Table>
           <TableHeader>
             <TableRow>
