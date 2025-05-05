@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,12 +23,76 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
 import { AllCustomerSample, AllPartnerSample } from "@/constants";
 import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CATEGORIES } from "@/graphql/products";
+import { GET_ALL_PARTNERS } from "@/graphql/people";
+import apolloClientPartner from "@/graphql/apolloClientPartners";
+import apolloClient from "@/graphql/apolloClient";
+import { toast } from "sonner";
+
+interface PartnerTypes {
+  id: string;
+  name: string;
+  address: string;
+  contactNumber: string;
+  categoryId: string;
+}
 
 const page = () => {
   const router = useRouter();
+
+  const [partners, setPartners] = useState<PartnerTypes[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
   const handleRowClick = (id: string) => {
     router.push(`/partners/${id}`);
   };
+
+  const {
+    loading: partnersLoading,
+    error: partnersError,
+    data: partnersData,
+  } = useQuery(GET_ALL_PARTNERS, {
+    client: apolloClientPartner,
+    fetchPolicy: "network-only",
+  });
+
+  const {
+    loading: categoriesLoading,
+    error: categoriesError,
+    data: categoriesData,
+  } = useQuery(GET_ALL_CATEGORIES, {
+    client: apolloClient,
+    fetchPolicy: "cache-and-network",
+  });
+
+  const getPartnerCategories = (categories: any[] = []) => {
+    return categories.filter((category) => category.type === "Partner");
+  };
+
+  const getCategoryName = (categoryId: string): string => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
+  useEffect(() => {
+    try {
+      if (partnersData?.getPartner && categoriesData?.getCategories) {
+        const partnerCategories = getPartnerCategories(
+          categoriesData.getCategories
+        );
+        setCategories(partnerCategories);
+        setPartners(partnersData.getPartner);
+        console.log("DATA:", partnersData.getPartner);
+        console.log("Categories:", categoriesData.getCategories);
+      }
+    } catch (error) {
+      toast.error(
+        "An error occurred while fetching data. Please try again later."
+      );
+    }
+  }, [partnersData, partnersLoading, categoriesData, categoriesLoading]);
 
   return (
     <>
@@ -74,18 +138,16 @@ const page = () => {
             </TableHeader>
             <TableBody>
               {/* 5 rows is ideal */}
-              {AllPartnerSample.map((data) => (
+              {partners.map((data) => (
                 <TableRow
                   key={data.id}
                   className="hover:cursor-pointer"
                   onClick={() => handleRowClick(data.id.toString())}
                 >
-                  <TableCell className="font-medium">
-                    {data.partnerName}
-                  </TableCell>
+                  <TableCell className="font-medium">{data.name}</TableCell>
                   <TableCell>{data.address}</TableCell>
-                  <TableCell>{data.phoneNumber}</TableCell>
-                  <TableCell>{data.category}</TableCell>
+                  <TableCell>{data.contactNumber}</TableCell>
+                  <TableCell>{getCategoryName(data.categoryId)}</TableCell>
                   <TableCell className="hover:underline cursor-pointer">
                     Edit
                   </TableCell>

@@ -91,7 +91,7 @@ const page = () => {
           name: data.name,
           address: data.address,
           contact_number: data.contactNumber,
-          categories: [selectedCategory],
+          category_id: selectedCategory,
         },
         {
           headers: {
@@ -99,15 +99,13 @@ const page = () => {
           },
         }
       );
-
+      
       toast("Partner Added Successfully", {
         description: "New partner is added to the repository",
         className: "bg-green-500/80 border border-none text-white",
       });
       router.push("/partners");
     } catch (error) {
-
-
       toast.error("Failed to add partner. Please try again.");
     }
   };
