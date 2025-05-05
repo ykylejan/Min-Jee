@@ -46,7 +46,7 @@ const Navbar = () => {
                                 </span>
                             </Link>
 
-                            <Link href="/*">
+                            <Link href="/about-us">
                                 <span className="hover:underline text-[#778768] cursor-pointer block">
                                     About Us
                                 </span>
