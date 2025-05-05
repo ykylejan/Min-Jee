@@ -12,11 +12,13 @@ const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
                     <div className="flex items-center justify-between">
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Contact Number</h1>
-                            <h1 className="font-poppins_medium">{contactNumber}</h1>
+                            <h1 className="font-poppins_medium">
+                                {contactNumber}
+                            </h1>
                         </div>
                         <Button
                             onClick={() => setIsEdit(true)}
-                            className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5"
+                            className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200"
                         >
                             EDIT
                         </Button>
@@ -41,13 +43,22 @@ const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
                                 toast("Profile Changed", {
                                     description:
                                         "New contact number is set to the account",
-                                    className: "bg-green-500/80 border border-none text-white"
+                                    className:
+                                        "bg-green-500/80 border border-none text-white",
                                 });
                             }}
-                            className="bg-[#778768] shadow-none text-white px-10 py-5"
+                            className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
                         >
                             DONE
                         </Button>
+
+                        <span
+                            onClick={() => setIsEdit(false)}
+                            className="text-xs cursor-pointer underline ml-4 text-gray-500"
+                        >
+                            Cancel
+                        </span>
+                        
                     </div>
                     <hr className="mt-6" />
                 </div>

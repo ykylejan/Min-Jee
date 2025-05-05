@@ -14,7 +14,7 @@ const TabEdit = ({ label, sublabel }: TabEditProps) => {
                     <h1 className="text-[#6B7280]">{label}</h1>
                     <h1 className="font-poppins_medium">{sublabel}</h1>
                 </div>
-                <Button className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5">
+                <Button className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200">
                     EDIT
                 </Button>
             </div>

@@ -2,9 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 const EditPassword = ({password}: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    
     return (
         <div className="mt-10">
             {!isEdit ? (
@@ -18,7 +23,7 @@ const EditPassword = ({password}: EditAccountProps) => {
                         </div>
                         <Button
                             onClick={() => setIsEdit(true)}
-                            className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5"
+                            className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200"
                         >
                             EDIT
                         </Button>
@@ -32,21 +37,48 @@ const EditPassword = ({password}: EditAccountProps) => {
                             <h1 className="text-base">
                                 Edit your contact number:
                             </h1>
-                            <Input
-                                type="password"
-                                placeholder="Old Password"
-                                className="w-1/2 shadow-none h-10"
-                            />
-                            <Input
-                                type="password"
-                                placeholder="New Password"
-                                className="w-1/2 shadow-none h-10"
-                            />
-                            <Input
-                                type="password"
-                                placeholder="Confrim New Password"
-                                className="w-1/2 shadow-none h-10"
-                            />
+                            <div className="relative w-1/2">
+                                <Input
+                                    type={showOldPassword ? "text" : "password"}
+                                    placeholder="Old Password"
+                                    className="w-full shadow-none h-10 pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowOldPassword(!showOldPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                                >
+                                    {showOldPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                            <div className="relative w-1/2">
+                                <Input
+                                    type={showNewPassword ? "text" : "password"}
+                                    placeholder="New Password"
+                                    className="w-full shadow-none h-10 pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                                >
+                                    {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                            <div className="relative w-1/2">
+                                <Input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    placeholder="Confirm New Password"
+                                    className="w-full shadow-none h-10 pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                                >
+                                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                         </div>
                         <Button
                             onClick={() => {
@@ -57,10 +89,17 @@ const EditPassword = ({password}: EditAccountProps) => {
                                     className: "bg-green-500/80 border border-none text-white"
                                 });
                             }}
-                            className="bg-[#778768] shadow-none text-white px-10 py-5"
+                            className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
                         >
                             DONE
                         </Button>
+
+                        <span 
+                            onClick={() => setIsEdit(false)}
+                            className="text-xs cursor-pointer underline ml-4 text-gray-500"
+                        >
+                            Cancel
+                        </span>
                     </div>
                     <hr className="mt-6" />
                 </div>
