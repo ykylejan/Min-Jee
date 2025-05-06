@@ -1,13 +1,13 @@
 import React from "react";
 import { Bird, Menu, ShoppingBasket, X } from "lucide-react";
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "./ui/sheet";
 import Link from "next/link";
 import OrderSideItem from "./Basketlist/OrderSideItem";
@@ -17,123 +17,126 @@ import { BasketlistSample } from "@/constants";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
-    return (
-        <div className="bg-[#334628] opacity-90 h-[70px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-10 lg:px-24">
-            <Link href="/">
-                <span className="text-3xl lg:text-3xl font-caveat_brush cursor-pointer">
-                    MIN-JEE
+  return (
+    <div className="bg-[#334628] opacity-90 h-[70px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-10 lg:px-24">
+      <Link href="/">
+        <span className="text-3xl lg:text-3xl font-caveat_brush cursor-pointer">
+          MIN-JEE
+        </span>
+      </Link>
+
+      <div className="lg:hidden">
+        <Sheet>
+          <SheetTrigger>
+            <Menu size={25} className="items-center hover:text-[#778768]" />
+          </SheetTrigger>
+          <SheetContent className="bg-[#FFFBF5]">
+            <SheetHeader>
+              <SheetTitle className="text-[#334628] opacity-75 text-xl font-intersemibold ml-3">
+                NAVIGATION
+              </SheetTitle>
+            </SheetHeader>
+            <SheetDescription className="font-inder text-lg space-y-3 ml-5">
+              <Link href="/shop">
+                <span className="mt-5 hover:underline text-[#778768] cursor-pointer block">
+                  Shop
                 </span>
-            </Link>
+              </Link>
 
-            <div className="lg:hidden">
-                <Sheet>
-                    <SheetTrigger>
-                        <Menu
-                            size={25}
-                            className="items-center hover:text-[#778768]"
-                        />
-                    </SheetTrigger>
-                    <SheetContent className="bg-[#FFFBF5]">
-                        <SheetHeader>
-                            <SheetTitle className="text-[#334628] opacity-75 text-xl font-intersemibold ml-3">
-                                NAVIGATION
-                            </SheetTitle>
-                        </SheetHeader>
-                        <SheetDescription className="font-inder text-lg space-y-3 ml-5">
-                            <Link href="/shop">
-                                <span className="mt-5 hover:underline text-[#778768] cursor-pointer block">
-                                    Shop
-                                </span>
-                            </Link>
+              <Link href="/about-us">
+                <span className="hover:underline text-[#778768] cursor-pointer block">
+                  About Us
+                </span>
+              </Link>
 
-                            <Link href="/about-us">
-                                <span className="hover:underline text-[#778768] cursor-pointer block">
-                                    About Us
-                                </span>
-                            </Link>
+              <Link href="/account">
+                <span className="hover:underline text-[#778768] cursor-pointer block">
+                  Account
+                </span>
+              </Link>
+            </SheetDescription>
+          </SheetContent>
+        </Sheet>
+      </div>
 
-                            <Link href="/account">
-                                <span className="hover:underline text-[#778768] cursor-pointer block">
-                                    Account
-                                </span>
-                            </Link>
-                        </SheetDescription>
-                    </SheetContent>
-                </Sheet>
-            </div>
+      <div className="lg:flex space-x-7 font-inder hidden">
+        <Link href="/shop">
+          <span className="text-lg hover:text-[#778768] cursor-pointer">
+            Shop
+          </span>
+        </Link>
+        <Link href="/about-us">
+          <span className="text-lg hover:text-[#778768] cursor-pointer">
+            About Us
+          </span>
+        </Link>
+        <Link href="/account">
+          <span className="text-lg hover:text-[#778768] cursor-pointer">
+            Account
+          </span>
+        </Link>
 
-            <div className="lg:flex space-x-7 font-inder hidden">
-                <Link href="/shop">
-                    <span className="text-lg hover:text-[#778768] cursor-pointer">
-                        Shop
-                    </span>
-                </Link>
-                <Link href="/about-us">
-                    <span className="text-lg hover:text-[#778768] cursor-pointer">
-                        About Us
-                    </span>
-                </Link>
-                <Link href="/account">
-                    <span className="text-lg hover:text-[#778768] cursor-pointer">
-                        Account
-                    </span>
-                </Link>
+        <Sheet>
+          <SheetTrigger>
+            <ShoppingBasket
+              size={25}
+              strokeWidth={1.5}
+              className="hover:text-[#778768] cursor-pointer"
+            />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>My Basket</SheetTitle>
 
-                <Sheet>
-                    <SheetTrigger>
-                        <ShoppingBasket
-                            size={25}
-                            strokeWidth={1.5}
-                            className="hover:text-[#778768] cursor-pointer"
-                        />
-                    </SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>My Basket</SheetTitle>
+              {BasketlistSample.length <= 0 ? (
+                <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
+                  <Bird className="text-neutral-400" size={60} />
+                  <h1 className="text-neutral-500 text-xl">
+                    Basket is currently empty
+                  </h1>
+                  <h1 className="text-neutral-500 text-xs mb-5">
+                    It is looking real empty at the moment, care to browse the
+                    shops?
+                  </h1>
+                  <a href="/shop">
+                    <Button className="bg-[#0F172A] text-white w-full rounded-full">
+                      Browse Catalog
+                    </Button>
+                  </a>
+                </div>
+              ) : (
+                <ScrollArea className="w-full h-[450px]">
+                  {BasketlistSample.map((sample) => (
+                    <OrderSideItem
+                      key={sample.id}
+                      name={sample.name}
+                      category={sample.category}
+                      quantity={sample.quantity}
+                      price={sample.price * sample.quantity}
+                      image={sample.image.src}
+                    />
+                  ))}
+                </ScrollArea>
+              )}
+            </SheetHeader>
 
-                            {BasketlistSample.length <= 0 ? (
-                                <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
-                                    <Bird className="text-neutral-400" size={60} />
-                                    <h1 className="text-neutral-500 text-xl">Basket is currently empty</h1>
-                                    <h1 className="text-neutral-500 text-xs mb-5">It is looking real empty at the moment, care to browse the shops?</h1>
-                                    <a href="/shop">
-                                        <Button className="bg-[#0F172A] text-white w-full rounded-full">Browse Catalog</Button>
-                                    </a>
-                                </div>
-                            ) : (
-                                <ScrollArea className="w-full h-[450px]">
-                                    {BasketlistSample.map((sample) => (
-                                        <OrderSideItem
-                                            key={sample.id}
-                                            name={sample.name}
-                                            category={sample.category}
-                                            quantity={sample.quantity}
-                                            price={sample.price * sample.quantity}
-                                            image={sample.image.src} />
-                                    ))}
-                                </ScrollArea>
-                            )}
-
-
-                        </SheetHeader>
-
-                        <SheetFooter>
-                            {BasketlistSample.length <= 0 ? ("") : (
-                                <Subtotal
-                                    amount={BasketlistSample.reduce(
-                                        (total, item) => total + (item.price * item.quantity),
-                                        0
-                                    )}
-                                />
-                            )}
-
-
-                        </SheetFooter>
-                    </SheetContent>
-                </Sheet>
-            </div>
-        </div>
-    );
+            <SheetFooter>
+              {BasketlistSample.length <= 0 ? (
+                ""
+              ) : (
+                <Subtotal
+                  amount={BasketlistSample.reduce(
+                    (total, item) => total + item.price * item.quantity,
+                    0
+                  )}
+                />
+              )}
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </div>
+  );
 };
 
 export default Navbar;

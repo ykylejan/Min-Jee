@@ -9,7 +9,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   const { accessToken, role } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const pathname = usePathname();
-
+  
   useEffect(() => {
     if (accessToken === undefined || role === undefined) return;
   

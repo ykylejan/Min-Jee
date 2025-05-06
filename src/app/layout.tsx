@@ -11,7 +11,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <ReduxProvider>
-          <OwnerAuthRedirect>{children}</OwnerAuthRedirect>
+          {/* <OwnerAuthRedirect> */}
+
+          {children}
+
+          {/* </OwnerAuthRedirect> */}
         </ReduxProvider>
       </body>
     </html>

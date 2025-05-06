@@ -47,7 +47,6 @@ const navLinks = [
     name: "Events",
     href: "/events",
     icon: <Tag />,
-    
   },
   {
     name: "Services",
@@ -88,6 +87,11 @@ const OwnerLayout: React.FC<OwnerLayoutProps> = ({ children }) => {
 
   // Create the onLogout function
   const onLogout = () => {
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     dispatch(logout()); // Clear auth state
     router.push("/login"); // Redirect to login page
   };

@@ -2,30 +2,31 @@
 import axios from "axios";
 import { store } from "@/redux/store";
 import { refreshAccessToken, logout } from "@/redux/slices/authSlice";
-import "dotenv/config";
+
+let currentAccessToken: string | null = null;
+
+// Helper to keep token in sync
+export const setAccessToken = (token: string | null) => {
+  currentAccessToken = token;
+};
+
 const api = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:8000/api/v1", 
-  withCredentials: true, // Important if tokens are in httpOnly cookies
+  baseURL: process.env.API_URL || "http://localhost:8000/api/v1",
+  withCredentials: true,
 });
 
-// Request interceptor: Attach access token
+// Request interceptor: attach current token
 api.interceptors.request.use(
   (config) => {
-    const state = store.getState();
-    const token = state.auth.accessToken;
-    
-    if (token && config.headers) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+    if (currentAccessToken && config.headers) {
+      config.headers["Authorization"] = `Bearer ${currentAccessToken}`;
     }
-
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor: Handle 401 and refresh token
+// Response interceptor: handle 401s and refresh token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -35,7 +36,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // call your backend refresh endpoint
         const res = await axios.post(
           `${process.env.API_URL}/auth/refresh`,
           {},
@@ -44,14 +44,16 @@ api.interceptors.response.use(
 
         const newAccessToken = res.data.accessToken;
 
-        // Update token in Redux
+        // Update Redux and token tracker
         store.dispatch(refreshAccessToken(newAccessToken));
+        setAccessToken(newAccessToken); // 
 
-        // Retry original request with new token
+        // Retry original request
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         store.dispatch(logout());
+        setAccessToken(null); // Clear token
         return Promise.reject(refreshError);
       }
     }
