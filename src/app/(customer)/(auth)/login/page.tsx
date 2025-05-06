@@ -15,7 +15,7 @@ import api from "@/app/utils/api";
 import { jwtDecode } from "jwt-decode"; // import this
 import { loginSuccess } from "@/redux/slices/authSlice"; // import loginSuccess action
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"; // import your custom hook
-
+import Cookies from "js-cookie";
 // Validation schema remains the same
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -76,6 +76,9 @@ const LoginPage = () => {
           role: decodedToken.role,
         })
       );
+
+      Cookies.set("accessToken", access_token, { expires: 7 });
+      // Cookies.set("role", decodedToken.role, { expires: 7 });
 
       toast("Login Successful", {
         description: "You have been logged in successfully.",
