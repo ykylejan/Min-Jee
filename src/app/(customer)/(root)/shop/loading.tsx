@@ -8,12 +8,10 @@ import { Search } from "lucide-react";
 const loading = () => {
     return (
         <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40">
-            {/* Title Skeleton */}
             <div className="text-[#778768] flex flex-col items-center justify-center text-center">
                 <Skeleton className="h-16 w-64 rounded-lg mt-5 bg-camouflage-200" />
             </div>
 
-            {/* Tabs Skeleton */}
             <div className="px-24 pt-8 pb-4">
                 <div className="flex justify-center pb-8">
                     <Tabs>
@@ -40,7 +38,6 @@ const loading = () => {
                     </Tabs>
                 </div>
 
-                {/* Search Box Skeleton */}
                 <div className="flex justify-center pb-10">
                     <div className="relative w-[530px]">
                         <div className="bg-white/70 p-6 w-full pl-10 rounded-md border border-input">
@@ -53,19 +50,15 @@ const loading = () => {
                     </div>
                 </div>
 
-                {/* Products Grid Skeleton */}
                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10">
                     {Array(8)
                         .fill(0)
                         .map((_, index) => (
                             <div key={index} className="flex flex-col gap-2">
-                                {/* Product Image Skeleton */}
                                 <Skeleton className="h-56 w-full rounded-lg bg-camouflage-100" />
 
-                                {/* Product Name Skeleton */}
                                 <Skeleton className="h-5 w-3/4 mt-2 bg-camouflage-100" />
 
-                                {/* Product Price Skeleton */}
                                 <Skeleton className="h-4 w-1/2 mt-1 bg-camouflage-100" />
                             </div>
                         ))}
