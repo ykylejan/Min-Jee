@@ -4,7 +4,6 @@ import EditEmail from "./Profile/EditEmail";
 import EditContactNumber from "./Profile/EditContactNumber";
 import EditPassword from "./Profile/EditPassword";
 import EditAddress from "./Profile/EditAddress";
-import { AccountSample } from "@/constants";
 
 const ProfileScreen = () => {
     return (

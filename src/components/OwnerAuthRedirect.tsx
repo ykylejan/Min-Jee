@@ -13,7 +13,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (accessToken === undefined || role === undefined) return;
   
-    const publicPaths = ["/login", "/signup", "/forgot-password", "/", "/shop", "/shop/halfsized-food-warmer"]; // Add any other public paths here
+    const publicPaths = ["/login", "/signup", "/forgot-password", "/", "/shop", "/shop/halfsized-food-warmer", "/about-us"]; // Add any other public paths here
     const customerPaths = ["/account", "/checkout", "/receipt", "/", "/shop"]; // Add any other customer paths here
       
     
