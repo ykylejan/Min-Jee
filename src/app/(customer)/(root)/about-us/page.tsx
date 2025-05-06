@@ -8,6 +8,7 @@ import {
     Award,
     Heart,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const page = () => {
     return (
@@ -288,23 +289,15 @@ const page = () => {
                             Let Min-Jee help make it unforgettable.
                         </span>
                     </h2>
-                    <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-                        <div className="inline-flex rounded-md shadow">
-                            <a
-                                href="#"
-                                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-camouflage-400 bg-white hover:bg-gray-50"
-                            >
-                                Get Started
-                            </a>
-                        </div>
-                        <div className="ml-3 inline-flex rounded-md shadow">
-                            <a
-                                href="#"
-                                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-camouflage-400 hover:bg-camouflage-400/80"
-                            >
-                                Contact Us
-                            </a>
-                        </div>
+                    <div className="space-x-3 mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                        <Button className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-camouflage-400 bg-white hover:bg-gray-50">
+                            Get Started
+                        </Button>
+                        
+                        <Button className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-camouflage-400 hover:bg-camouflage-400/80">
+                            Contact Us
+                        </Button>
+                        
                     </div>
                 </div>
             </div>

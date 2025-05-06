@@ -42,7 +42,7 @@ const Navbar = () => {
                         <SheetDescription className="font-inder text-lg space-y-3 ml-5">
                             <Link href="/shop">
                                 <span className="mt-5 hover:underline text-[#778768] cursor-pointer block">
-                                    Shopppppppppppppppppppp
+                                    Shop
                                 </span>
                             </Link>
 
@@ -68,7 +68,7 @@ const Navbar = () => {
                         Shop
                     </span>
                 </Link>
-                <Link href="/*">
+                <Link href="/about-us">
                     <span className="text-lg hover:text-[#778768] cursor-pointer">
                         About Us
                     </span>

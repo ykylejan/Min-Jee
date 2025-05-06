@@ -3,8 +3,6 @@ import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { NotebookIcon, Truck, User } from "lucide-react";
 
 const OrderDetails = () => {
     return (
@@ -20,8 +18,8 @@ const OrderDetails = () => {
             <div className="font-afacad">
                 <div className="pt-8">
                     <div className="flex items-center gap-x-3">
-                        <User size={20} />
-                        <h1 className="text-xl">Personal Information</h1>
+                        {/* <User size={20} /> */}
+                        <h1 className="text-xl font-afacad_medium">Personal Information</h1>
                     </div>
                     <hr />
 
@@ -41,8 +39,8 @@ const OrderDetails = () => {
 
                 <div className="pt-16">
                     <div className="flex items-center gap-x-3">
-                        <NotebookIcon size={20} />
-                        <h1 className="text-xl">Booking Schedule</h1>
+                        {/* <NotebookIcon size={20} /> */}
+                        <h1 className="text-xl font-afacad_medium">Booking Schedule</h1>
                     </div>
                     <hr />
 
@@ -78,8 +76,8 @@ const OrderDetails = () => {
 
                 <div className="pt-16">
                     <div className="flex items-center gap-x-3">
-                        <Truck size={20} />
-                        <h1 className="text-xl">Delivery Option</h1>
+                        {/* <Truck size={20} /> */}
+                        <h1 className="text-xl font-afacad_medium">Delivery Option</h1>
                     </div>
                     <hr />
 
