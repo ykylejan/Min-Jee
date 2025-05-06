@@ -134,7 +134,7 @@ const page = () => {
                 <Input
                   placeholder="Enter the rental name"
                   className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                  {...register("name")}
+                  {...register("name")} 
                 />
                 {errors.name && (
                   <p className="text-red-500 text-xs mt-1">

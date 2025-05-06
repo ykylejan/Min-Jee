@@ -24,7 +24,7 @@ const OwnerAuthRedirect = ({ children }: { children: React.ReactNode }) => {
         router.replace("/orders");
         return;
       }
-  
+      
       if (accessToken && role === "customer") {
         console.log("Customer detected on public page, redirecting to account...");
         router.replace("/account");
