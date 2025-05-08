@@ -67,9 +67,7 @@ const SignUpPage = () => {
           email: data.email,
           address: data.address,
           password: data.password,
-          isActive: true,
-          bookings: 0,
-          passwordConf: data.passwordConf, // Changed to match common backend expectations
+          passwordConf: data.passwordConf, 
         },
         {
           headers: {
