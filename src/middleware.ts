@@ -6,7 +6,9 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("accessToken")?.value;
+    const token = request.cookies.get("accessToken")?.value;
+//   const authHeader = request.headers.get("authorization");
+//   const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
   // Only do redirect logic on login or signup pages if user is authenticated
   if ((pathname === "/login" || pathname === "/signup") && token) {
@@ -36,7 +38,8 @@ export async function middleware(request: NextRequest) {
     "/otp-success",
     "/about-us",
   ];
-  const isPublic = publicPaths.includes(pathname) || pathname.startsWith("/shop");
+  const isPublic =
+    publicPaths.includes(pathname) || pathname.startsWith("/shop");
 
   if (isPublic) {
     return NextResponse.next();

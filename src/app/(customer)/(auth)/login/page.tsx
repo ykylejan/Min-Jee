@@ -16,6 +16,7 @@ import { jwtDecode } from "jwt-decode"; // import this
 import { loginSuccess } from "@/redux/slices/authSlice"; // import loginSuccess action
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"; // import your custom hook
 import Cookies from "js-cookie";
+import axios from "axios";
 // Validation schema remains the same
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -76,15 +77,16 @@ const LoginPage = () => {
           role: decodedToken.role,
         })
       );
-
+      // axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       Cookies.set("accessToken", access_token, { expires: 7 });
+      // api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       // Cookies.set("role", decodedToken.role, { expires: 7 });
 
       toast("Login Successful", {
         description: "You have been logged in successfully.",
         className: "bg-green-500/80 border border-none text-white",
       });
-
+      
       if (decodedToken.role === "owner") {
         router.push("/orders");
       } else if (decodedToken.role === "customer") {
