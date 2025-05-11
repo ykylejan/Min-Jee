@@ -75,7 +75,7 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                                     Contact Number
                                 </h1>
                                 <Input
-                                    placeholder={"Set the product's quantity"}
+                                    placeholder={"Set the customer's contact number"}
                                     className="bg-neutral-100/50 w-80 h-12 px-5"
                                     defaultValue={"09095901234"}
                                 />
