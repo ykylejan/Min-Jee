@@ -15,7 +15,7 @@ const page = () => {
                     <h1 className="font-afacad_medium text-3xl">
                         Order Details:{" "}
                     </h1>
-                    <StatusLabel label="Completed" />
+                    <StatusLabel label="Pending" />
                 </div>
                 <Link href={"/orders/order-item/edit-order"}>
                     <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-white hover:bg-camouflage-400/80">
@@ -31,9 +31,11 @@ const page = () => {
                     <div className="font-afacad_medium text-2xl">
                         Product Details
                     </div>
-                    <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
-                        Add Product
-                    </Button>
+                    <Link href={"/orders/order-item/add-product"}>
+                        <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                            Add Product
+                        </Button>
+                    </Link>
                 </div>
 
                 <ProductDetailsItem />

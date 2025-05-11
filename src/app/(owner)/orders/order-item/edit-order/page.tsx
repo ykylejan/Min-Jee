@@ -44,7 +44,7 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                         <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
                             Edit Order
                         </h1>
-                        <StatusLabel label="Completed" />
+                        <StatusLabel label="Pending" />
                     </div>
                 </div>
 

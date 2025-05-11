@@ -29,7 +29,7 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
     return (
         <div className="flex justify-center">
             <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-                <div className="flex gap-x-3 items-center mb-12">
+                <div className="flex gap-x-3 items-center">
                     <button
                         onClick={() => router.back()}
                         className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
@@ -45,101 +45,110 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                     </h1>
                 </div>
 
-                <div>
-                    <h1 className="font-afacad text-neutral-500">
-                        Customer Information
-                    </h1>
-                    <hr />
-                </div>
+                <div className="mt-12">
+                    <div>
+                        <h1 className="font-afacad text-neutral-500">
+                            Customer Information
+                        </h1>
+                        <hr />
+                    </div>
 
-                <div className="pt-6 pb-10 space-y-6">
-                    <div className="flex justify-between w-full">
-                        <div>
-                            <h1 className="text-sm text-neutral-500">
-                                Customer Name
-                            </h1>
-                            {/* <Input
+                    <div className="pt-6 pb-10 space-y-6">
+                        <div className="flex justify-between w-full">
+                            <div>
+                                <h1 className="text-sm text-neutral-500">
+                                    Customer Name
+                                </h1>
+                                {/* <Input
                                 placeholder="Enter the product name"
                                 className="bg-neutral-100/50 min-w-80 h-12 px-5"
                             /> */}
-                            <Select>
-                                <SelectTrigger className="min-w-80 h-12 bg-neutral-100/50 px-5">
-                                    <SelectValue placeholder="Select from the customer list" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="apple">
-                                            Kyle Dellatan
-                                        </SelectItem>
-                                        <SelectItem value="banana">
-                                            Art Montebon
-                                        </SelectItem>
-                                        <SelectItem value="blueberry">
-                                            Leonard Orion
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                <Select>
+                                    <SelectTrigger className="min-w-80 h-12 bg-neutral-100/50 px-5">
+                                        <SelectValue placeholder="Select from the customer list" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="apple">
+                                                Kyle Dellatan
+                                            </SelectItem>
+                                            <SelectItem value="banana">
+                                                Art Montebon
+                                            </SelectItem>
+                                            <SelectItem value="blueberry">
+                                                Leonard Orion
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                        <div>
-                            <h1 className="text-sm text-neutral-500">Intended Name</h1>
-                            <Input
-                                placeholder={"Set the product's quantity"}
-                                className="bg-neutral-100/50 w-80 h-12 px-5"
-                            />
+                            <div>
+                                <h1 className="text-sm text-neutral-500">
+                                    Intended Name
+                                </h1>
+                                <Input
+                                    placeholder={"Set the product's quantity"}
+                                    className="bg-neutral-100/50 w-80 h-12 px-5"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <h1 className="text-sm text-neutral-500">Location</h1>
-                        <Input
-                            placeholder={"Set the customer's place address"}
-                            className="bg-neutral-100/50 w-full h-12 px-5"
-                        />
-                    </div>
-                </div>
-
-                <div>
-                    <h1 className="font-afacad text-neutral-500">
-                        Booking Schedule
-                    </h1>
-                    <hr />
-                </div>
-                <div className="pt-6 pb-10 space-y-6">
-                    <div className="flex justify-between w-full">
                         <div>
                             <h1 className="text-sm text-neutral-500">
-                                Pricing
+                                Location
                             </h1>
                             <Input
-                                placeholder="Set the price"
-                                className="bg-neutral-100/50 w-80 h-12 px-5"
+                                placeholder={"Set the customer's place address"}
+                                className="bg-neutral-100/50 w-full h-12 px-5"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <h1 className="font-afacad text-neutral-500">
-                        Delivery Option
-                    </h1>
-                    <hr />
-                </div>
-
-                <div className="pt-6 pb-10 space-y-6">
+                <div className="mt-12">
                     <div>
-                        <h1 className="text-sm text-neutral-500">
-                            Description
+                        <h1 className="font-afacad text-neutral-500">
+                            Booking Schedule
                         </h1>
-                        <Textarea
-                            placeholder={
-                                "Write the product's description here.."
-                            }
-                            className="bg-neutral-100/50 w-full h-28 px-5 py-3"
-                        />
+                        <hr />
+                    </div>
+                    <div className="pt-6 pb-10 space-y-6">
+                        <div className="flex justify-between w-full">
+                            <div>
+                                <h1 className="text-sm text-neutral-500">
+                                    Pricing
+                                </h1>
+                                <Input
+                                    placeholder="Set the price"
+                                    className="bg-neutral-100/50 w-80 h-12 px-5"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div className="mt-12">
+                    <div>
+                        <h1 className="font-afacad text-neutral-500">
+                            Delivery Option
+                        </h1>
+                        <hr />
+                    </div>
+
+                    <div className="pt-6 pb-10 space-y-6">
+                        <div>
+                            <h1 className="text-sm text-neutral-500">
+                                Description
+                            </h1>
+                            <Textarea
+                                placeholder={
+                                    "Write the product's description here.."
+                                }
+                                className="bg-neutral-100/50 w-full h-28 px-5 py-3"
+                            />
+                        </div>
+                    </div>
+                </div>
 
                 <div className="pt-16 pb-10 flex justify-end">
                     <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6">
