@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 
 const Subtotal = ({ amount }: SubtotalProps) => {
     return (
-        <div className="w-full h-[280px] font-afacad">
+        <div className="absolute bottom-3 left-0 w-full bg-white p-4 font-afacad">
             <hr />
             <section className="mt-3 mb-10">
                 <div className="flex justify-between items-center font-afacad_semibold">

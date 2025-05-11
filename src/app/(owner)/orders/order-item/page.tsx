@@ -1,4 +1,3 @@
-
 import OrderDetailsSection from "@/components/OwnerPage/Order/OrderDetailsSection";
 import PaymentDetailsItem from "@/components/OwnerPage/Order/PaymentDetailsItem";
 import ProductDetailsItem from "@/components/OwnerPage/Order/ProductDetailsItem";
@@ -13,50 +12,62 @@ const page = () => {
         <div className="bg-white min-h-screen rounded-lg border border-neutral-200 px-12 py-8">
             <div className="flex justify-between">
                 <div className="flex flex-row gap-x-6 items-center">
-                    <h1 className="font-afacad_medium text-3xl">Order Details: </h1>
+                    <h1 className="font-afacad_medium text-3xl">
+                        Order Details:{" "}
+                    </h1>
                     <StatusLabel label="Completed" />
                 </div>
-
-                <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-lg text-white hover:bg-camouflage-400/80">
-                    Verify Status
-                </Button>
+                <Link href={"/orders/order-item/edit-order"}>
+                    <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-white hover:bg-camouflage-400/80">
+                        Edit Order
+                    </Button>
+                </Link>
             </div>
 
             <OrderDetailsSection />
 
             <div className="mt-10">
-                <div className="font-afacad_medium text-2xl">Product Details</div>
+                <div className="flex items-center justify-between mb-10">
+                    <div className="font-afacad_medium text-2xl">
+                        Product Details
+                    </div>
+                    <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad">
+                        Add Product
+                    </Button>
+                </div>
 
                 <ProductDetailsItem />
                 <ProductDetailsItem />
             </div>
 
-
             <div className="mt-10">
-                <div className="font-afacad_medium text-2xl">Payment Details</div>
+                <div className="font-afacad_medium text-2xl">
+                    Payment Details
+                </div>
 
                 <PaymentDetailsItem />
             </div>
 
             <div className="mt-10">
-                <div className="font-afacad_medium text-2xl">Customer Notes</div>
+                <div className="font-afacad_medium text-2xl">
+                    Customer Notes
+                </div>
 
                 <Textarea
                     placeholder="Customer's notes seems empty..."
                     className="min-h-32 mt-5"
-                    value={"Need three of your 8 seater buffet table, with blue table cloths"}
+                    value={
+                        "Need three of your 8 seater buffet table, with blue table cloths"
+                    }
                     readOnly={true}
                 />
             </div>
 
             <Link href={"/orders/order-item/receipt"}>
-                <Button
-                    className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
+                <Button className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
                     View Receipt
                 </Button>
             </Link>
-
-
         </div>
     );
 };

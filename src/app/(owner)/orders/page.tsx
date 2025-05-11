@@ -10,9 +10,17 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { PackagePlus, Search } from "lucide-react";
 import OrderStatusTable from "@/components/OwnerPage/Order/OrderStatusTable";
 
 const page = () => {
@@ -33,49 +41,62 @@ const page = () => {
                             </CardDescription>
                         </div>
 
-                        <div className="relative w-fit">
-                            <Input placeholder="Search an order item" className="w-fit font-light pr-8" />
-                            <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <div className="flex gap-x-3">
+                            <div className="relative w-fit">
+                                <Input
+                                    placeholder="Search an order item"
+                                    className="w-fit font-light pr-8"
+                                />
+                                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                            </div>
+
+                            <Button
+                                onClick={() =>
+                                    router.push("/orders/add-order")
+                                }
+                                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
+                            >
+                                <PackagePlus />
+                                New Order
+                            </Button>
                         </div>
+
 
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[150px]">Order ID</TableHead>
+                                <TableHead className="w-[150px]">
+                                    Order ID
+                                </TableHead>
                                 <TableHead>Customer Name</TableHead>
                                 <TableHead>Date Ordered</TableHead>
                                 <TableHead>Quantity</TableHead>
-                                <TableHead className="text-center">Status</TableHead>
+                                <TableHead className="text-center">
+                                    Status
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-
-
                             {/* 5 rows is ideal */}
                             <TableRow
                                 className="hover:cursor-pointer"
                                 onClick={() => handleRowClick("order-item")}
                             >
-                                <TableCell className="font-medium">REF 10223</TableCell>
+                                <TableCell className="font-medium">
+                                    REF 10223
+                                </TableCell>
                                 <TableCell>Kyle Dellatan</TableCell>
                                 <TableCell>Dec. 15, 2024</TableCell>
                                 <TableCell>164/200</TableCell>
                                 <TableCell className="flex justify-center">
-
-                                    <OrderStatusTable label="Verified"/>
-
+                                    <OrderStatusTable label="Verified" />
                                 </TableCell>
                             </TableRow>
-                            
-
                         </TableBody>
                     </Table>
-
-
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button variant="outline">Cancel</Button>

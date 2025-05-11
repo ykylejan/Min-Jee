@@ -17,6 +17,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { FaLongArrowAltRight } from 'react-icons/fa';
+import { GiMailShirt } from 'react-icons/gi';
 
 interface ProductCardProps {
     category?: string;

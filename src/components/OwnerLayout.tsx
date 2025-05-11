@@ -33,11 +33,11 @@ const navLinks = [
     href: "/orders",
     icon: <ShoppingCart />,
   },
-  {
-    name: "Products",
-    href: "/products",
-    icon: <Tag />,
-  },
+  // {
+  //   name: "Products",
+  //   href: "/products",
+  //   icon: <Tag />,
+  // },
   {
     name: "Rentals",
     href: "/rentals",
@@ -63,11 +63,11 @@ const navLinks = [
     href: "/partners",
     icon: <Contact />,
   },
-  {
-    name: "Calendar",
-    href: "/calendar",
-    icon: <CalendarDays />,
-  },
+  // {
+  //   name: "Calendar",
+  //   href: "/calendar",
+  //   icon: <CalendarDays />,
+  // },
   {
     name: "History",
     href: "/history",
