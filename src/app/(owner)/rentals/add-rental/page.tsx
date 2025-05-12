@@ -76,7 +76,7 @@ const page = () => {
             if (selectedImage) {
                 formData.append("file", selectedImage);
             }
-
+            
             // Make API call
             const response = await api.post("/o/rental", formData, {
                 headers: {
