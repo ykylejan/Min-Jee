@@ -16,6 +16,7 @@ import gcash from "../assets/icons/gcash.png";
 import gcashActive from "../assets/icons/gcash-active.png";
 import wallet from "../assets/icons/wallet.png";
 import walletActive from "../assets/icons/wallet-active.png";
+import qrCodeSample from "../assets/images/qrCodeSample.png";
 
 import logoleaf from "../assets/icons/leaflogo.svg";
 
@@ -28,6 +29,8 @@ export const images = {
     landingDim,
     landingPackage1,
     landingPackage2,
+
+    qrCodeSample,
 };
 
 export const icons = {

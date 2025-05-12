@@ -42,7 +42,7 @@ const OrderDetails = () => {
                         {/* <NotebookIcon size={20} /> */}
                         <h1 className="text-xl font-afacad_medium">Booking Schedule</h1>
                     </div>
-                    <hr />o
+                    <hr />
 
 
                     <div className="space-y-3">
