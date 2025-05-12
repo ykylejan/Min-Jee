@@ -3,8 +3,30 @@ import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+interface EditAccountProps {
+    address: string;
+}
+
 const EditAddress = ({ address }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
+    const [newAddress, setNewAddress] = useState(address);
+
+    const handleSave = () => {
+        if (!newAddress.trim()) {
+            toast("Warning", {
+                description: "Address cannot be empty",
+                className: "bg-yellow-500/80 border border-none text-white",
+            });
+            return;
+        }
+
+        setIsEdit(false);
+        toast.success("Profile Changed", {
+            description: "New address is set to the account",
+            className: "bg-green-500/80 border border-none text-white",
+        });
+    };
+
     return (
         <div className="mt-10">
             {!isEdit ? (
@@ -12,7 +34,9 @@ const EditAddress = ({ address }: EditAccountProps) => {
                     <div className="flex items-center justify-between">
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Home Address</h1>
-                            <h1 className="font-poppins_medium">{address}</h1>
+                            <h1 className="font-poppins_medium">
+                                {newAddress}
+                            </h1>
                         </div>
                         <Button
                             onClick={() => setIsEdit(true)}
@@ -27,31 +51,26 @@ const EditAddress = ({ address }: EditAccountProps) => {
                 <div className="">
                     <div className="flex justify-between items-center">
                         <div className="w-full space-y-2">
-                            <h1 className="text-base">
-                                Edit your address:
-                            </h1>
+                            <h1 className="text-base">Edit your address:</h1>
                             <Textarea
                                 placeholder="03 Red Stone, Calinan, Davao City.."
                                 className="w-1/2 shadow-none h-10"
+                                value={newAddress}
+                                onChange={(e) => setNewAddress(e.target.value)}
                             />
                         </div>
                         <Button
-                            onClick={() => {
-                                setIsEdit(false);
-                                toast("Profile Changed", {
-                                    description:
-                                        "New billing address is set to the account",
-                                    className:
-                                        "bg-green-500/80 border border-none text-white",
-                                });
-                            }}
+                            onClick={handleSave}
                             className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
                         >
                             DONE
                         </Button>
 
                         <span
-                            onClick={() => setIsEdit(false)}
+                            onClick={() => {
+                                setIsEdit(false);
+                                setNewAddress(address);
+                            }}
                             className="text-xs cursor-pointer underline ml-4 text-gray-500"
                         >
                             Cancel

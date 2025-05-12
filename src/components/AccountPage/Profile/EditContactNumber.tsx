@@ -3,8 +3,28 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+interface EditAccountProps {
+    contactNumber: string;
+}
+
 const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
+    const [newContactNumber, setNewContactNumber] = useState(contactNumber);
+
+    const handleSave = () => {
+        if (!newContactNumber.trim()) {
+            toast.error("Contact number cannot be empty", {
+                className: "bg-yellow-500/80 border border-none text-white",
+            });
+            return;
+        }
+
+        setIsEdit(false);
+        toast.success("Profile Changed", {
+            description: "New contact number is set to the account",
+            className: "bg-green-500/80 border border-none text-white",
+        });
+    };
     return (
         <div className="mt-10">
             {!isEdit ? (
@@ -13,7 +33,7 @@ const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Contact Number</h1>
                             <h1 className="font-poppins_medium">
-                                {contactNumber}
+                                {newContactNumber}
                             </h1>
                         </div>
                         <Button
@@ -33,32 +53,30 @@ const EditContactNumber = ({ contactNumber }: EditAccountProps) => {
                                 Edit your contact number:
                             </h1>
                             <Input
-                                placeholder="09963355454"
+                                placeholder="Enter contact number"
                                 className="w-1/2 shadow-none h-10"
+                                value={newContactNumber}
+                                onChange={(e) =>
+                                    setNewContactNumber(e.target.value)
+                                }
                             />
                         </div>
                         <Button
-                            onClick={() => {
-                                setIsEdit(false);
-                                toast("Profile Changed", {
-                                    description:
-                                        "New contact number is set to the account",
-                                    className:
-                                        "bg-green-500/80 border border-none text-white",
-                                });
-                            }}
+                            onClick={handleSave}
                             className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
                         >
                             DONE
                         </Button>
 
                         <span
-                            onClick={() => setIsEdit(false)}
+                            onClick={() => {
+                                setIsEdit(false);
+                                setNewContactNumber(contactNumber);
+                            }}
                             className="text-xs cursor-pointer underline ml-4 text-gray-500"
                         >
                             Cancel
                         </span>
-                        
                     </div>
                     <hr className="mt-6" />
                 </div>

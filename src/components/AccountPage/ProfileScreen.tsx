@@ -17,7 +17,7 @@ const ProfileScreen = () => {
 
             <div>
                 <EditName firstname={"Art"} lastname={"Montebon"} />
-                <EditEmail email={"arkiart@gmail.com"} />
+                {/* <EditEmail email={"arkiart@gmail.com"} /> */}
                 <EditContactNumber contactNumber={"09963355454"} />
                 <EditPassword password={"Test123!"} />
                 <EditAddress address={"33 Red Stone, Calinan"} />

@@ -4,12 +4,44 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 
-const EditPassword = ({password}: EditAccountProps) => {
+const EditPassword = ({ password }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    
+
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleSave = () => {
+        // Validation
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            toast.error("All fields are required", {
+                className: "bg-yellow-500/80 border border-none text-white",
+            });
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            toast.error("New passwords do not match", {
+                className: "bg-red-500/80 border border-none text-white",
+            });
+            return;
+        }
+
+        setIsEdit(false);
+        toast.success("Profile Changed", {
+            description: "New password is set to the account",
+            className: "bg-green-500/80 border border-none text-white",
+        });
+
+        // Optional: Clear fields after save
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+    };
+
     return (
         <div className="mt-10">
             {!isEdit ? (
@@ -18,7 +50,7 @@ const EditPassword = ({password}: EditAccountProps) => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Password</h1>
                             <h1 className="font-poppins_medium">
-                                {Array(password?.length).fill('•').join('')}
+                                {Array(password?.length).fill("•").join("")}
                             </h1>
                         </div>
                         <Button
@@ -31,17 +63,19 @@ const EditPassword = ({password}: EditAccountProps) => {
                     <hr className="mt-6" />
                 </div>
             ) : (
-                <div className="">
-                    <div className="flex justify-between items-center">
+                <div>
+                    <div className="flex justify-between items-start gap-6">
                         <div className="w-full space-y-2">
-                            <h1 className="text-base">
-                                Edit your contact number:
-                            </h1>
+                            <h1 className="text-base">Change your password:</h1>
+
+                            {/* Current Password */}
                             <div className="relative w-1/2">
                                 <Input
                                     type={showOldPassword ? "text" : "password"}
-                                    placeholder="Old Password"
+                                    placeholder="Current Password"
                                     className="w-full shadow-none h-10 pr-10"
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
                                 />
                                 <button
                                     type="button"
@@ -51,11 +85,15 @@ const EditPassword = ({password}: EditAccountProps) => {
                                     {showOldPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
+
+                            {/* New Password */}
                             <div className="relative w-1/2">
                                 <Input
                                     type={showNewPassword ? "text" : "password"}
                                     placeholder="New Password"
                                     className="w-full shadow-none h-10 pr-10"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
                                 />
                                 <button
                                     type="button"
@@ -65,11 +103,15 @@ const EditPassword = ({password}: EditAccountProps) => {
                                     {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
+
+                            {/* Confirm New Password */}
                             <div className="relative w-1/2">
                                 <Input
                                     type={showConfirmPassword ? "text" : "password"}
                                     placeholder="Confirm New Password"
                                     className="w-full shadow-none h-10 pr-10"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                                 <button
                                     type="button"
@@ -80,26 +122,22 @@ const EditPassword = ({password}: EditAccountProps) => {
                                 </button>
                             </div>
                         </div>
-                        <Button
-                            onClick={() => {
-                                setIsEdit(false);
-                                toast("Profile Changed", {
-                                    description:
-                                        "New password is set to the account",
-                                    className: "bg-green-500/80 border border-none text-white"
-                                });
-                            }}
-                            className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
-                        >
-                            DONE
-                        </Button>
 
-                        <span 
-                            onClick={() => setIsEdit(false)}
-                            className="text-xs cursor-pointer underline ml-4 text-gray-500"
-                        >
-                            Cancel
-                        </span>
+                        <div className="flex flex-col items-end space-y-2">
+                            <Button
+                                onClick={handleSave}
+                                className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
+                            >
+                                DONE
+                            </Button>
+
+                            <span
+                                onClick={() => setIsEdit(false)}
+                                className="text-xs cursor-pointer underline text-gray-500"
+                            >
+                                Cancel
+                            </span>
+                        </div>
                     </div>
                     <hr className="mt-6" />
                 </div>

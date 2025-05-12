@@ -3,8 +3,30 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+interface EditAccountProps {
+    firstname: string;
+    lastname: string;
+}
+
 const EditName = ({ firstname, lastname }: EditAccountProps) => {
     const [isEdit, setIsEdit] = useState(false);
+    const [newFirstName, setNewFirstName] = useState(firstname);
+    const [newLastName, setNewLastName] = useState(lastname);
+
+    const handleSave = () => {
+        if (!newFirstName.trim() || !newLastName.trim()) {
+            toast.error("All fields are required", {
+                className: "bg-yellow-500/80 border border-none text-white",
+            });
+            return;
+        }
+
+        setIsEdit(false);
+        toast.success("Profile Changed", {
+            description: "New name is set to the account",
+            className: "bg-green-500/80 border border-none text-white",
+        });
+    };
 
     return (
         <div>
@@ -14,7 +36,7 @@ const EditName = ({ firstname, lastname }: EditAccountProps) => {
                         <div className="text-base">
                             <h1 className="text-[#6B7280]">Name</h1>
                             <h1 className="font-poppins_medium">
-                                {firstname + " " + lastname}
+                                {newFirstName + " " + newLastName}
                             </h1>
                         </div>
                         <Button
@@ -34,35 +56,35 @@ const EditName = ({ firstname, lastname }: EditAccountProps) => {
                             <Input
                                 placeholder="First Name"
                                 className="w-1/2 shadow-none h-10"
-                                defaultValue={firstname}
+                                value={newFirstName}
+                                onChange={(e) =>
+                                    setNewFirstName(e.target.value)
+                                }
                             />
                             <Input
                                 placeholder="Last Name"
                                 className="w-1/2 shadow-none h-10"
-                                defaultValue={lastname}
+                                value={newLastName}
+                                onChange={(e) => setNewLastName(e.target.value)}
                             />
                         </div>
                         <Button
-                            onClick={() => {
-                                setIsEdit(false);
-                                toast("Profile Changed", {
-                                    description:
-                                        "New name is set to the account",
-                                    className: "bg-green-500/80 border border-none text-white"
-                                });
-                            }}
+                            onClick={handleSave}
                             className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
                         >
                             DONE
                         </Button>
 
-                        <span 
-                            onClick={() => setIsEdit(false)}
+                        <span
+                            onClick={() => {
+                                setIsEdit(false);
+                                setNewFirstName(firstname);
+                                setNewLastName(lastname);
+                            }}
                             className="text-xs cursor-pointer underline ml-4 text-gray-500"
                         >
                             Cancel
                         </span>
-
                     </div>
                     <hr className="mt-6" />
                 </div>
