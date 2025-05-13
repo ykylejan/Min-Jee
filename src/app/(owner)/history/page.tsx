@@ -64,7 +64,7 @@ const page = () => {
                                 <TableRow
                                     key={data.id}
                                     className="hover:cursor-pointer"
-                                    onClick={() => handleRowClick("edit-customer")}
+                                    onClick={() => handleRowClick("view")}
                                 >
                                     <TableCell className="font-medium">{data.customerName}</TableCell>
                                     <TableCell>{data.phoneNumber}</TableCell>

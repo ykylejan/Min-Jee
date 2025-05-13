@@ -102,7 +102,7 @@ const OrderDetailsPayment = () => {
                         />
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-xl p-0 overflow-hidden border-0">
-                        <DialogHeader className="p-0 m-0">
+                        <DialogHeader className="">
                             <DialogTitle className="sr-only">
                                 GCash Payment
                             </DialogTitle>
