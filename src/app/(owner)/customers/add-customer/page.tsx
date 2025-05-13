@@ -50,7 +50,7 @@ const page = () => {
         isActive: true,
         bookings: 0,
       };
-
+      
       const response = await api.post("o/customer", payload, {
         headers: {
           "Content-Type": "application/json",

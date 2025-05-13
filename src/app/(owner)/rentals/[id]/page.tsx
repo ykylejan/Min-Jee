@@ -348,7 +348,7 @@ const EditRentalPage = () => {
               />
             </div>
           </div>
-
+                
           <div>
             <h1 className="font-afacad text-neutral-500">Media</h1>
             <hr />

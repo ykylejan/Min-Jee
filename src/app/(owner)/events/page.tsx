@@ -100,9 +100,9 @@ const page = () => {
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <div className="font-afacad font-light text-2xl">
-              Services
+              Parnter List
               <CardDescription className="text-base">
-                Click an order row to view/edit a service details.
+                Click an order row to view/edit a partner details.
               </CardDescription>
             </div>
 
@@ -116,11 +116,11 @@ const page = () => {
               </div>
 
               <Button
-                onClick={() => router.push("/services/add-service")}
+                onClick={() => router.push("/partners/add-partner")}
                 className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
               >
                 <UserRoundPlus />
-                Add Service
+                Add Partner
               </Button>
             </div>
           </CardTitle>
@@ -129,8 +129,10 @@ const page = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="">Service Name</TableHead>
-
+                <TableHead className="">Partner Name</TableHead>
+                <TableHead>Address</TableHead>
+                <TableHead>Phone Number</TableHead>
+                <TableHead>Category</TableHead>
                 <TableHead> </TableHead>
               </TableRow>
             </TableHeader>
@@ -143,7 +145,9 @@ const page = () => {
                   onClick={() => handleRowClick(data.id.toString())}
                 >
                   <TableCell className="font-medium">{data.name}</TableCell>
-
+                  <TableCell>{data.address}</TableCell>
+                  <TableCell>{data.contactNumber}</TableCell>
+                  <TableCell>{getCategoryName(data.categoryId)}</TableCell>
                   <TableCell className="hover:underline cursor-pointer">
                     Edit
                   </TableCell>
