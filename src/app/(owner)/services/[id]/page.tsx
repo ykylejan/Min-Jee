@@ -1,4 +1,5 @@
 "use client";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { MoveLeft } from "lucide-react";
@@ -36,7 +37,11 @@ const serviceSchema = z.object({
     )
     .min(1, "At least one service item is required"),
 });
-
+type ServiceItem = {
+  name: string;
+  price: number;
+  description?: string; // Optional field
+};
 type ServiceFormValues = z.infer<typeof serviceSchema>;
 
 const EditServicePage = () => {
@@ -47,6 +52,8 @@ const EditServicePage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [serviceItems, setServiceItems] = useState<ServiceItem[]>([]);
 
   const {
     register,
@@ -54,6 +61,7 @@ const EditServicePage = () => {
     resetField,
     control,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
@@ -62,11 +70,6 @@ const EditServicePage = () => {
       service_items: [{ name: "", price: 0, description: "" }],
       add_service_items: [{ addName: "", addPrice: 0, addDescription: "" }],
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "service_items",
   });
 
   const {
@@ -81,47 +84,60 @@ const EditServicePage = () => {
   const { data, loading, error } = useQuery(GET_SERVICE_BY_ID, {
     variables: { id: serviceId },
     fetchPolicy: "network-only",
-
     client: apolloClient,
   });
 
   useEffect(() => {
-    console.log("ID:", serviceId);
-    // console.log("DATA:", data.getServiceById);
     if (data && data.getServiceById) {
-      console.log("DATA:", data.getServiceById);
-
-      const rental = data.getServiceById;
+      const service = data.getServiceById;
 
       reset({
-        name: rental.name || "",
-        service_items: rental.serviceItems.map((item: any) => ({
+        name: service.name || "",
+        service_items: service.serviceItems.map((item: any) => ({
           name: item.name,
           price: parseFloat(item.price),
           description: item.description || "",
         })),
+        add_service_items: [{ addName: "", addPrice: 0, addDescription: "" }],
       });
 
-      if (rental.img) {
-        setCurrentImageUrl(rental.img);
+      setServiceItems(service.serviceItems);
+
+      if (service.img) {
+        setCurrentImageUrl(service.img);
       }
     }
-  }, [data, reset, loading]);
+  }, [data, reset]);
 
-  const onItemSubmit = async (data: ServiceFormValues) => {
-    setIsSubmitting(true);
+  // Add a simple function to handle adding a service item
+  const handleAddServiceItem = async (e: any) => {
+    e.preventDefault(); // Prevent the main form from submitting
+
+    setIsAddingItem(true);
     try {
-      //   JSON.stringify(data.service_items);
+      const values = getValues();
+      const { addName, addPrice, addDescription } = values.add_service_items[0];
 
-      const { addName, addPrice, addDescription } = data.add_service_items[0];
+      // Validate the fields manually
+      if (!addName) {
+        toast.error("Item name is required");
+        setIsAddingItem(false);
+        return;
+      }
 
-      // Send the data directly
-      await api.post(
+      if (!addPrice || addPrice < 1) {
+        toast.error("Price must be at least 1");
+        setIsAddingItem(false);
+        return;
+      }
+
+      // Send the data to the specific endpoint for adding service items
+      const response = await api.post(
         `/o/services/${serviceId}/service_item`,
         {
           name: addName,
           price: addPrice,
-          description: addDescription,
+          description: addDescription || "",
         },
         {
           headers: {
@@ -130,25 +146,29 @@ const EditServicePage = () => {
         }
       );
 
-      toast("Service Item Added Successfully", {
-        description: "You have added a service successfully.",
-        className: "bg-green-500/80 border border-none text-white",
-      });
-      //   router.push("/services");
+      // If successful, update the local state
+      if (response.data) {
+        const newItem = {
+          name: addName,
+          price: addPrice,
+          description: addDescription || "",
+        };
 
-      data.add_service_items.forEach((_, index) => {
-        resetField(`add_service_items.${index}.addName`);
-        resetField(`add_service_items.${index}.addPrice`);
-        resetField(`add_service_items.${index}.addDescription`);
-      });
-    } catch (error: any) {
-      console.error("Submission error:", error);
-      toast("Error", {
-        description: "Something went wrong. Please try again.",
-        className: "bg-red-500/80 border border-none text-white",
-      });
+        // Update both the displayed items and the form state
+        setServiceItems([...serviceItems, newItem]);
+      }
+
+      toast.success("Service Item Added Successfully");
+
+      // Reset just the add service item fields
+      resetField("add_service_items.0.addName");
+      resetField("add_service_items.0.addPrice");
+      resetField("add_service_items.0.addDescription");
+    } catch (error) {
+      console.error("Error adding service item:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
-      setIsSubmitting(false);
+      setIsAddingItem(false);
     }
   };
 
@@ -182,7 +202,7 @@ const EditServicePage = () => {
 
       toast.success("Service updated successfully.");
       router.push("/services");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error updating service:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -212,7 +232,7 @@ const EditServicePage = () => {
               Service Information
             </h1>
             <hr />
-            <div className="pt-6 pb-10 space-y-6">
+            <div className="pt-6 space-y-6">
               <div>
                 <h1 className="text-sm text-neutral-500">Service Name</h1>
                 <Controller
@@ -235,13 +255,13 @@ const EditServicePage = () => {
             </div>
           </div>
 
-          {/* Service Items */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Service Items</h1>
+          {/* Service Items Form Section */}
+          <div className="mt-6 pb-10">
+            <h1 className="font-afacad text-neutral-500">Add Service Item</h1>
             <hr />
             <div className="pt-6 pb-4 space-y-6">
               {addFields.map((field, index) => (
-                <div key={field.id} className="space-y-4 border-b pb-4">
+                <div key={field.id} className="space-y-4">
                   <div>
                     <h1 className="text-sm text-neutral-500">Item Name</h1>
                     <Input
@@ -285,16 +305,45 @@ const EditServicePage = () => {
 
                   <div className="flex w-full items-end justify-end">
                     <Button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={handleSubmit(onItemSubmit)}
+                      type="button" // Important: type="button" prevents form submission
+                      disabled={isAddingItem}
+                      onClick={handleAddServiceItem}
                       className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800"
                     >
-                      {isSubmitting ? "Adding..." : "Add Service Item"}
+                      {isAddingItem ? "Adding..." : "Add Service Item"}
                     </Button>
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Display Service Items */}
+          <div className="mt-6 pb-10">
+            <h1 className="font-afacad text-neutral-500">Service Item List</h1>
+            <hr />
+
+            <div className="pt-6 space-y-4">
+              {serviceItems.length > 0 ? (
+                serviceItems.map((item: any, index) => (
+                  <div
+                    key={index}
+                    className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white"
+                  >
+                    <h2 className="text-lg font-semibold text-neutral-800">
+                      {item.name}
+                    </h2>
+                    <p className="text-sm text-neutral-500 mt-2">
+                      {item.description || "No description provided."}
+                    </p>
+                    <p className="text-base font-bold text-neutral-800 mt-4">
+                      Price: ₱{item.price}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-neutral-500">No service items available.</p>
+              )}
             </div>
           </div>
 
