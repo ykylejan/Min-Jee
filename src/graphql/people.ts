@@ -64,3 +64,20 @@ export const GET_ALL_CUSTOMERS = gql`
     }
   }
 `;
+
+export const GET_SERVICE_BY_ID = gql`
+  query getIndividualServiceById($id: UUID!) {
+    getServiceById(id: $id) {
+      id
+      img
+      name
+      serviceItems {
+        description
+        id
+        name
+        price
+        serviceId
+      }
+    }
+  }
+`;
