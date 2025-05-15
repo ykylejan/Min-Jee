@@ -5,94 +5,59 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
-import { AllCustomerSample, AllPartnerSample } from "@/constants";
-import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_CATEGORIES } from "@/graphql/products";
-import { GET_ALL_PARTNERS } from "@/graphql/people";
-import apolloClientPartner from "@/graphql/apolloClientPartners";
-import apolloClient from "@/graphql/apolloClient";
+import { Search, UserRoundPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_EVENT_PACKAGES } from "@/graphql/people";
+import apolloClient from "@/graphql/apolloClient";
 
-interface PartnerTypes {
+interface EventPackage {
   id: string;
   name: string;
-  address: string;
-  contactNumber: string;
-  categoryId: string;
+  img?: string;
 }
 
-const page = () => {
+const page: React.FC = () => {
   const router = useRouter();
-
-  const [partners, setPartners] = useState<PartnerTypes[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-
-  const handleRowClick = (id: string) => {
-    router.push(`/partners/${id}`);
-  };
+  const [eventPackages, setEventPackages] = useState<EventPackage[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const {
-    loading: partnersLoading,
-    error: partnersError,
-    data: partnersData,
-  } = useQuery(GET_ALL_PARTNERS, {
-    client: apolloClientPartner,
+    loading: packagesLoading,
+    error: packagesError,
+    data: packagesData,
+  } = useQuery(GET_ALL_EVENT_PACKAGES, {
+    client: apolloClient,
     fetchPolicy: "network-only",
   });
 
-  const {
-    loading: categoriesLoading,
-    error: categoriesError,
-    data: categoriesData,
-  } = useQuery(GET_ALL_CATEGORIES, {
-    client: apolloClient,
-    fetchPolicy: "cache-and-network",
-  });
-
-  const getPartnerCategories = (categories: any[] = []) => {
-    return categories.filter((category) => category.type === "Partner");
-  };
-
-  const getCategoryName = (categoryId: string): string => {
-    const category = categories.find((cat) => cat.id === categoryId);
-    return category ? category.name : "Unknown Category";
-  };
-
   useEffect(() => {
     try {
-      if (partnersData?.getPartner && categoriesData?.getCategories) {
-        const partnerCategories = getPartnerCategories(
-          categoriesData.getCategories
-        );
-        setCategories(partnerCategories);
-        setPartners(partnersData.getPartner);
-        console.log("DATA:", partnersData.getPartner);
-        console.log("Categories:", categoriesData.getCategories);
+      if (packagesData?.getEventPackages) {
+        setEventPackages(packagesData.getEventPackages);
       }
     } catch (error) {
       toast.error(
-        "An error occurred while fetching data. Please try again later."
+        "An error occurred while fetching event packages. Please try again later."
       );
     }
-  }, [partnersData, partnersLoading, categoriesData, categoriesLoading]);
+  }, [packagesData, packagesLoading]);
+
+  const handleCardClick = (id: string): void => {
+    router.push(`/events/${id}`);
+  };
+
+  // Filter packages based on search term
+  const filteredPackages = eventPackages.filter((pkg) => {
+    return pkg.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <>
@@ -100,66 +65,95 @@ const page = () => {
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <div className="font-afacad font-light text-2xl">
-              Parnter List
+              Event Packages
               <CardDescription className="text-base">
-                Click an order row to view/edit a partner details.
+                Click on a package card to view/edit package details.
               </CardDescription>
             </div>
 
             <div className="flex gap-x-3">
               <div className="relative w-fit">
                 <Input
-                  placeholder="Search an order item"
+                  placeholder="Search packages"
                   className="w-fit font-light pr-8"
+                  value={searchTerm}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearchTerm(e.target.value)
+                  }
                 />
                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               </div>
 
               <Button
-                onClick={() => router.push("/partners/add-partner")}
+                onClick={() => router.push("/event-packages/add-package")}
                 className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
               >
-                <UserRoundPlus />
-                Add Partner
+                <UserRoundPlus className="mr-2" />
+                Add Package
               </Button>
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="">Partner Name</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Phone Number</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {/* 5 rows is ideal */}
-              {partners.map((data) => (
-                <TableRow
-                  key={data.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(data.id.toString())}
+          {packagesLoading ? (
+            <div className="flex justify-center items-center min-h-64">
+              <p>Loading event packages...</p>
+            </div>
+          ) : filteredPackages.length === 0 ? (
+            <div className="flex justify-center items-center min-h-64">
+              <p>
+                No packages found. Try adjusting your search or add a new
+                package.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredPackages.map((pkg: EventPackage) => (
+                <Card
+                  key={pkg.id}
+                  className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => handleCardClick(pkg.id)}
                 >
-                  <TableCell className="font-medium">{data.name}</TableCell>
-                  <TableCell>{data.address}</TableCell>
-                  <TableCell>{data.contactNumber}</TableCell>
-                  <TableCell>{getCategoryName(data.categoryId)}</TableCell>
-                  <TableCell className="hover:underline cursor-pointer">
-                    Edit
-                  </TableCell>
-                </TableRow>
+                  <div className="relative">
+                    <img
+                      src={pkg.img || "/placeholder-event.jpg"}
+                      alt={pkg.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <Badge className="absolute top-2 right-2 bg-camouflage-400">
+                      Package
+                    </Badge>
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="font-afacad text-xl">
+                      {pkg.name}
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      {pkg.name} event package with comprehensive services.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter className="flex justify-between pt-0">
+                    <div className="flex items-center">
+                      <span className="text-sm text-gray-500">
+                        Click for details
+                      </span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
+                        handleCardClick(pkg.id);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </CardFooter>
+                </Card>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          )}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
       </Card>
     </>
   );
