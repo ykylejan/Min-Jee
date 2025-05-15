@@ -1,7 +1,7 @@
 declare interface ProductProps {
     image: any;
     name: string;
-    price: number;
+    price: string;
     className?: string;
 }
 
