@@ -26,73 +26,47 @@ import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import { GET_ALL_PARTNERS } from "@/graphql/people";
-import apolloClientPartner from "@/graphql/apolloClientPartners";
+import { GET_ALL_SERVICES } from "@/graphql/catalog";
 import apolloClient from "@/graphql/apolloClient";
 import { toast } from "sonner";
 
 interface PartnerTypes {
   id: string;
   name: string;
-  address: string;
-  contactNumber: string;
-  categoryId: string;
 }
 
 const page = () => {
   const router = useRouter();
 
-  const [partners, setPartners] = useState<PartnerTypes[]>([]);
+  const [services, setServices] = useState<PartnerTypes[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const handleRowClick = (id: string) => {
-    router.push(`/partners/${id}`);
+    router.push(`/services/${id}`);
   };
 
   const {
-    loading: partnersLoading,
-    error: partnersError,
-    data: partnersData,
-  } = useQuery(GET_ALL_PARTNERS, {
-    client: apolloClientPartner,
+    loading: servicesLoading,
+    error: servicesError,
+    data: servicesData,
+  } = useQuery(GET_ALL_SERVICES, {
+    client: apolloClient,
     fetchPolicy: "network-only",
   });
 
-  const {
-    loading: categoriesLoading,
-    error: categoriesError,
-    data: categoriesData,
-  } = useQuery(GET_ALL_CATEGORIES, {
-    client: apolloClient,
-    fetchPolicy: "cache-and-network",
-  });
-
-  const getPartnerCategories = (categories: any[] = []) => {
-    return categories.filter((category) => category.type === "Partner");
-  };
-
-  const getCategoryName = (categoryId: string): string => {
-    const category = categories.find((cat) => cat.id === categoryId);
-    return category ? category.name : "Unknown Category";
-  };
-
   useEffect(() => {
     try {
-      if (partnersData?.getPartner && categoriesData?.getCategories) {
-        const partnerCategories = getPartnerCategories(
-          categoriesData.getCategories
-        );
-        setCategories(partnerCategories);
-        setPartners(partnersData.getPartner);
-        console.log("DATA:", partnersData.getPartner);
-        console.log("Categories:", categoriesData.getCategories);
+      if (servicesData?.getServices) {
+        setServices(servicesData.getServices);
+        console.log("DATA:", servicesData.getServices);
       }
     } catch (error) {
       toast.error(
         "An error occurred while fetching data. Please try again later."
       );
     }
-  }, [partnersData, partnersLoading, categoriesData, categoriesLoading]);
+  }, [servicesData, servicesLoading]);
 
   return (
     <>
@@ -136,7 +110,7 @@ const page = () => {
             </TableHeader>
             <TableBody>
               {/* 5 rows is ideal */}
-              {partners.map((data) => (
+              {services.map((data) => (
                 <TableRow
                   key={data.id}
                   className="hover:cursor-pointer"
