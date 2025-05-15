@@ -16,33 +16,50 @@ import { useQuery } from "@apollo/client";
 import { GET_SERVICE_BY_ID } from "@/graphql/people";
 import apolloClient from "@/graphql/apolloClient";
 
+// Zod schemas
 const serviceSchema = z.object({
   name: z.string().min(1, "Service name is required"),
   service_items: z
     .array(
       z.object({
         name: z.string().min(1, "Item name is required"),
-        price: z.number().min(1, "Price must be at least 0"),
+        price: z.number().min(1, "Price must be at least 1"),
         description: z.string().optional(),
       })
     )
     .min(1, "At least one service item is required"),
-  add_service_items: z
-    .array(
-      z.object({
-        addName: z.string().min(1, "Item name is required"),
-        addPrice: z.number().min(1, "Price must be at least 1"),
-        addDescription: z.string().optional(),
-      })
-    )
-    .min(1, "At least one service item is required"),
 });
+
+const addServiceItemSchema = z.object({
+  addName: z.string().min(1, "Item name is required"),
+  addPrice: z.number().min(1, "Price must be at least 1"),
+  addDescription: z.string().optional(),
+});
+type AddServiceItemFormValues = z.infer<typeof addServiceItemSchema>;
+
 type ServiceItem = {
   name: string;
   price: number;
-  description?: string; // Optional field
+  description?: string;
+  id: string;
 };
+
+type AddServiceItem = {
+  name: string;
+  price: number;
+  description?: string;
+  // id: string;
+};
+
 type ServiceFormValues = z.infer<typeof serviceSchema>;
+
+const editServiceItemSchema = z.object({
+  editName: z.string().min(1, "Item name is required"),
+  editPrice: z.number().min(1, "Price must be at least 1"),
+  editDescription: z.string().optional(),
+  ediId: z.string(),
+});
+type EditServiceItemFormValues = z.infer<typeof editServiceItemSchema>;
 
 const EditServicePage = () => {
   const router = useRouter();
@@ -53,8 +70,12 @@ const EditServicePage = () => {
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAddingItem, setIsAddingItem] = useState(false);
-  const [serviceItems, setServiceItems] = useState<ServiceItem[]>([]);
+  const [serviceItems, setServiceItems] = useState<AddServiceItem[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
+  // Main service form
   const {
     register,
     handleSubmit,
@@ -68,19 +89,39 @@ const EditServicePage = () => {
     defaultValues: {
       name: "",
       service_items: [{ name: "", price: 0, description: "" }],
-      add_service_items: [{ addName: "", addPrice: 0, addDescription: "" }],
     },
   });
 
   const {
-    fields: addFields,
-    append: addAppend,
-    remove: addRemove,
-  } = useFieldArray({
-    control,
-    name: "add_service_items",
+    control: editControl,
+    handleSubmit: editHandleSubmit,
+    reset: editReset,
+    formState: { errors: editErrors },
+  } = useForm<EditServiceItemFormValues>({
+    resolver: zodResolver(editServiceItemSchema),
+    defaultValues: {
+      editName: "",
+      editPrice: 0,
+      editDescription: "",
+      ediId: "",
+    },
+  });
+  // Add Service Item form (modal)
+  const {
+    register: addRegister,
+    handleSubmit: handleAddSubmit,
+    reset: resetAddForm,
+    formState: { errors: addErrors },
+  } = useForm<AddServiceItemFormValues>({
+    resolver: zodResolver(addServiceItemSchema),
+    defaultValues: {
+      addName: "",
+      addPrice: 0,
+      addDescription: "",
+    },
   });
 
+  // Fetch service data
   const { data, loading, error } = useQuery(GET_SERVICE_BY_ID, {
     variables: { id: serviceId },
     fetchPolicy: "network-only",
@@ -90,80 +131,48 @@ const EditServicePage = () => {
   useEffect(() => {
     if (data && data.getServiceById) {
       const service = data.getServiceById;
-
       reset({
         name: service.name || "",
         service_items: service.serviceItems.map((item: any) => ({
+          id: item.id,
           name: item.name,
           price: parseFloat(item.price),
           description: item.description || "",
         })),
-        add_service_items: [{ addName: "", addPrice: 0, addDescription: "" }],
       });
-
       setServiceItems(service.serviceItems);
-
-      if (service.img) {
-        setCurrentImageUrl(service.img);
-      }
+      if (service.img) setCurrentImageUrl(service.img);
     }
   }, [data, reset]);
 
-  // Add a simple function to handle adding a service item
-  const handleAddServiceItem = async (e: any) => {
-    e.preventDefault(); // Prevent the main form from submitting
-
+  // Add Service Item handler
+  const onAddServiceItem = async (values: AddServiceItemFormValues) => {
     setIsAddingItem(true);
     try {
-      const values = getValues();
-      const { addName, addPrice, addDescription } = values.add_service_items[0];
-
-      // Validate the fields manually
-      if (!addName) {
-        toast.error("Item name is required");
-        setIsAddingItem(false);
-        return;
-      }
-
-      if (!addPrice || addPrice < 1) {
-        toast.error("Price must be at least 1");
-        setIsAddingItem(false);
-        return;
-      }
-
-      // Send the data to the specific endpoint for adding service items
+      // API call to add service item
       const response = await api.post(
         `/o/services/${serviceId}/service_item`,
         {
-          name: addName,
-          price: addPrice,
-          description: addDescription || "",
+          name: values.addName,
+          price: values.addPrice,
+          description: values.addDescription || "",
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      // If successful, update the local state
       if (response.data) {
         const newItem = {
-          name: addName,
-          price: addPrice,
-          description: addDescription || "",
+          name: values.addName,
+          price: values.addPrice,
+          description: values.addDescription || "",
         };
-
-        // Update both the displayed items and the form state
         setServiceItems([...serviceItems, newItem]);
+        toast.success("Service Item Added Successfully");
+        setShowAddModal(false);
+        resetAddForm();
       }
-
-      toast.success("Service Item Added Successfully");
-
-      // Reset just the add service item fields
-      resetField("add_service_items.0.addName");
-      resetField("add_service_items.0.addPrice");
-      resetField("add_service_items.0.addDescription");
     } catch (error) {
       console.error("Error adding service item:", error);
       toast.error("Something went wrong. Please try again.");
@@ -172,34 +181,27 @@ const EditServicePage = () => {
     }
   };
 
+  // Main form submit
   const onSubmit = async (data: ServiceFormValues) => {
     setIsSubmitting(true);
     try {
-      const formData = new FormData();
-
       if (selectedImage) {
+        const formData = new FormData();
         formData.append("file", selectedImage);
-
-        await api.patch(`/o/service/${serviceId}/img`, formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+        await api.patch(`/o/services/${serviceId}/img`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       }
-
       await api.patch(
-        `/o/service/${serviceId}`,
+        `/o/services/${serviceId}`,
         {
           name: data.name,
-          service_items: data.service_items,
+          service_items: serviceItems,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
-
       toast.success("Service updated successfully.");
       router.push("/services");
     } catch (error) {
@@ -207,6 +209,37 @@ const EditServicePage = () => {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const onEditServiceItem = async (values: EditServiceItemFormValues) => {
+    if (editingIndex === null) return;
+    try {
+      const response = await api.patch(
+        `/o/services/${serviceId}/service_item/${values.ediId}`,
+        {
+          name: values.editName,
+          price: values.editPrice,
+          description: values.editDescription,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      // Update local state if API call is successful
+      const updatedItems = [...serviceItems];
+      updatedItems[editingIndex] = {
+        ...updatedItems[editingIndex],
+        name: values.editName,
+        price: values.editPrice,
+        description: values.editDescription,
+      };
+      setServiceItems(updatedItems);
+      toast.success("Service Item updated successfully");
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Error updating service item:", error);
+      toast.error("Failed to update service item");
     }
   };
 
@@ -225,6 +258,7 @@ const EditServicePage = () => {
           </h1>
         </div>
 
+        {/* Main Service Form */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Service Name */}
           <div className="mt-12">
@@ -255,66 +289,21 @@ const EditServicePage = () => {
             </div>
           </div>
 
-          {/* Service Items Form Section */}
+          {/* Add Service Item Button */}
           <div className="mt-6 pb-10">
-            <h1 className="font-afacad text-neutral-500">Add Service Item</h1>
-            <hr />
-            <div className="pt-6 pb-4 space-y-6">
-              {addFields.map((field, index) => (
-                <div key={field.id} className="space-y-4">
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Item Name</h1>
-                    <Input
-                      placeholder="Enter item name"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
-                      {...register(`add_service_items.${index}.addName`)}
-                    />
-                    {errors.add_service_items?.[index]?.addName && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.add_service_items?.[index]?.addName?.message}
-                      </p>
-                    )}
-                  </div>
+            <div className="flex flex-col justify-between gap-y-2">
+              <h1 className="font-afacad text-neutral-500">Add Service Item</h1>
+              <hr />
 
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Price</h1>
-                    <Input
-                      placeholder="Set the price"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
-                      type="number"
-                      step="0.01"
-                      {...register(`add_service_items.${index}.addPrice`, {
-                        valueAsNumber: true,
-                      })}
-                    />
-                    {errors.add_service_items?.[index]?.addPrice && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.add_service_items?.[index]?.addPrice?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Description</h1>
-                    <Textarea
-                      placeholder="Write the item description here.."
-                      className="bg-neutral-100/50 w-full h-20 px-5 py-3"
-                      {...register(`add_service_items.${index}.addDescription`)}
-                    />
-                  </div>
-
-                  <div className="flex w-full items-end justify-end">
-                    <Button
-                      type="button" // Important: type="button" prevents form submission
-                      disabled={isAddingItem}
-                      onClick={handleAddServiceItem}
-                      className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800"
-                    >
-                      {isAddingItem ? "Adding..." : "Add Service Item"}
-                    </Button>
-                  </div>
-                </div>
-              ))}
+              <div className="flex w-full justify-end mt-3">
+                <Button
+                  type="button"
+                  className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white w-fit"
+                  onClick={() => setShowAddModal(true)}
+                >
+                  Add Service Item
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -322,13 +311,24 @@ const EditServicePage = () => {
           <div className="mt-6 pb-10">
             <h1 className="font-afacad text-neutral-500">Service Item List</h1>
             <hr />
-
             <div className="pt-6 space-y-4">
               {serviceItems.length > 0 ? (
                 serviceItems.map((item: any, index) => (
                   <div
                     key={index}
-                    className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white"
+                    className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white cursor-pointer"
+                    onClick={() => {
+                      setEditingIndex(index);
+                      console.log(item.id);
+
+                      editReset({
+                        editName: item.name,
+                        editPrice: Number(item.price),
+                        editDescription: item.description || "",
+                        ediId: item.id,
+                      });
+                      setShowEditModal(true);
+                    }}
                   >
                     <h2 className="text-lg font-semibold text-neutral-800">
                       {item.name}
@@ -369,6 +369,164 @@ const EditServicePage = () => {
             </Button>
           </div>
         </form>
+
+        {/* Add Service Item Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
+              <h2 className="font-afacad text-xl mb-4">Add Service Item</h2>
+              <form
+                onSubmit={handleAddSubmit(onAddServiceItem)}
+                className="space-y-4"
+              >
+                <div>
+                  <h1 className="text-sm text-neutral-500">Item Name</h1>
+                  <Input
+                    placeholder="Enter item name"
+                    className="bg-neutral-100/50 w-full h-12 px-5"
+                    {...addRegister("addName")}
+                  />
+                  {addErrors.addName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {addErrors.addName.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-sm text-neutral-500">Price</h1>
+                  <Input
+                    placeholder="Set the price"
+                    className="bg-neutral-100/50 w-full h-12 px-5"
+                    type="number"
+                    step="0.01"
+                    {...addRegister("addPrice", { valueAsNumber: true })}
+                  />
+                  {addErrors.addPrice && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {addErrors.addPrice.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-sm text-neutral-500">Description</h1>
+                  <Textarea
+                    placeholder="Write the item description here.."
+                    className="bg-neutral-100/50 w-full h-20 px-5 py-3"
+                    {...addRegister("addDescription")}
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-8">
+                  <Button
+                    type="button"
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    onClick={() => {
+                      handleAddSubmit(onAddServiceItem);
+                      setShowAddModal(false);
+                      resetAddForm();
+                    }}
+                    disabled={isAddingItem}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
+                    disabled={isAddingItem}
+                  >
+                    {isAddingItem ? "Adding..." : "Add Item"}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        {showEditModal && editingIndex !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
+              <h2 className="font-afacad text-xl mb-4">Edit Service Item</h2>
+              <form
+                onSubmit={editHandleSubmit(onEditServiceItem)}
+                className="space-y-4"
+              >
+                <div>
+                  <h1 className="text-sm text-neutral-500">Item Name</h1>
+                  <Controller
+                    control={editControl}
+                    name="editName"
+                    render={({ field }) => (
+                      <Input
+                        placeholder="Enter item name"
+                        className="bg-neutral-100/50 w-full h-12 px-5"
+                        {...field}
+                      />
+                    )}
+                  />
+                  {editErrors.editName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {editErrors.editName.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-sm text-neutral-500">Price</h1>
+                  <Controller
+                    control={editControl}
+                    name="editPrice"
+                    render={({ field }) => (
+                      <Input
+                        placeholder="Set the price"
+                        className="bg-neutral-100/50 w-full h-12 px-5"
+                        type="number"
+                        step="0.01"
+                        value={field.value}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value === "" ? 0 : Number(e.target.value)
+                          )
+                        }
+                      />
+                    )}
+                  />
+                  {editErrors.editPrice && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {editErrors.editPrice.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-sm text-neutral-500">Description</h1>
+                  <Controller
+                    control={editControl}
+                    name="editDescription"
+                    render={({ field }) => (
+                      <Textarea
+                        placeholder="Write the item description here.."
+                        className="bg-neutral-100/50 w-full h-20 px-5 py-3"
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-8">
+                  <Button
+                    type="button"
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
+                    onClick={() => {}}
+                  >
+                    Update Item
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
