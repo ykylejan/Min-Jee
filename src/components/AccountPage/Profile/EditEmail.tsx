@@ -14,12 +14,12 @@ const EditEmail = ({ email }: EditAccountProps) => {
                             <h1 className="text-[#6B7280]">Email</h1>
                             <h1 className="font-poppins_medium">{email}</h1>
                         </div>
-                        <Button
+                        {/* <Button
                             onClick={() => setIsEdit(true)}
                             className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200"
                         >
                             EDIT
-                        </Button>
+                        </Button> */}
                     </div>
                     <hr className="mt-6" />
                 </div>

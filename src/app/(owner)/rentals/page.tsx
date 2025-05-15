@@ -103,7 +103,7 @@ const Page: React.FC = () => {
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <div className="font-afacad font-light text-2xl">
-            All Rentals
+            Rental Products
             <CardDescription className="text-base">
               This table shows all the rentals available in the system.
             </CardDescription>
