@@ -91,3 +91,30 @@ export const GET_ALL_SERVICES = gql`
     }
   }
 `;
+
+export const GET_ALL_EVENT_PACKAGES = gql`
+  query getAllEventPackages {
+    getEventPackages {
+      id
+      img
+      name
+    }
+  }
+`;
+
+export const GET_EVENT_PACKAGE_BY_ID = gql`
+  query getIndividualPackageById($id: UUID!) {
+    getEventsPackageById(id: $id) {
+      id
+      img
+      name
+      pax {
+        description
+        eventPackageId
+        id
+        name
+        price
+      }
+    }
+  }
+`;

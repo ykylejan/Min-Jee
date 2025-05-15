@@ -6,7 +6,7 @@ import { store } from "@/redux/store";
 import { refreshAccessToken, logout } from "@/redux/slices/authSlice";
 import "dotenv/config";
 const api = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:8000/api/v1",
+  baseURL: "http://localhost:8000/api/v1",
   withCredentials: true, // Important if tokens are in httpOnly cookies
 });
 
@@ -38,11 +38,14 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        const refToken = Cookies.get("refresh_token");
+
         // Call your backend refresh endpoint
-        const res = await axios.post(
-          `${process.env.API_URL}/o/auth/refresh`,
-          {},
-          { withCredentials: true } // Ensure cookies are sent with the request
+        console.log("REFRESH TOKEN", refToken);
+
+        const res = await axios.get(
+          `http://localhost:8000/api/v1/o/auth/refresh`,
+          {}
         );
 
         const newAccessToken = res.data.accessToken;
