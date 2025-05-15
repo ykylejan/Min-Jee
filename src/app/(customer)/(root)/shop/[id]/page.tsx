@@ -168,13 +168,13 @@ const page = ({ params }: PageProps) => {
                                                     name="Venue"
                                                     price={5000}
                                                     onClick={() => setIsVenue(!isVenue)}
-                                                    className={`${isVenue ? "border-2 border-green-800" : ""}`}
+                                                    selected={isVenue}
                                                 />
                                                 <AddOn
                                                     name="Karaoke"
                                                     price={500}
                                                     onClick={() => setIsKaraoke(!isKaraoke)}
-                                                    className={`${isKaraoke ? "border-2 border-green-800" : ""}`}
+                                                    selected={isKaraoke}
                                                 />
                                             </div>
                                         </>

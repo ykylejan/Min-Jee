@@ -129,7 +129,7 @@ const Page = () => {
                 <TableCell>{rental.currentQuantity}/{rental.totalQuantity}</TableCell>
                 <TableCell>
                   <StockStatus
-                    status={rental.currentQuantity > 0 ? "In Stock" : "Out of Stock"}
+                    status={rental.currentQuantity <= rental.totalQuantity * 0.1 ? "Out of Stock" : "In Stock"}
                   />
                 </TableCell>
                 <TableCell className="hover:underline cursor-pointer">
