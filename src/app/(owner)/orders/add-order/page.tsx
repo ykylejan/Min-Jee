@@ -70,7 +70,9 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                                     Contact Number
                                 </h1>
                                 <Input
-                                    placeholder={"Set the customer's contact number"}
+                                    placeholder={
+                                        "Set the customer's contact number"
+                                    }
                                     className="bg-neutral-100/50 w-80 h-12 px-5"
                                 />
                             </div>
@@ -201,36 +203,24 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                     <div className="pt-6 pb-10 space-y-6">
                         <div>
                             <h1 className="text-sm text-neutral-500">
-                                Obtainment Method
+                                Select Status for this order item
                             </h1>
                             <Select>
                                 <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
                                     <SelectValue placeholder="Select Obtainment Method" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem
-                                            value="pending"
-                                            className="text-orange-400"
-                                        >
+                                    <SelectGroup className="font-afacad">
+                                        <SelectItem value="pending">
                                             Pending
                                         </SelectItem>
-                                        <SelectItem
-                                            value="verified"
-                                            className="text-green-400"
-                                        >
+                                        <SelectItem value="verified">
                                             Verified
                                         </SelectItem>
-                                        <SelectItem
-                                            value="rejected"
-                                            className="text-red-400"
-                                        >
+                                        <SelectItem value="rejected">
                                             Rejected
                                         </SelectItem>
-                                        <SelectItem
-                                            value="completed"
-                                            className="text-stone-400"
-                                        >
+                                        <SelectItem value="completed">
                                             Completed
                                         </SelectItem>
                                     </SelectGroup>
