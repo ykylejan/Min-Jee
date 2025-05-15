@@ -30,7 +30,7 @@ interface Service {
   description?: string;
   priceRange?: string;
   categoryId?: string;
-  imageUrl?: string;
+  img?: string;
 }
 
 const page: React.FC = () => {
@@ -39,7 +39,7 @@ const page: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  
+
   const {
     loading: servicesLoading,
     error: servicesError,
@@ -74,13 +74,18 @@ const page: React.FC = () => {
     try {
       if (servicesData?.getServices) {
         // Add placeholders for missing data
-        const processedServices: Service[] = servicesData.getServices.map((service: Service) => ({
-          ...service,
-          imageUrl: `/api/placeholder/${600 + Math.floor(Math.random() * 100)}/${400 + Math.floor(Math.random() * 100)}`,
-          // Use the service name to generate a semi-random category if none exists
-          categoryId: service.categoryId || (categories.length > 0 ? 
-            categories[Math.floor(Math.random() * categories.length)].id : undefined)
-        }));
+        const processedServices: Service[] = servicesData.getServices.map(
+          (service: Service) => ({
+            ...service,
+            imageUrl: service.img,
+            // Use the service name to generate a semi-random category if none exists
+            categoryId:
+              service.categoryId ||
+              (categories.length > 0
+                ? categories[Math.floor(Math.random() * categories.length)].id
+                : undefined),
+          })
+        );
         setServices(processedServices);
       }
     } catch (error) {
@@ -95,15 +100,19 @@ const page: React.FC = () => {
   };
 
   // Filter services based on search term and selected category
-  const filteredServices = services.filter(service => {
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory ? service.categoryId === selectedCategory : true;
+  const filteredServices = services.filter((service) => {
+    const matchesSearch = service.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory
+      ? service.categoryId === selectedCategory
+      : true;
     return matchesSearch && matchesCategory;
   });
 
   // Find category name by ID
   const getCategoryName = (categoryId: string): string => {
-    const category = categories.find(cat => cat.id === categoryId);
+    const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.name : "Uncategorized";
   };
 
@@ -125,7 +134,9 @@ const page: React.FC = () => {
                   placeholder="Search services"
                   className="w-fit font-light pr-8"
                   value={searchTerm}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearchTerm(e.target.value)
+                  }
                 />
                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               </div>
@@ -143,7 +154,7 @@ const page: React.FC = () => {
         <CardContent>
           {!servicesLoading && categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
-              <Button 
+              <Button
                 variant={selectedCategory === "" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory("")}
@@ -154,7 +165,9 @@ const page: React.FC = () => {
               {categories.map((category: Category) => (
                 <Button
                   key={category.id}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  variant={
+                    selectedCategory === category.id ? "default" : "outline"
+                  }
                   size="sm"
                   onClick={() => setSelectedCategory(category.id)}
                   className="mb-2"
@@ -171,20 +184,23 @@ const page: React.FC = () => {
             </div>
           ) : filteredServices.length === 0 ? (
             <div className="flex justify-center items-center min-h-64">
-              <p>No services found. Try adjusting your search or add a new service.</p>
+              <p>
+                No services found. Try adjusting your search or add a new
+                service.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredServices.map((service: Service) => (
-                <Card 
-                  key={service.id} 
+                <Card
+                  key={service.id}
                   className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
                   onClick={() => handleCardClick(service.id)}
                 >
                   <div className="relative">
-                    <img 
-                      src={service.imageUrl} 
-                      alt={service.name} 
+                    <img
+                      src={service.img}
+                      alt={service.name}
                       className="w-full h-48 object-cover"
                     />
                     {service.categoryId && (
@@ -194,20 +210,29 @@ const page: React.FC = () => {
                     )}
                   </div>
                   <CardHeader className="pb-2">
-                    <CardTitle className="font-afacad text-xl">{service.name}</CardTitle>
+                    <CardTitle className="font-afacad text-xl">
+                      {service.name}
+                    </CardTitle>
                     <CardDescription className="text-sm">
-                      {service.description || `${service.name} service provided by our expert team.`}
+                      {service.description ||
+                        `${service.name} service provided by our expert team.`}
                     </CardDescription>
                   </CardHeader>
                   <CardFooter className="flex justify-between pt-0">
                     <div className="flex items-center">
                       <Tag className="h-4 w-4 mr-1 text-gray-500" />
-                      <span className="text-sm text-gray-500">{service.priceRange || "Contact for pricing"}</span>
+                      <span className="text-sm text-gray-500">
+                        {service.priceRange || "Contact for pricing"}
+                      </span>
                     </div>
-                    <Button variant="outline" size="sm" onClick={(e: React.MouseEvent) => {
-                      e.stopPropagation();
-                      handleCardClick(service.id);
-                    }}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
+                        handleCardClick(service.id);
+                      }}
+                    >
                       Edit
                     </Button>
                   </CardFooter>
