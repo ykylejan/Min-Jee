@@ -59,7 +59,6 @@ const page = () => {
     try {
       if (servicesData?.getServices) {
         setServices(servicesData.getServices);
-        console.log("DATA:", servicesData.getServices);
       }
     } catch (error) {
       toast.error(

@@ -2,7 +2,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { useQuery } from "@apollo/client";
 import { GET_SERVICE_BY_ID } from "@/graphql/people";
 import apolloClient from "@/graphql/apolloClient";
+// import {close}\
 
 // Zod schemas
 const serviceSchema = z.object({
@@ -37,18 +38,18 @@ const addServiceItemSchema = z.object({
 });
 type AddServiceItemFormValues = z.infer<typeof addServiceItemSchema>;
 
-type ServiceItem = {
-  name: string;
-  price: number;
-  description?: string;
-  id: string;
-};
+// type ServiceItem = {
+//   name: string;
+//   price: number;
+//   description?: string;
+//   id: string;
+// };
 
 type AddServiceItem = {
   name: string;
   price: number;
   description?: string;
-  // id: string;
+  id?: string;
 };
 
 type ServiceFormValues = z.infer<typeof serviceSchema>;
@@ -243,6 +244,23 @@ const EditServicePage = () => {
     }
   };
 
+  const onDeleteServiceItem = async () => {
+    if (editingIndex === null) return;
+    const item = serviceItems[editingIndex];
+    try {
+      await api.delete(`o/services/${serviceId}/service_item/${item.id}`);
+      // Remove the item from local state
+      const updatedItems = [...serviceItems];
+      updatedItems.splice(editingIndex, 1);
+      setServiceItems(updatedItems);
+      toast.success("Service Item deleted successfully");
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Error deleting service item:", error);
+      toast.error("Failed to delete service item");
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
@@ -319,7 +337,6 @@ const EditServicePage = () => {
                     className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white cursor-pointer"
                     onClick={() => {
                       setEditingIndex(index);
-                      console.log(item.id);
 
                       editReset({
                         editName: item.name,
@@ -443,7 +460,10 @@ const EditServicePage = () => {
         {showEditModal && editingIndex !== null && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
-              <h2 className="font-afacad text-xl mb-4">Edit Service Item</h2>
+              <div className="w-full flex flex-row justify-between items-center mb-4">
+                <h2 className="font-afacad text-xl">Edit Service Item</h2>
+                <X onClick={() => setShowEditModal(false)} />
+              </div>
               <form
                 onSubmit={editHandleSubmit(onEditServiceItem)}
                 className="space-y-4"
@@ -510,10 +530,10 @@ const EditServicePage = () => {
                 <div className="flex justify-end gap-2 mt-8">
                   <Button
                     type="button"
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-800"
-                    onClick={() => setShowEditModal(false)}
+                    className="bg-transparent border-red-500 border hover:bg-gray-300 text-red-600"
+                    onClick={onDeleteServiceItem}
                   >
-                    Cancel
+                    Delete
                   </Button>
                   <Button
                     type="submit"
