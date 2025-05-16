@@ -2,7 +2,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft, X } from "lucide-react";
+import { MoveLeft, Trash2, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { useQuery } from "@apollo/client";
 import { GET_SERVICE_BY_ID } from "@/graphql/people";
 import apolloClient from "@/graphql/apolloClient";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 // import {close}\
 
 // Zod schemas
@@ -376,7 +377,7 @@ const EditServicePage = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="pt-16 pb-10 flex justify-end">
+          <div className="pt-16 pb-10 flex items-center justify-end gap-x-4">
             <Button
               type="submit"
               className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
@@ -384,6 +385,27 @@ const EditServicePage = () => {
             >
               {isSubmitting ? "Updating..." : "Update Service"}
             </Button>
+
+            <Dialog>
+              <DialogTrigger>
+                <Trash2 className="text-red-700 hover:text-red-700/80 cursor-pointer" />
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-medium">Are you absolutely sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete this rental item
+                    and remove your data from our servers.
+                  </DialogDescription>
+                  <div className="flex justify-end gap-3 pt-6">
+                    <DialogClose asChild>
+                      <Button variant="outline" className="px-4">Cancel</Button>
+                    </DialogClose>
+                    <Button className="bg-red-600 hover:bg-red-700 px-4">Delete</Button>
+                  </div>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
         </form>
 

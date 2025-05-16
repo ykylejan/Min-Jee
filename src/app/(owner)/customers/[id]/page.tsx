@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, Trash2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import api from "@/app/utils/api";
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER_BY_ID } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const customerSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -241,7 +242,7 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="pt-16 flex justify-end">
+        <div className="pt-16 flex justify-end items-center gap-x-4">
           <Button
             className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
             onClick={handleSubmit(onSubmit)}

@@ -44,13 +44,13 @@ const navLinks = [
     icon: <Tag />,
   },
   {
-    name: "Events",
-    href: "/events",
+    name: "Services",
+    href: "/services",
     icon: <Tag />,
   },
   {
-    name: "Services",
-    href: "/services",
+    name: "Events",
+    href: "/events",
     icon: <Tag />,
   },
   {
