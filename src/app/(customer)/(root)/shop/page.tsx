@@ -11,7 +11,7 @@ import apolloClient from "@/graphql/apolloClient";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENT_PACKAGES, GET_ALL_SERVICES } from "@/graphql/people";
 import { GET_ALL_RENTALS } from "@/graphql/products";
-
+import { useRouter } from "next/navigation";
 const formatPrice = (price: any): string => {
   // Handle null, undefined, empty string
   if (price == null || price === "") return "0.00";
@@ -42,7 +42,7 @@ const ShopPage = () => {
   }, [isTitle]);
 
   const [searchQuery, setSearchQuery] = useState("");
-
+  const router = useRouter();
   // State for fetched data
   const [rentals, setRentals] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
@@ -96,6 +96,26 @@ const ShopPage = () => {
       setEvents(eventsData.getEventPackages);
     }
   }, [eventsData]);
+
+  const getItemTypeById = (id: string) => {
+    if (rentalsData?.getRentals?.some((item: any) => item.id === id)) {
+      return "rental";
+    }
+    if (servicesData?.getServices?.some((item: any) => item.id === id)) {
+      return "service";
+    }
+    if (eventsData?.getEventPackages?.some((item: any) => item.id === id)) {
+      return "event";
+    }
+    return null;
+  };
+
+  const handleItemClick = (itemId: string) => {
+    const itemType = getItemTypeById(itemId);
+    if (itemType) {
+      router.push(`/shop/${itemType}/${itemId}`);
+    }
+  };
 
   // Filtering logic for search
   const filteredRentals = rentals.filter((rental) =>
@@ -202,17 +222,18 @@ const ShopPage = () => {
           >
             {currentData.length > 0 ? (
               currentData.map((item) => (
-                <Link
+                <div
                   key={item.id}
-                  href={`/shop/${item.id}`}
-                  onClick={() => setIsTitle(isTitle)}
+                  // href={`/shop/${item.id}`}
+                  onClick={() => handleItemClick(item.id)}
+                  style={{ cursor: "pointer" }}
                 >
                   <ProductItem
                     image={item.img.toString() || "/placeholder-product.jpg"}
                     name={item.name}
                     price={item.price ? "PHP " + item.price : "Price May Vary"}
                   />
-                </Link>
+                </div>
               ))
             ) : (
               <div className="col-span-full flex flex-col justify-center items-center text-center mt-10">

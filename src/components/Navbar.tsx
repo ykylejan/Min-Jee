@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Bird, Menu, ShoppingBasket, X } from "lucide-react";
 import {
@@ -13,10 +14,13 @@ import Link from "next/link";
 import OrderSideItem from "./Basketlist/OrderSideItem";
 import { ScrollArea } from "./ui/scroll-area";
 import Subtotal from "./Basketlist/Subtotal";
-import { BasketlistSample } from "@/constants";
 import { Button } from "./ui/button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store"; // Adjust path if needed
 
 const Navbar = () => {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   return (
     <div className="bg-[#334628] opacity-90 h-[70px] text-white flex items-center justify-between fixed top-0 left-0 w-full z-50 px-10 lg:px-24">
       <Link href="/">
@@ -88,7 +92,7 @@ const Navbar = () => {
             <SheetHeader>
               <SheetTitle>My Basket</SheetTitle>
 
-              {BasketlistSample.length <= 0 ? (
+              {cartItems.length <= 0 ? (
                 <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
                   <Bird className="text-neutral-400" size={60} />
                   <h1 className="text-neutral-500 text-xl">
@@ -106,14 +110,15 @@ const Navbar = () => {
                 </div>
               ) : (
                 <ScrollArea className="w-full h-[450px]">
-                  {BasketlistSample.map((sample) => (
+                  {cartItems.map((item: any) => (
                     <OrderSideItem
-                      key={sample.id}
-                      name={sample.name}
-                      category={sample.category}
-                      quantity={sample.quantity}
-                      price={sample.price * sample.quantity}
-                      image={sample.image.src}
+                      id={item.id}
+                      key={item.id}
+                      name={item.name}
+                      category={item.category}
+                      quantity={item.quantity}
+                      price={item.price * item.quantity}
+                      image={item.image}
                     />
                   ))}
                 </ScrollArea>
@@ -121,18 +126,18 @@ const Navbar = () => {
             </SheetHeader>
 
             <SheetFooter>
-              {BasketlistSample.length <= 0 ? (
+              {cartItems.length <= 0 ? (
                 ""
               ) : (
                 <Subtotal
-                  amount={BasketlistSample.reduce(
-                    (total, item) => total + item.price * item.quantity,
+                  amount={cartItems.reduce(
+                    (total: number, item: any) =>
+                      total + item.price * item.quantity,
                     0
                   )}
                 />
               )}
             </SheetFooter>
-            
           </SheetContent>
         </Sheet>
       </div>
