@@ -51,7 +51,7 @@ api.interceptors.response.use(
         const newAccessToken = res.data.accessToken;
         const newRefreshToken = res.data.refreshToken; // Assuming the backend also sends a new refresh token
 
-        // Update the access token in cookies
+        // Update the access token in cookies 
         Cookies.set("accessToken", newAccessToken, { expires: 7 }); // Set to expire in 7 days
 
         // Optionally update the refresh token in cookies (if provided by the backend)

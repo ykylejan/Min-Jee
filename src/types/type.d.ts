@@ -18,6 +18,7 @@ declare interface OrderSideItemProps {
     category: string;
     quantity: number;
     price: number;
+    id: string;
     image: any;
 }
 

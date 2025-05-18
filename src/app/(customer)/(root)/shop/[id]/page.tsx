@@ -39,20 +39,45 @@ import {
   GET_EVENT_PACKAGE_BY_ID,
   GET_ALL_EVENT_PACKAGES,
 } from "@/graphql/people";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/slices/cartSlice";
+import { toast } from "sonner";
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+  category?: string;
+  pax?: string;
+  addOns?: {
+    venue: boolean;
+    karaoke: boolean;
+  };
+}
 
 const Page = () => {
   const params = useParams();
   const id = params.id as string;
+
+  const dispatch = useDispatch();
 
   // State to determine type
   const [productType, setProductType] = useState<
     "Rental" | "Service" | "Event" | null
   >(null);
 
+  // Form state
+  const [rentalQuantity, setRentalQuantity] = useState<number>(1);
+  const [selectedPax, setSelectedPax] = useState<string>("");
+  const [formError, setFormError] = useState<string | null>(null);
+
   // Fetch all to determine type
   const { data: rentalsList } = useQuery(GET_ALL_RENTALS_PRODUCTS, {
     client: apolloClient,
   });
+  
   const { data: servicesList } = useQuery(GET_ALL_SERVICES, {
     client: apolloClient,
   });
@@ -108,6 +133,70 @@ const Page = () => {
   const [isVenue, setIsVenue] = useState(false);
   const [isKaraoke, setIsKaraoke] = useState(false);
 
+  const handleAddToBasket = () => {
+    // Validate form based on product type
+    if (productType === "Rental") {
+      if (rentalQuantity <= 0) {
+        setFormError("Please enter a valid quantity");
+        toast.error("Please enter a valid quantity");
+        return;
+      }
+    } else if (productType === "Service" || productType === "Event") {
+      if (!selectedPax) {
+        setFormError("Please select a pax amount");
+        toast.error("Please select a pax amount");
+        return;
+      }
+    }
+
+    // Clear any previous errors
+    setFormError(null);
+
+    // Prepare the base cart item
+    const cartItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      quantity: productType === "Rental" ? rentalQuantity : 1,
+      image: product.img,
+      category: productType ?? undefined,
+    };
+
+    // For services and events, include pax
+    if (productType === "Service" || productType === "Event") {
+      cartItem.pax = selectedPax;
+      cartItem.name = `${product.name} (${selectedPax} pax)`;
+    }
+
+    // For events, include add-ons
+    if (productType === "Event") {
+      cartItem.addOns = {
+        venue: isVenue,
+        karaoke: isKaraoke,
+      };
+
+      let addOnsText = "";
+      let addOnsPrice = 0;
+
+      if (isVenue) {
+        addOnsText += " + Venue";
+        addOnsPrice += 5000;
+      }
+      if (isKaraoke) {
+        addOnsText += " + Karaoke";
+        addOnsPrice += 500;
+      }
+
+      if (addOnsText) {
+        cartItem.name += addOnsText;
+        cartItem.price += addOnsPrice;
+      }
+    }
+
+    dispatch(addToCart(cartItem));
+    toast.success("Added to basket!");
+  };
+
   // Loading and error handling
   if (
     (productType === "Rental" && rentalLoading) ||
@@ -151,7 +240,6 @@ const Page = () => {
     );
   }
 
-  // Render
   return (
     <div className="min-h-screen bg-[#FFFBF5] px-24 pt-44">
       <div className="">
@@ -213,13 +301,22 @@ const Page = () => {
                     <QuantityInput
                       placeholder="Enter the amount to rent"
                       className="h-12 !text-base bg-white"
+                      value={rentalQuantity}
+                      onChange={(value) => setRentalQuantity(Number(value))}
+                      min={1}
                     />
+                    {formError && productType === "Rental" && (
+                      <p className="text-red-500 text-sm mt-1">{formError}</p>
+                    )}
                   </>
                 )}
                 {productType === "Service" && (
                   <>
                     <h1 className="font-afacad_semibold text-md">Pax</h1>
-                    <Select>
+                    <Select
+                      value={selectedPax}
+                      onValueChange={(value) => setSelectedPax(value)}
+                    >
                       <SelectTrigger className="min-w-80 h-12 bg-white px-5">
                         <SelectValue placeholder="Select the pax amount" />
                       </SelectTrigger>
@@ -231,12 +328,18 @@ const Page = () => {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    {formError && productType === "Service" && (
+                      <p className="text-red-500 text-sm mt-1">{formError}</p>
+                    )}
                   </>
                 )}
                 {productType === "Event" && (
                   <>
                     <h1 className="font-afacad_semibold text-md">Pax</h1>
-                    <Select>
+                    <Select
+                      value={selectedPax}
+                      onValueChange={(value) => setSelectedPax(value)}
+                    >
                       <SelectTrigger className="min-w-80 h-12 bg-white px-5">
                         <SelectValue placeholder="Select the pax amount" />
                       </SelectTrigger>
@@ -248,6 +351,9 @@ const Page = () => {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    {formError && productType === "Event" && (
+                      <p className="text-red-500 text-sm mt-1">{formError}</p>
+                    )}
 
                     <h1 className="font-afacad_semibold text-md mt-6">
                       Add-ons
@@ -271,7 +377,15 @@ const Page = () => {
                 )}
               </div>
 
-              <Button className="bg-[#0F172A] font-poppins_bold w-full rounded-3xl h-12 mt-5">
+              <Button
+                className="bg-[#0F172A] font-poppins_bold w-full rounded-3xl h-12 mt-5"
+                onClick={handleAddToBasket}
+                disabled={
+                  (productType === "Rental" && rentalQuantity <= 0) ||
+                  ((productType === "Service" || productType === "Event") &&
+                    !selectedPax)
+                }
+              >
                 Add to basket
               </Button>
 
