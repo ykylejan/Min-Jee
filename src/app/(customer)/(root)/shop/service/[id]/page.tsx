@@ -38,6 +38,7 @@ interface PageProps {
 
 const Page = ({ params }: PageProps) => {
   const { id } = React.use(params);
+
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
@@ -224,4 +225,3 @@ const Page = ({ params }: PageProps) => {
 };
 
 export default Page;
-// ...end of file...

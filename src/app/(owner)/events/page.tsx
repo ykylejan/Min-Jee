@@ -85,7 +85,7 @@ const page: React.FC = () => {
               </div>
 
               <Button
-                onClick={() => router.push("/event-packages/add-package")}
+                onClick={() => router.push("/events/add-event")}
                 className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
               >
                 <UserRoundPlus className="mr-2" />
