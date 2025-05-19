@@ -57,7 +57,7 @@ const LoginPage = () => {
       );
 
       const { access_token } = response.data;
-
+      
       // Decode the JWT to get user info
       const decodedToken: {
         sub: string;
