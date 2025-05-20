@@ -14,7 +14,7 @@ const BasketList = () => {
       <div className="font-afacad">
         <h1 className="text-2xl font-afacad_medium">
           <span>Basket List </span>
-          <span>(2 item)</span>
+          {/* <span>(2 item)</span> */}
         </h1>
         <h1 className="text-[#6B7280]">This is your current order</h1>
       </div>

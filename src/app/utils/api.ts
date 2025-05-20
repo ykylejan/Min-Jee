@@ -5,6 +5,9 @@ import Cookies from "js-cookie";
 import { store } from "@/redux/store";
 import { refreshAccessToken, logout } from "@/redux/slices/authSlice";
 import "dotenv/config";
+import { jwtDecode } from "jwt-decode";
+
+
 const api = axios.create({
   baseURL: "http://localhost:8000/api/v1",
   withCredentials: true, // Important if tokens are in httpOnly cookies
@@ -39,30 +42,35 @@ api.interceptors.response.use(
 
       try {
         const refToken = Cookies.get("refresh_token");
-
+        const accessToken = Cookies.get("accessToken");
         // Call your backend refresh endpoint
-        console.log("REFRESH TOKEN", refToken);
-
-        const res = await axios.get(
-          `http://localhost:8000/api/v1/o/auth/refresh`,
-          {}
-        );
-
-        const newAccessToken = res.data.accessToken;
-        const newRefreshToken = res.data.refreshToken; // Assuming the backend also sends a new refresh token
-
-        // Update the access token in cookies 
-        Cookies.set("accessToken", newAccessToken, { expires: 7 }); // Set to expire in 7 days
-
-        // Optionally update the refresh token in cookies (if provided by the backend)
-        if (newRefreshToken) {
-          Cookies.set("refreshToken", newRefreshToken, { expires: 30 }); // Set to expire in 30 days
+        let userRole = "customer"; // default
+        if (accessToken) {
+          try {
+            const decoded: any = jwtDecode(accessToken);
+            userRole = decoded.role || "customer";
+          } catch (e) {
+            // fallback to customer
+          }
         }
 
-        // Update token in Redux (if applicable)
-        store.dispatch(refreshAccessToken(newAccessToken));
+        // Set refresh URL based on user role
+        const refreshUrl =
+          userRole === "owner"
+            ? "http://localhost:8000/api/v1/o/auth/refresh"
+            : "http://localhost:8000/api/v1/u/auth/refresh";
 
-        // Retry the original request with the new access token
+        const res = await axios.get(refreshUrl, {});
+
+        const newAccessToken = res.data.accessToken;
+        const newRefreshToken = res.data.refreshToken;
+
+        Cookies.set("accessToken", newAccessToken, { expires: 7 });
+        if (newRefreshToken) {
+          Cookies.set("refreshToken", newRefreshToken, { expires: 30 });
+        }
+
+        store.dispatch(refreshAccessToken(newAccessToken));
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {

@@ -13,6 +13,9 @@ import api from "@/app/utils/api";
 import { RootState } from "@/redux/store";
 import { useAppSelector } from "@/redux/hooks";
 import { parse, format } from "date-fns";
+
+import { useRouter } from "next/navigation";
+
 const Page = () => {
   // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
   const [orderStatus, setOrderStatus] = useState("");
@@ -20,7 +23,7 @@ const Page = () => {
   const cartItems = useAppSelector((state: RootState) => state.cart.items);
   // React Hook Form setup
   const { register, handleSubmit, formState, trigger, reset } = useForm();
-
+  const router = useRouter();
   // POST request handler
   const onSubmit = async (data: any) => {
     try {
@@ -88,7 +91,7 @@ const Page = () => {
         delivery_price: 250,
         deposit_price: 0,
       };
-      
+
       // Build request body
       const body = {
         order_data,
@@ -97,12 +100,12 @@ const Page = () => {
       };
 
       await api.post("http://localhost:8000/api/v1/u/order/", body);
-      toast.success("Order placed! Analyzing order...");
+      //   toast.success("Order placed! Analyzing order...");
       setOrderStatus("Pending");
-      setTimeout(() => {
-        setOrderStatus("Verified");
-        toast.success("Order verified!");
-      }, 12000);
+
+      toast.success("Ordered Successfully!");
+      router.push("/account");
+
     } catch (error: any) {
       toast.error("Order submission failed. Please try again.");
       console.error("Order submission failed:", error);
