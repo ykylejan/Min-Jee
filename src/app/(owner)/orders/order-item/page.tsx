@@ -1,13 +1,23 @@
+"use client";
+
 import OrderDetailsSection from "@/components/OwnerPage/Order/OrderDetailsSection";
 import PaymentDetailsItem from "@/components/OwnerPage/Order/PaymentDetailsItem";
 import ProductDetailsItem from "@/components/OwnerPage/Order/ProductDetailsItem";
 import StatusLabel from "@/components/StatusLabel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useOrder } from "../../../../../contexts/OrderContext"; // Adjust path as needed
 import Link from "next/link";
 import React from "react";
 
 const page = () => {
+    const { selectedProducts } = useOrder();
+    
+    // Calculate total price
+    const totalPrice = selectedProducts.reduce((total, product) => {
+        return total + (product.price * product.quantity);
+    }, 0);
+
     return (
         <div className="bg-white min-h-screen rounded-lg border border-neutral-200 px-12 py-8">
             <div className="flex justify-between">
@@ -38,8 +48,18 @@ const page = () => {
                     </Link>
                 </div>
 
-                <ProductDetailsItem />
-                <ProductDetailsItem />
+                {selectedProducts.length > 0 ? (
+                    selectedProducts.map(product => (
+                        <ProductDetailsItem 
+                            key={product.id} 
+                            product={product} 
+                        />
+                    ))
+                ) : (
+                    <div className="text-center py-8 text-gray-500">
+                        No products added yet. Click "Add Product" to add some.
+                    </div>
+                )}
             </div>
 
             <div className="mt-10">
@@ -48,6 +68,15 @@ const page = () => {
                 </div>
 
                 <PaymentDetailsItem />
+                
+                {/* Show total price from selected products */}
+                {selectedProducts.length > 0 && (
+                    <div className="flex justify-end mt-4 pr-5">
+                        <div className="font-afacad_medium text-xl">
+                            Total: PHP {totalPrice.toFixed(2)}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="mt-10">

@@ -9,36 +9,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Search, X } from "lucide-react";
 import { ProductsDataSample } from "@/constants";
 import Image from "next/image";
-
-// Define TypeScript interfaces
-interface ProductImage {
-  src: string;
-}
-
-interface Product {
-  id: string | number;
-  name: string;
-  category: string;
-  price: number;
-  image: ProductImage;
-}
-
-interface SelectedProduct extends Product {
-  quantity: number;
-}
+import { useOrder, Product } from "../../../../../../contexts/OrderContext"; // Adjust path as needed
 
 const Page = () => {
+  // Get functions from OrderContext
+  const { selectedProducts, addProduct, removeProduct, updateQuantity } = useOrder();
+  
   // State for search term
   const [searchTerm, setSearchTerm] = useState<string>("");
   
   // State for category filter
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   
-  // State for selected products
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
-  
   // Filter products based on search term and category
-  const filteredProducts = ProductsDataSample.filter((product: Product) => {
+  const filteredProducts = ProductsDataSample.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === "all" || product.category.toLowerCase() === categoryFilter.toLowerCase();
     return matchesSearch && matchesCategory;
@@ -48,44 +32,6 @@ const Page = () => {
   const totalPrice = selectedProducts.reduce((total, product) => {
     return total + (product.price * product.quantity);
   }, 0);
-  
-  // Add product to selected products
-  const addProduct = (product: Product) => {
-    setSelectedProducts((prev) => {
-      // Check if product is already in the selected products
-      const existingProductIndex = prev.findIndex(item => item.id === product.id);
-      
-      if (existingProductIndex !== -1) {
-        // If product already exists, increase its quantity
-        const updatedProducts = [...prev];
-        updatedProducts[existingProductIndex] = {
-          ...updatedProducts[existingProductIndex],
-          quantity: updatedProducts[existingProductIndex].quantity + 1
-        };
-        return updatedProducts;
-      } else {
-        // If product doesn't exist, add it with quantity 1
-        return [...prev, {...product, quantity: 1}];
-      }
-    });
-  };
-  
-  // Remove product from selected products
-  const removeProduct = (productId: string | number) => {
-    setSelectedProducts((prev) => prev.filter(item => item.id !== productId));
-  };
-  
-  // Update product quantity
-  const updateQuantity = (productId: string | number, newQuantity: number) => {
-    // Ensure quantity is at least 1
-    const quantity = Math.max(1, newQuantity);
-    
-    setSelectedProducts((prev) => 
-      prev.map(item => 
-        item.id === productId ? {...item, quantity} : item
-      )
-    );
-  };
   
   // Handle direct input of quantity
   const handleQuantityInput = (e: React.ChangeEvent<HTMLInputElement>, productId: string | number) => {
@@ -151,7 +97,7 @@ const Page = () => {
                     <Button 
                       size="sm" 
                       className="bg-camouflage-400 hover:bg-camouflage-400/80"
-                      onClick={() => addProduct(product)}
+                      onClick={() => addProduct({...product, quantity: 1})}
                     >
                       Add
                     </Button>
@@ -226,10 +172,8 @@ const Page = () => {
 
               <div className="mt-4 flex flex-col gap-3">
                 <Link href="/orders/order-item">
-                  <Button 
-                    className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad w-full"
-                    disabled={selectedProducts.length === 0}
-                  >
+                  <Button className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad w-full"
+                    disabled={selectedProducts.length === 0}>
                     Add to Order
                   </Button>
                 </Link>
