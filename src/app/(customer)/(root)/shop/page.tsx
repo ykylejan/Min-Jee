@@ -129,13 +129,13 @@ const ShopPage = () => {
   );
 
   // Loading state
-  if (rentalsLoading || servicesLoading || eventsLoading) {
-    return (
-      <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40 flex justify-center items-center">
-        <div className="text-[#778768] text-xl">Loading...</div>
-      </div>
-    );
-  }
+  // if (rentalsLoading || servicesLoading || eventsLoading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40 flex justify-center items-center">
+  //       <div className="text-[#778768] text-xl">Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   // Error state
   if (rentalsError || servicesError || eventsError) {

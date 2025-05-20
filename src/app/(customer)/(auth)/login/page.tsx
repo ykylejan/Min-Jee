@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,8 @@ import { jwtDecode } from "jwt-decode"; // import this
 import { loginSuccess } from "@/redux/slices/authSlice"; // import loginSuccess action
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"; // import your custom hook
 import Cookies from "js-cookie";
-import axios from "axios";
+import { RootState } from "@/redux/store";
+import { updateUserId } from "@/redux/slices/cartSlice";
 // Validation schema remains the same
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -30,7 +31,9 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const userId = useAppSelector(
+    (state: RootState) => state.auth.user?.id ?? null
+  );
   const {
     register,
     handleSubmit,
@@ -86,7 +89,7 @@ const LoginPage = () => {
         description: "You have been logged in successfully.",
         className: "bg-green-500/80 border border-none text-white",
       });
-      
+
       if (decodedToken.role === "owner") {
         router.push("/orders");
       } else if (decodedToken.role === "customer") {
@@ -114,7 +117,9 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
-
+  useEffect(() => {
+    dispatch(updateUserId(userId));
+  }, [userId, dispatch]);
   return (
     <div className="min-h-screen bg-[#FFFBF5] pt-16">
       <div className="flex flex-col justify-center items-center pt-[80px]">

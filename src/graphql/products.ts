@@ -38,3 +38,5 @@ export const GET_RENTAL_BY_ID = gql`
     }
   }
 `;
+
+

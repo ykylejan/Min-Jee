@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/slices/authSlice";
 import api from "@/app/utils/api";
-
 interface CustomerData {
   first_name: string;
   last_name: string;
@@ -28,6 +27,7 @@ const Page = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+
     document.cookie =
       "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie =
