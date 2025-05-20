@@ -11,10 +11,10 @@ import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 import { toast } from "sonner";
 import api from "@/app/utils/api";
 import { RootState } from "@/redux/store";
-import { useAppSelector } from "@/redux/hooks";
 import { parse, format } from "date-fns";
-
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
+import { clearCart } from "@/redux/slices/cartSlice";
 
 const Page = () => {
   // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
@@ -24,6 +24,7 @@ const Page = () => {
   // React Hook Form setup
   const { register, handleSubmit, formState, trigger, reset } = useForm();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   // POST request handler
   const onSubmit = async (data: any) => {
     try {
@@ -104,8 +105,8 @@ const Page = () => {
       setOrderStatus("Pending");
 
       toast.success("Ordered Successfully!");
+      dispatch(clearCart());
       router.push("/account");
-
     } catch (error: any) {
       toast.error("Order submission failed. Please try again.");
       console.error("Order submission failed:", error);
