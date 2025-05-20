@@ -45,16 +45,17 @@ const PaymentDetailsItem: React.FC<PaymentDetailsItemProps> = ({ order }) => {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Payment Receipt</DialogTitle>
-                      <DialogDescription className="max-h-[70vh] overflow-y-auto"></DialogDescription>
+                      <DialogDescription className="max-h-[70vh] overflow-y-auto">
+                        <img
+                          src={payment.img}
+                          alt={`Receipt ${idx + 1}`}
+                          className="h-auto w-auto object-cover"
+                        />
+                        <div className="mt-2 text-xs text-gray-500">
+                          Ref No: {payment.id || 'N/A'}
+                        </div>
+                      </DialogDescription>
                     </DialogHeader>
-                    <img
-                      src={payment.img}
-                      alt={`Receipt ${idx + 1}`}
-                      className="h-auto w-auto object-cover"
-                    />
-                    <div className="mt-2 text-xs text-gray-500">
-                      Ref No: {payment.id}
-                    </div>
                   </DialogContent>
                 </Dialog>
               ) : (
