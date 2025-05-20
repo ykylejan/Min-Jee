@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,9 +27,37 @@ import apolloClientPartner from "@/graphql/apolloClientPartners";
 
 const page = () => {
   const router = useRouter();
+  const [search, setSearch] = useState("");
   const { data, loading, error } = useQuery(GET_ALL_ORDERS_OWNER, {
     client: apolloClientPartner,
   });
+
+  const filteredAndSortedOrders = useMemo(() => {
+    if (!data?.getOrders) return [];
+
+    // Filter by search (customer name)
+    let filtered = data.getOrders.filter((order: any) => {
+      const customerName = order.customer
+        ? `${order.customer.firstName} ${order.customer.lastName}`.toLowerCase()
+        : "";
+      return customerName.includes(search.toLowerCase());
+    });
+
+    // Sort: verified first, then by most recent orderDate
+    filtered.sort((a: any, b: any) => {
+      // Verified orders first
+      if (a.orderStatus === "verified" && b.orderStatus !== "verified")
+        return -1;
+      if (a.orderStatus !== "verified" && b.orderStatus === "verified")
+        return 1;
+      // Then by most recent date
+      const dateA = new Date(a.orderDate).getTime();
+      const dateB = new Date(b.orderDate).getTime();
+      return dateB - dateA;
+    });
+
+    return filtered;
+  }, [data, search]);
 
   const handleRowClick = (id: string) => {
     router.push(`/orders/${id}`);
@@ -51,6 +79,8 @@ const page = () => {
                 <Input
                   placeholder="Search an order item"
                   className="w-fit font-light pr-8"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               </div>
@@ -86,12 +116,12 @@ const page = () => {
                   <TableCell colSpan={5}>Error loading orders.</TableCell>
                 </TableRow>
               )}
-              {data?.getOrders?.length === 0 && (
+              {filteredAndSortedOrders.length === 0 && !loading && !error && (
                 <TableRow>
                   <TableCell colSpan={5}>No orders found.</TableCell>
                 </TableRow>
               )}
-              {data?.getOrders?.map((order: any) => (
+              {filteredAndSortedOrders.map((order: any) => (
                 <TableRow
                   key={order.id}
                   className="hover:cursor-pointer"
