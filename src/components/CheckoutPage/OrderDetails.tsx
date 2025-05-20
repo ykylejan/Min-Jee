@@ -66,7 +66,7 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
           <div className="space-y-3">
             <div className="flex gap-x-3 mt-5">
               <div>
-                <h1>Date of Booking</h1>
+                <h1>Date of Order</h1>
                 <Input
                   type="date"
                   {...register("bookingDate", {
@@ -80,7 +80,7 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
                 )}
               </div>
               <div>
-                <h1>Time of Booking</h1>
+                <h1>Time of Order</h1>
                 <Input
                   type="time"
                   {...register("bookingTime", {
@@ -110,21 +110,6 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
                   </span>
                 )}
               </div>
-              <div>
-                <h1>Time of Return</h1>
-                <Input
-                  type="time"
-                  {...register("returnTime", {
-                    required: "Return time is required",
-                  })}
-                />
-                {errors.returnTime && (
-                  <span className="text-red-500 text-xs">
-                    {errors.returnTime.message}
-                  </span>
-                )}
-              </div>
-              <h1 className="text-neutral-500 text-sm">(If rent included)</h1>
             </div>
           </div>
         </div>
@@ -169,15 +154,6 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
                   {errors.obtainmentMethod.message}
                 </span>
               )}
-            </div>
-
-            <div className="pt-5">
-              <h1>Note to Owner</h1>
-              <Textarea
-                placeholder="Write a note of your order here"
-                className="min-h-[120px]"
-                {...register("note")}
-              />
             </div>
           </div>
         </div>

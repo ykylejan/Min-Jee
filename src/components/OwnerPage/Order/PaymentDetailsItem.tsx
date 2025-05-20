@@ -1,52 +1,75 @@
-import { icons, images } from "@/constants";
 import { Download } from "lucide-react";
 import React from "react";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-const PaymentDetailsItem = () => {
-    return (
-        <div className="w-80 h-40 border border-neutral-200 rounded-lg font-afacad text-neutral-600 px-8 py-5 mt-5">
-            <h1 className="font-afacad_semibold text-xl">GCash</h1>
+interface PaymentDetailsItemProps {
+  order: any;
+}
 
-            <div className="-space-y-2">
-                <h1>Art Montebon</h1>
-                <h1>Ref No: 1039SD9898OIN</h1>
+const PaymentDetailsItem: React.FC<PaymentDetailsItemProps> = ({ order }) => {
+  // transactionDetails is now an array
+  const payments = Array.isArray(order?.transactionDetails)
+    ? order.transactionDetails
+    : [];
+
+  const customerName = order?.customer
+    ? `${order.customer.firstName} ${order.customer.lastName}`
+    : "N/A";
+
+  return (
+    <div className="w-80 border border-neutral-200 rounded-lg font-afacad text-neutral-600 px-8 py-5 mt-5">
+      <h1 className="font-afacad_semibold text-xl">Payment Receipts</h1>
+      <div className="-space-y-2 mb-2">
+        <h1>{customerName}</h1>
+      </div>
+      <div className="flex flex-col gap-2 mt-3">
+        {payments.length > 0 ? (
+          payments.map((payment: any, idx: number) => (
+            <div key={payment.id} className="flex items-center gap-x-3">
+              <Download width={16} height={16} />
+              {payment.img ? (
+                <Dialog>
+                  <DialogTrigger>
+                    <h1 className="underline cursor-pointer">
+                      Receipt {idx + 1}
+                    </h1>
+                  </DialogTrigger>
+                  <DialogContent className="max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Payment Receipt</DialogTitle>
+                      {/* <DialogDescription className="max-h-[70vh] overflow-y-auto"></DialogDescription> */}
+                    </DialogHeader>
+                    <div className="h-full">
+                      <img
+                        src={payment.img}
+                        alt={`Receipt ${idx + 1}`}
+                        className="h-auto w-auto object-cover"
+                      />
+                      <div className="mt-2 text-xs text-gray-500">
+                        Ref No: {payment.id || "N/A"}
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <span className="text-gray-400">No receipt</span>
+              )}
             </div>
-
-            <div className="flex justify-between mt-3">
-                <div className="flex items-center gap-x-3">
-                    <Download width={16} height={16} />
-                    <Dialog>
-                        <DialogTrigger>
-                            <h1 className="underline">Receipt.png</h1>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Payment Receipt</DialogTitle>
-                                <DialogDescription className="max-h-[70vh] overflow-y-auto">
-                                    <img
-                                        src={images.receiptSample.src}
-                                        alt="Receipt"
-                                        className="h-auto w-auto object-cover"
-                                    />
-                                </DialogDescription>
-                            </DialogHeader>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-
-                <img src={icons.gcashActive.src} width={30} height={25} />
-            </div>
-        </div>
-    );
+          ))
+        ) : (
+          <span className="text-gray-400">No receipts</span>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default PaymentDetailsItem;

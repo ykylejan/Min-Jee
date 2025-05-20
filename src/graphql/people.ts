@@ -186,6 +186,73 @@ export const GET_EVENT_BY_ID = gql`
     }
   }
 `;
+export const GET_ALL_EVENTS_CUSTOMER = gql`
+  query getAllEventsCustomer {
+    getEvents {
+      addonsList {
+        addons {
+          availability
+          id
+          name
+          price
+        }
+        addonsId
+        eventsId
+        id
+      }
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
+        id
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
+      }
+      customerId
+      customizations
+      customizationsPrice
+      eventAddress
+      eventDate
+      eventEnd
+      eventStart
+      eventStatus
+      id
+      isDone
+      location
+      minjeeVenue
+      name
+      pax {
+        description
+        eventPackageId
+        eventPackages {
+          id
+          img
+          name
+        }
+        id
+        name
+        price
+      }
+      paxId
+      transactionDetails {
+        date
+        eventId
+        id
+        img
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
+      }
+    }
+  }
+`;
 
 export const GET_ALL_ORDERS = gql`
   query getAllOrders {
@@ -349,138 +416,163 @@ export const GET_ORDER_BY_ID = gql`
   }
 `;
 
-export const GET_ALL_EVENTS = gql`
-query getAllEvents {
-  getEvents {
-    addonsList {
-      addons {
-        availability
+export const GET_ALL_ORDERS_OWNER = gql`
+  query getAllOrders {
+    getOrders {
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
         id
-        name
-        price
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
       }
-      addonsId
-      eventsId
+      customerId
+      deliveryPrice
+      depositPrice
       id
-    }
-    customer {
-      address
-      bookings
-      contactNumber
-      email
-      firstName
-      id
-      isActive
-      lastName
-      userId
-      verifyEmail
-      verifyNumber
-    }
-    customerId
-    customizations
-    customizationsPrice
-    eventAddress
-    eventDate
-    eventEnd
-    eventStart
-    eventStatus
-    id
-    isDone
-    location
-    minjeeVenue
-    name
-    pax {
-      description
-      eventPackageId
-      eventPackages {
+      isShipped
+      location
+      name
+      orderDate
+      orderStatus
+      orderTime
+      orderTotal
+      overdueDays
+      rentalList {
+        id
+        orderId
+        orderItemStatus
+        rentalId
+        rentalQuantity
+        rentalTotal
+        rentals {
+          categoryId
+          currentQuantity
+          description
+          id
+          name
+          price
+          img
+          totalQuantity
+        }
+      }
+      returnDate
+      servicesList {
+        id
+        orderId
+        serviceItemsId
+        serviceQuantity
+        serviceTotal
+        servicesItems {
+          description
+          id
+          name
+          price
+          serviceId
+          services {
+            id
+            img
+            name
+          }
+        }
+      }
+      transactionDetails {
+        date
+        eventId
         id
         img
-        name
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
       }
-      id
-      name
-      price
-    }
-    paxId
-    transactionDetails {
-      date
-      eventId
-      id
-      img
-      isEvent
-      isVerified
-      orderId
-      payment
-      paymentStatus
     }
   }
-}
 `;
-
-export const GET_ALL_EVENTS_BY_ID = gql`
-query getAllEventsByID($id: UUID!){
-  getEventsById(id: $id) {
-    addonsList {
-      addons {
-        availability
+export const GET_ORDER_BY_ID_OWNER = gql`
+  query getOrderById($id: UUID!) {
+    getOrdersById(id: $id) {
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
         id
-        name
-        price
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
       }
-      addonsId
-      eventsId
+      customerId
+      deliveryPrice
+      depositPrice
       id
-    }
-    customer {
-      address
-      bookings
-      contactNumber
-      email
-      firstName
-      id
-      isActive
-      lastName
-      userId
-      verifyNumber
-      verifyEmail
-    }
-    customerId
-    customizations
-    customizationsPrice
-    eventAddress
-    eventDate
-    eventEnd
-    eventStart
-    eventStatus
-    id
-    isDone
-    location
-    minjeeVenue
-    name
-    pax {
-      description
-      eventPackageId
-      eventPackages {
+      isShipped
+      location
+      name
+      orderDate
+      orderStatus
+      orderTime
+      orderTotal
+      overdueDays
+      rentalList {
+        id
+        orderId
+        orderItemStatus
+        rentalId
+        rentalQuantity
+        rentalTotal
+        rentals {
+          categoryId
+          currentQuantity
+          description
+          id
+          name
+          price
+          img
+          totalQuantity
+        }
+      }
+      returnDate
+      servicesList {
+        id
+        orderId
+        serviceItemsId
+        serviceQuantity
+        serviceTotal
+        servicesItems {
+          description
+          id
+          name
+          price
+          serviceId
+          services {
+            id
+            img
+            name
+          }
+        }
+      }
+      transactionDetails {
+        date
+        eventId
         id
         img
-        name
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
       }
-      id
-      name
-      price
-    }
-    paxId
-    transactionDetails {
-      date
-      eventId
-      id
-      img
-      isVerified
-      isEvent
-      orderId
-      payment
-      paymentStatus
     }
   }
-}
-`
+`;

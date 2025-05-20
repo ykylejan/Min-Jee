@@ -1,71 +1,58 @@
 "use client";
 
 import React from "react";
-import { Trash, Edit } from "lucide-react";
 import Image from "next/image";
-import { Product } from "../../../../contexts/OrderContext"; // Adjust path as needed
-import { useOrder } from "../../../../contexts/OrderContext"; // Adjust path as needed
 
 interface ProductDetailsItemProps {
-  product?: Product;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    img?: string;
+    type?: string;
+  };
   editable?: boolean;
 }
 
-const ProductDetailsItem: React.FC<ProductDetailsItemProps> = ({ 
+const ProductDetailsItem: React.FC<ProductDetailsItemProps> = ({
   product,
-  editable = true
+  editable = false, // default to false for order details page
 }) => {
-  const { removeProduct } = useOrder();
-
-  // If no product provided, use a default placeholder
-  if (!product) {
-    return null;
-  }
+  if (!product) return null;
 
   return (
-    <div>
-      <div className="flex justify-between mt-5 px-5">
-        <div className="flex">
-          <Image
-            src={product.image.src}
-            alt={product.name}
-            width={75}
-            height={75}
-            className="rounded-lg"
-          />
-
-          <div className="ml-7">
-            <div className="font-afacad_semibold text-xl">
-              {product.name}
+    <div className="w-full flex flex-row items-center justify-between bg-neutral-50 rounded-lg p-4 mb-4 border border-neutral-200">
+      <div className="flex flex-row items-center gap-x-6">
+        <div className="w-20 h-20 relative rounded-lg overflow-hidden bg-neutral-200">
+          {product.img ? (
+            <img
+              src={product.img}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-neutral-400">
+              No Image
             </div>
-            <div className="font-afacad text-base text-neutral-500">
-              {product.category}
-            </div>
-            <div className="font-afacad text-base text-neutral-500">
-              Qty {product.quantity}
-            </div>
-          </div>
-        </div>
-
-        <div className="font-afacad">
-          <div className="font-afacad_medium text-xl">PHP {product.price.toFixed(2)}</div>
-          {editable && (
-            <>
-              <div className="underline cursor-pointer flex justify-end text-neutral-600 hover:text-camouflage-400">
-                Edit
-              </div>
-              <div 
-                className="cursor-pointer flex justify-end text-red-400 hover:text-red-700"
-                onClick={() => removeProduct(product.id)}
-              >
-                <Trash size={16}/>
-              </div>
-            </>
           )}
         </div>
+        <div>
+          <div className="font-afacad_semibold text-lg">{product.name}</div>
+          <div className="font-afacad text-base text-neutral-500 capitalize">
+            {product.type}
+          </div>
+          <div className="font-afacad text-base text-neutral-500">
+            Qty: {product.quantity}
+          </div>
+        </div>
       </div>
-
-      <hr className="w-full mt-3" />
+      <div className="flex flex-col items-end">
+        <div className="font-afacad_medium text-xl mb-1">
+          PHP {Number(product.price || 0).toFixed(2)}
+        </div>
+        {/* No edit/remove on details page */}
+      </div>
     </div>
   );
 };
