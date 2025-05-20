@@ -53,6 +53,7 @@ const Page = () => {
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [paymentAmount, setPaymentAmount] = useState<number | string>("");
 
   const cartItems = useAppSelector((state: RootState) => state.cart.items);
   const { register, handleSubmit, formState, trigger, reset, control } =
@@ -98,85 +99,40 @@ const Page = () => {
     client: apolloClientCustomer,
   });
 
-  const onSubmit = async (data: any) => {
+  const handleCheckoutPayment = async () => {
+    if (!receiptFile) {
+      toast.error("Please upload a payment receipt.");
+      return;
+    }
     try {
-      const services = cartItems
-        .filter((item) => item.category === "service")
-        .map((item) => ({
-          service_quantity: item.quantity,
-          service_total: Number(item.price) * item.quantity,
-          service_items_id: item.id,
-        }));
+      const formData = new FormData();
+      formData.append("date", format(new Date(), "yyyy-MM-dd"));
+      //   formData.append("payment", Number(paymentAmount));
+      formData.append("payment", String(paymentAmount));
+      formData.append("payment_status", "partial");
+      formData.append("is_verified", "false");
+      formData.append("order_id", orderId);
+      formData.append("file", receiptFile);
 
-      const rentals = cartItems
-        .filter((item) => item.category === "rental")
-        .map((item) => ({
-          order_item_status: "basket",
-          rental_quantity: item.quantity,
-          rental_total: Number(item.price) * item.quantity,
-          rental_id: item.id,
-        }));
-
-      const order_total = cartItems.reduce(
-        (sum, item) => sum + Number(item.price) * item.quantity,
-        0
+      await api.post(
+        "http://localhost:8000/api/v1/u/transactions/orders",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
 
-      const order_time =
-        data.bookingDate && data.bookingTime
-          ? format(
-              parse(
-                `${data.bookingDate} ${data.bookingTime}`,
-                "yyyy-MM-dd HH:mm",
-                new Date()
-              ),
-              "HH:mm:ss.SSS'Z'"
-            )
-          : "";
-
-      const return_time =
-        data.returnDate && data.returnTime
-          ? format(
-              parse(
-                `${data.returnDate} ${data.returnTime}`,
-                "yyyy-MM-dd HH:mm",
-                new Date()
-              ),
-              "HH:mm:ss.SSS'Z'"
-            )
-          : "";
-
-      const order_data = {
-        name: data.name,
-        location: data.address,
-        order_total,
-        order_date: data.bookingDate,
-        order_time,
-        order_status: "pending",
-        return_date: data.returnDate,
-        return_time,
-        overdue_days: 0,
-        is_shipped: data.obtainmentMethod === "shipped",
-        delivery_price: 250,
-        deposit_price: 0,
-      };
-
-      const body = {
-        order_data,
-        services,
-        rentals,
-      };
-
-      await api.post("http://localhost:8000/api/v1/u/order/", body);
-      setOrderStatus("Pending");
-
-      toast.success("Ordered Successfully!");
+      toast.success("Payment submitted successfully!");
       router.push("/account");
-    } catch (error: any) {
-      toast.error("Order submission failed. Please try again.");
-      console.error("Order submission failed:", error);
+      setPaymentConfirmed(true);
+      setDialogOpen(false);
+      // Optionally, refresh or redirect
+    } catch (error) {
+      toast.error("Failed to submit payment. Please try again.");
+      console.error(error);
     }
   };
+
   useEffect(() => {
     const status = data?.getOrdersById?.orderStatus || "";
     setOrderStatus(status);
@@ -341,6 +297,20 @@ const Page = () => {
                           isGcash="GCash"
                         />
                       </DialogTrigger>
+                      <div className="mt-4 bg-white rounded-md py-5 px-8 border border-[#D2D6DA]">
+                        <h3 className="text-[#0066DF] font-bold mb-2 ">
+                          Payment Amount <span className="text-red-500">*</span>
+                        </h3>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="Enter payment amount"
+                          value={paymentAmount}
+                          onChange={(e) => setPaymentAmount(e.target.value)}
+                          className="w-full"
+                          required
+                        />
+                      </div>
                       <DialogContent className="sm:max-w-xl p-0 overflow-hidden border-0">
                         <DialogHeader className="">
                           <DialogTitle className="sr-only">
@@ -666,13 +636,15 @@ const Page = () => {
             <hr />
             <div className="flex justify-between px-12 py-6">
               <h1>TOTAL</h1>
-              <h1>PHP {(subtotal + 250).toFixed(2)}</h1>
+              <h1>
+                PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}
+              </h1>
             </div>
             <hr />
             <div className="flex flex-col gap-y-3 px-12 py-6">
               <Button
-                // onClick={handleButtonClick}
-                disabled={isButtonDisabled}
+                onClick={handleCheckoutPayment}
+                disabled={isButtonDisabled || !receiptFile}
                 className={`rounded-full ${
                   isButtonDisabled ? "bg-gray-400" : "bg-[#0F172A]"
                 }`}
