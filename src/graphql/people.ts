@@ -416,3 +416,71 @@ query getAllEvents {
   }
 }
 `;
+
+export const GET_ALL_EVENTS_BY_ID = gql`
+query getAllEventsByID($id: UUID!){
+  getEventsById(id: $id) {
+    addonsList {
+      addons {
+        availability
+        id
+        name
+        price
+      }
+      addonsId
+      eventsId
+      id
+    }
+    customer {
+      address
+      bookings
+      contactNumber
+      email
+      firstName
+      id
+      isActive
+      lastName
+      userId
+      verifyNumber
+      verifyEmail
+    }
+    customerId
+    customizations
+    customizationsPrice
+    eventAddress
+    eventDate
+    eventEnd
+    eventStart
+    eventStatus
+    id
+    isDone
+    location
+    minjeeVenue
+    name
+    pax {
+      description
+      eventPackageId
+      eventPackages {
+        id
+        img
+        name
+      }
+      id
+      name
+      price
+    }
+    paxId
+    transactionDetails {
+      date
+      eventId
+      id
+      img
+      isVerified
+      isEvent
+      orderId
+      payment
+      paymentStatus
+    }
+  }
+}
+`

@@ -5,9 +5,11 @@ import StatusLabel from "../StatusLabel";
 import { GET_ALL_EVENTS } from "@/graphql/people";
 import apolloClientCustomer from "@/graphql/apolloClientCustomer";
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 
 
 const EventsScreen = () => {
+    const router = useRouter();
     const [isPossess, setIsPosses] = useState(true);
     const [isCurrentOrder, setIsCurrentOrder] = useState(true);
     const [isRecentOrder, setIsRecentOrder] = useState(true);
@@ -89,6 +91,9 @@ const EventsScreen = () => {
                         <>
                             {currentEvents.map(event => (
                             <OrderItem
+                                onClick={() =>
+                                    router.push(`/account/event-details/${event.id}`)
+                                }
                                 key={event.id}
                                 name={event.name}
                                 date={event.eventDate}
@@ -115,6 +120,9 @@ const EventsScreen = () => {
                         <>
                             {recentEvents.map(event => (
                             <OrderItem
+                                onClick={() =>
+                                    router.push(`/account/event-details/${event.id}`)
+                                }
                                 key={event.id}
                                 name={event.name}
                                 date={event.eventDate}
