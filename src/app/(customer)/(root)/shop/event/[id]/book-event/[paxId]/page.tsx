@@ -7,11 +7,12 @@ import OrderStatus from "@/components/CheckoutPage/OrderStatus";
 import StatusLabel from "@/components/StatusLabel";
 import OrderDetailsSet from "@/components/CheckoutPage/OrderDetailsSet";
 import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
-
+import { useParams } from "next/navigation";
 const Page = () => {
   // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
   const [orderStatus, setOrderStatus] = useState("");
-
+  const params = useParams();
+  const paxId = params.paxId as string;
   // Controls which form to show (order details or payment)
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 

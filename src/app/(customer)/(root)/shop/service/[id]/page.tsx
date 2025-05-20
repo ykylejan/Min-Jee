@@ -41,7 +41,6 @@ const Page = ({ params }: PageProps) => {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
-
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 

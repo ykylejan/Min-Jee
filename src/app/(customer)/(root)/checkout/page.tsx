@@ -8,6 +8,7 @@ import StatusLabel from "@/components/StatusLabel";
 import OrderDetailsSet from "@/components/CheckoutPage/OrderDetailsSet";
 import OrderDetailsPayment from "@/components/CheckoutPage/OrderDetailsPayment";
 
+
 const Page = () => {
     // Possible states: "" (initial), "Pending", "Verified", "Rejected", "Completed"
     const [orderStatus, setOrderStatus] = useState("");
