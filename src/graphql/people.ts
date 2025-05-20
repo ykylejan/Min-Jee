@@ -348,3 +348,164 @@ export const GET_ORDER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_ORDERS_OWNER = gql`
+  query getAllOrders {
+    getOrders {
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
+        id
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
+      }
+      customerId
+      deliveryPrice
+      depositPrice
+      id
+      isShipped
+      location
+      name
+      orderDate
+      orderStatus
+      orderTime
+      orderTotal
+      overdueDays
+      rentalList {
+        id
+        orderId
+        orderItemStatus
+        rentalId
+        rentalQuantity
+        rentalTotal
+        rentals {
+          categoryId
+          currentQuantity
+          description
+          id
+          name
+          price
+          img
+          totalQuantity
+        }
+      }
+      returnDate
+      servicesList {
+        id
+        orderId
+        serviceItemsId
+        serviceQuantity
+        serviceTotal
+        servicesItems {
+          description
+          id
+          name
+          price
+          serviceId
+          services {
+            id
+            img
+            name
+          }
+        }
+      }
+      transactionDetails {
+        date
+        eventId
+        id
+        img
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
+      }
+    }
+  }
+`;
+export const GET_ORDER_BY_ID_OWNER = gql`
+  query getOrderById($id: UUID!) {
+    getOrdersById(id: $id) {
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
+        id
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
+      }
+      customerId
+      deliveryPrice
+      depositPrice
+      id
+      isShipped
+      location
+      name
+      orderDate
+      orderStatus
+      orderTime
+      orderTotal
+      overdueDays
+      rentalList {
+        id
+        orderId
+        orderItemStatus
+        rentalId
+        rentalQuantity
+        rentalTotal
+        rentals {
+          categoryId
+          currentQuantity
+          description
+          id
+          name
+          price
+          img
+          totalQuantity
+        }
+      }
+      returnDate
+      servicesList {
+        id
+        orderId
+        serviceItemsId
+        serviceQuantity
+        serviceTotal
+        servicesItems {
+          description
+          id
+          name
+          price
+          serviceId
+          services {
+            id
+            img
+            name
+          }
+        }
+      }
+      transactionDetails {
+        date
+        eventId
+        id
+        img
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
+      }
+    }
+  }
+`;
