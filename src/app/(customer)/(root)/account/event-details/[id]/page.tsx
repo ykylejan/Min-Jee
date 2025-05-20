@@ -35,7 +35,9 @@ const Page = () => {
   if (error || !data?.getEventsById) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <span className="text-xl text-red-500">Failed to load event details.</span>
+        <span className="text-xl text-red-500">
+          Failed to load event details.
+        </span>
       </div>
     );
   }
@@ -48,13 +50,19 @@ const Page = () => {
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" });
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen pt-[120px] pb-[80px] px-48 bg-[#FFFBF5]">
       <div className="bg-white border border-[#D2D6DA] w-[750px] h-auto rounded-lg px-24 py-20">
-        <h1 className="text-[#6B7280] font-afacad_bold">Event Booking Successful</h1>
+        <h1 className="text-[#6B7280] font-afacad_bold">
+          Event Booking Successful
+        </h1>
         <h1 className="font-poppins_extrabold text-5xl py-3">
           Thanks for booking!
         </h1>
@@ -63,7 +71,7 @@ const Page = () => {
           tight and we’ll send you confirmation soon!
         </h1>
         <hr />
-
+        
         {/* Populated Receipt Item */}
         <ReceiptItem
           img={event.pax?.eventPackages?.img}
@@ -77,12 +85,19 @@ const Page = () => {
           <h1 className="flex justify-between">
             <span className="text-[#6B7280] font-afacad_bold">Subtotal</span>
             <span className="font-afacad_semibold">
-              PHP {event.pax?.price ? Number(event.pax.price).toFixed(2) : "0.00"}
+              PHP{" "}
+              {event.pax?.price ? Number(event.pax.price).toFixed(2) : "0.00"}
             </span>
           </h1>
           <h1 className="flex justify-between">
-            <span className="text-[#6B7280] font-afacad_bold">Customization Price</span>
-            <span className="font-afacad_semibold">{event.customizationsPrice ? Number(event.customizationsPrice).toFixed(2) : "0.00"}</span>
+            <span className="text-[#6B7280] font-afacad_bold">
+              Customization Price
+            </span>
+            <span className="font-afacad_semibold">
+              {event.customizationsPrice
+                ? Number(event.customizationsPrice).toFixed(2)
+                : "0.00"}
+            </span>
           </h1>
           {/* <h1 className="flex justify-between">
             <span className="text-[#6B7280] font-afacad_bold">Delivery Fee</span>
