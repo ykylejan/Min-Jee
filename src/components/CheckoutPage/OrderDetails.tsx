@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -12,7 +13,7 @@ interface OrderDetailsProps {
 
 const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
   return (
-    <div className="bg-white border border-[#D2D6DA] w-[750px] h-auto rounded-lg px-12 pt-6 pb-12">
+    <div className="bg-white border border-[#545557] w-[750px] h-auto rounded-lg px-12 pt-6 pb-12">
       <div className="font-afacad">
         <h1 className="text-2xl font-afacad_medium">Order Details</h1>
         <h1 className="text-[#6B7280]">

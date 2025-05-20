@@ -1,3 +1,4 @@
+import { on } from "events";
 import React from "react";
 
 interface ProductItemCheckoutProps {
@@ -6,9 +7,9 @@ interface ProductItemCheckoutProps {
   price: number;
   quantity: number;
   image?: string;
-  onIncrease: () => void;
-  onDecrease: () => void;
-  onRemove: () => void;
+  onIncrease?: () => void;
+  onDecrease?: () => void;
+  onRemove?: () => void;
 }
 
 const ProductItemCheckout: React.FC<ProductItemCheckoutProps> = ({
@@ -31,31 +32,37 @@ const ProductItemCheckout: React.FC<ProductItemCheckoutProps> = ({
         <div className="pl-5">
           <p className="text-gray-500 text-sm">Rental</p>
           <h1 className="font-afacad_medium text-xl">{name}</h1>
-          <div className="flex items-center mt-2">
-            <div className="flex items-center border border-gray-300 rounded-md">
+
+          {!onIncrease && !onDecrease && !onRemove && (
+            <span className="px-3">Quantity: {quantity}</span>
+          )}
+          {onDecrease && onIncrease && onRemove && (
+            <div className="flex items-center mt-2">
+              <div className="flex items-center border border-gray-300 rounded-md">
+                <button
+                  onClick={onDecrease}
+                  className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md"
+                  aria-label="Decrease quantity"
+                >
+                  −
+                </button>
+                <span className="px-3">{quantity}</span>
+                <button
+                  onClick={onIncrease}
+                  className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md"
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
               <button
-                onClick={onDecrease}
-                className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md"
-                aria-label="Decrease quantity"
+                className="ml-4 text-gray-500 hover:text-gray-700"
+                onClick={onRemove}
               >
-                −
-              </button>
-              <span className="px-3">{quantity}</span>
-              <button
-                onClick={onIncrease}
-                className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md"
-                aria-label="Increase quantity"
-              >
-                +
+                Remove
               </button>
             </div>
-            <button
-              className="ml-4 text-gray-500 hover:text-gray-700"
-              onClick={onRemove}
-            >
-              Remove
-            </button>
-          </div>
+          )}
         </div>
       </div>
       <div>
