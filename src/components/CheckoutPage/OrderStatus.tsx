@@ -12,6 +12,9 @@ interface OrderStatusProps {
   updateOrderStatus: (status: string) => void;
   showPaymentForm: boolean;
   setShowPaymentForm: (show: boolean) => void;
+  handleSubmit: any;
+  trigger: any;
+  onSubmit: (data: any) => void;
 }
 
 const OrderStatus = ({
@@ -20,6 +23,9 @@ const OrderStatus = ({
   updateOrderStatus,
   showPaymentForm,
   setShowPaymentForm,
+  handleSubmit,
+  trigger,
+  onSubmit,
 }: OrderStatusProps) => {
   const router = useRouter();
 
@@ -31,15 +37,14 @@ const OrderStatus = ({
     0
   );
 
-  const handleButtonClick = () => {
-    // Initial state -> Pending
+  const handleButtonClick = async () => {
+    // Only validate and submit if on initial state
     if (orderStatus === "") {
-      updateOrderStatus("Pending");
-
-      // Simulate order analysis (in a real app, this would be an API call)
-      setTimeout(() => {
-        updateOrderStatus("Verified");
-      }, 12000);
+      const valid = await trigger();
+      if (valid) {
+        handleSubmit(onSubmit)();
+      }
+      return;
     }
     // Verified -> Show payment form
     else if (orderStatus === "Verified" && !showPaymentForm) {
@@ -86,10 +91,6 @@ const OrderStatus = ({
           <h1>Delivery Fee</h1>
           <h1>PHP 250.00</h1>
         </div>
-        {/* <div className="flex justify-between px-12">
-          <h1>Deposit</h1>
-          <h1>PHP 0.00</h1>
-        </div> */}
       </div>
 
       <hr />
