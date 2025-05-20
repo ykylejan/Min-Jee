@@ -45,6 +45,7 @@ const Page = () => {
   const event = data.getEventsById;
   const customer = event.customer;
   const transaction = event.transactionDetails?.[0]; // Show the first transaction for simplicity
+  console.log(transaction)
 
   // Helper: Format date
   const formatDate = (dateStr: string) => {
@@ -231,9 +232,14 @@ const Page = () => {
           <div className="flex space-x-20">
             <div className="grid grid-cols-1 gap-4 w-[300px]">
               <h1 className="font-afacad_semibold">Customization</h1>
-              <h1 className="font-afacad text-[#6B7280]">
-                {event.customizations}
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="font-afacad text-[#6B7280]">
+                  {event.customizations}
+                </h1>
+                <h1 className="font-afacad text-[#6B7280]">
+                  ₱{event.customizationsPrice}
+                </h1>
+              </div>
             </div>
             {/* <div className="grid grid-cols-1 gap-4 w-[300px]">
               <h1 className="font-afacad_semibold">Status</h1>
@@ -244,6 +250,33 @@ const Page = () => {
           </div>
         </div>
         <hr />
+
+        <div className="py-8">
+          <div className="flex space-x-20">
+            <div className="grid grid-cols-1 gap-4 w-[300px]">
+              <h1 className="font-afacad_semibold">Transactions</h1>
+              <div className="flex justify-between">
+                {event.transactionDetails.map((trans)=>(
+                  <div key={trans.id}>
+                  <h1 className="font-afacad_semibold">Date</h1>
+                  <h1 className="font-afacad text-[#6b7280]">
+                    {trans.date}
+                  </h1>
+                  <h1 className={trans.isVerified?"font-afacad_semibold text-green-500":"font-afacad_semibold"}>Verified </h1>
+                  <h1 className="font-afacad_semibold">Payment </h1>
+                  <h1 className="font-afacad text-[#6b7280]">
+                    ₱{trans.payment}
+                  </h1>
+                  <h1 className="font-afacad_semibold">Payment Status </h1>
+                  <h1 className="font-afacad text-[#6b7280]">
+                    {trans.paymentStatus}
+                  </h1>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="pt-16">
           <Link href="/shop">
