@@ -282,7 +282,7 @@ const Page = () => {
                   <div className="pt-16">
                     <div className="flex items-center gap-x-3">
                       <h1 className="text-xl font-afacad_medium">
-                        Booking Schedule
+                        Order Schedule
                       </h1>
                     </div>
                     <hr />
@@ -290,7 +290,7 @@ const Page = () => {
                     <div className="space-y-3">
                       <div className="flex gap-x-3 mt-5">
                         <div>
-                          <h1>Date of Booking</h1>
+                          <h1>Date of Order</h1>
                           <Controller
                             name="bookingDate"
                             control={control}
@@ -302,7 +302,7 @@ const Page = () => {
                           />
                         </div>
                         <div>
-                          <h1>Time of Booking</h1>
+                          <h1>Time of Order</h1>
                           <Controller
                             name="bookingTime"
                             control={control}
