@@ -1,6 +1,15 @@
 import React from "react";
 import ReceiptItem from "./ReceiptItem";
 import Link from "next/link";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "../ui/dialog";
+import { images } from "@/constants";
 
 const Receipt = ({ data }: any) => {
     // console.log("data: ", data)
@@ -71,9 +80,52 @@ const Receipt = ({ data }: any) => {
                                 Shipping Address
                             </h1>
                             <div className="font-afacad text-[#6B7280]">
-                                <h1>Art Montebon</h1>
-                                <h1>arkiart@gmail.com</h1>
-                                <h1>+63 909-509-5019</h1>
+                                <h1>03 Red Stone Calinan</h1>
+                                <h1>Davao City</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <div className="py-8">
+                    <div className="flex space-x-20">
+                        <div className="grid grid-cols-1 gap-4 w-[300px]">
+                            <h1 className="font-afacad_semibold">
+                                Payment Details
+                            </h1>
+                            <div className="font-afacad text-[#6B7280]">
+                                <h1>Ref No. 1115 8615 6</h1>
+                                <h1>20 May 2025</h1>
+                                <h1>Amount: PHP 500.00</h1>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 w-[300px]">
+                            <h1 className="font-afacad_semibold">Status</h1>
+                            <div className="font-afacad text-[#6B7280]">
+                                <h1>Partial Payment</h1>
+                                <h1>Verified</h1>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <h1 className="underline">
+                                            Receipt.png
+                                        </h1>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                Payment Receipt
+                                            </DialogTitle>
+                                            <DialogDescription className="max-h-[70vh] overflow-y-auto">
+                                                <img
+                                                    src={images.receiptSample.src}
+                                                    alt="Receipt"
+                                                    className="h-auto w-auto object-cover"
+                                                />
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         </div>
                     </div>
