@@ -88,7 +88,7 @@ const Page = () => {
         delivery_price: 250,
         deposit_price: 0,
       };
-
+      
       // Build request body
       const body = {
         order_data,

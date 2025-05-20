@@ -201,7 +201,39 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                     </div>
                 </div>
 
-                <div className="mt-12">
+                <div className="mt-6">
+                    <div>
+                        <h1 className="font-afacad text-neutral-500">
+                            Payment Status
+                        </h1>
+                        <hr />
+                    </div>
+
+                    <div className="pt-6 pb-10 space-y-6">
+                        <div>
+                            <h1 className="text-sm text-neutral-500">
+                                Select Payment Status for this order item
+                            </h1>
+                            <Select>
+                                <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
+                                    <SelectValue placeholder="Select payment status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup className="font-afacad">
+                                        <SelectItem value="pending">
+                                            Full 
+                                        </SelectItem>
+                                        <SelectItem value="verified">
+                                            Partial
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-6">
                     <div>
                         <h1 className="font-afacad text-neutral-500">
                             Order Status
@@ -216,7 +248,7 @@ const ProductCard = ({ category, action }: ProductCardProps) => {
                             </h1>
                             <Select>
                                 <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
-                                    <SelectValue placeholder="Select Obtainment Method" />
+                                    <SelectValue placeholder="Select order status" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup className="font-afacad">
