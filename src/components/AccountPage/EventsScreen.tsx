@@ -2,11 +2,52 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import OrderItem from "./OrderItem";
 import StatusLabel from "../StatusLabel";
+import { GET_ALL_EVENTS } from "@/graphql/people";
+import apolloClientCustomer from "@/graphql/apolloClientCustomer";
+import { useQuery } from "@apollo/client";
+
 
 const EventsScreen = () => {
-    const [isPossess, setIsPosses] = useState(false);
+    const [isPossess, setIsPosses] = useState(true);
     const [isCurrentOrder, setIsCurrentOrder] = useState(true);
     const [isRecentOrder, setIsRecentOrder] = useState(true);
+    const { data, loading, error } = useQuery(GET_ALL_EVENTS, {
+        client: apolloClientCustomer,
+    });
+
+    if (loading) {
+        return (
+        <div className="font-afacad text-2xl w-full text-center my-10">
+            Loading orders...
+        </div>
+        );
+    }
+
+    if (error) {
+        return (
+        <div className="font-afacad text-2xl w-full text-center my-10 text-red-500">
+            Failed to load orders.
+        </div>
+        );
+    }
+
+    const events = data?.getEvents || [];
+
+    const currentEvents = events.filter(
+        (event: any) =>
+        event.orderStatus !== "Completed" && event.orderStatus !== "Cancelled"
+    );
+    const recentEvents = events.filter(
+        (event: any) =>
+        event.orderStatus === "Completed" || event.orderStatus === "Cancelled"
+    );
+
+    const getStatusLabel = (status: string) => {
+        if (status === "Verified") return <StatusLabel label="Verified" />;
+        if (status === "Completed") return <StatusLabel label="Completed" />;
+        if (status === "Cancelled") return <StatusLabel label="Cancelled" />;
+        return <StatusLabel label={status} />;
+    };
 
     return (
         <div className="font-afacad text-2xl w-full">
@@ -46,13 +87,16 @@ const EventsScreen = () => {
                         </div>
                     ) : (
                         <>
+                            {currentEvents.map(event => (
                             <OrderItem
-                                name="Art Montebon"
-                                date="October 20, 2024"
-                                address="03 Red Stone Calinan, Davao City"
+                                key={event.id}
+                                name={event.name}
+                                date={event.eventDate}
+                                address={event.eventAddress}
                             >
-                                <StatusLabel label="Verified" />
+                                <StatusLabel label={event.eventStatus}/>
                             </OrderItem>
+                            ))}
                         </>
                     )}
 
@@ -69,13 +113,16 @@ const EventsScreen = () => {
                         </div>
                     ) : (
                         <>
+                            {recentEvents.map(event => (
                             <OrderItem
-                                name="Art Montebon"
-                                date="October 20, 2024"
-                                address="03 Red Stone Calinan, Davao City"
+                                key={event.id}
+                                name={event.name}
+                                date={event.eventDate}
+                                address={event.eventAddress}
                             >
-                                <StatusLabel label="Completed" />
+                                <StatusLabel label={event.eventStatus}/>
                             </OrderItem>
+                            ))}
                         </>
                     )}
                 </div>

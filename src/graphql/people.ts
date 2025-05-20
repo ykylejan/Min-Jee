@@ -348,3 +348,71 @@ export const GET_ORDER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_EVENTS = gql`
+query getAllEvents {
+  getEvents {
+    addonsList {
+      addons {
+        availability
+        id
+        name
+        price
+      }
+      addonsId
+      eventsId
+      id
+    }
+    customer {
+      address
+      bookings
+      contactNumber
+      email
+      firstName
+      id
+      isActive
+      lastName
+      userId
+      verifyEmail
+      verifyNumber
+    }
+    customerId
+    customizations
+    customizationsPrice
+    eventAddress
+    eventDate
+    eventEnd
+    eventStart
+    eventStatus
+    id
+    isDone
+    location
+    minjeeVenue
+    name
+    pax {
+      description
+      eventPackageId
+      eventPackages {
+        id
+        img
+        name
+      }
+      id
+      name
+      price
+    }
+    paxId
+    transactionDetails {
+      date
+      eventId
+      id
+      img
+      isEvent
+      isVerified
+      orderId
+      payment
+      paymentStatus
+    }
+  }
+}
+`;
