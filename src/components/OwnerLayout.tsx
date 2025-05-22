@@ -33,6 +33,11 @@ const navLinks = [
     href: "/orders",
     icon: <ShoppingCart />,
   },
+  {
+    name: "Bookings",
+    href: "/bookings",
+    icon: <ShoppingCart />,
+  },
   // {
   //   name: "Products",
   //   href: "/products",
