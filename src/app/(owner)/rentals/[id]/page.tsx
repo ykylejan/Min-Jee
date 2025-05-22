@@ -22,6 +22,7 @@ import { GET_RENTAL_BY_ID } from "@/graphql/products";
 import { ApolloError } from "@apollo/client";
 import apolloClient from "@/graphql/apolloClient";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { UUID } from "crypto";
 
 const rentalSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
@@ -112,6 +113,30 @@ const EditRentalPage = () => {
       );
 
       toast.success("Rental Updated Successfully");
+      router.push("/rentals");
+    } catch (error: any) {
+      let errorMessage = "Something went wrong. Please try again.";
+
+      if (error instanceof ApolloError) {
+        errorMessage = error.message;
+      } else if (error.response?.data?.detail?.[0]?.msg === "Field required") {
+        errorMessage = "Please fill in all the required fields.";
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+    const onDelete = async () => {
+    setIsSubmitting(true);
+    try {
+      await api.delete(
+        `/o/rental/${rentalId}`
+      );
+
+      toast.success("Rental Deleted Successfully");
       router.push("/rentals");
     } catch (error: any) {
       let errorMessage = "Something went wrong. Please try again.";
@@ -386,7 +411,7 @@ const EditRentalPage = () => {
                     <DialogClose asChild>
                       <Button variant="outline" className="px-4">Cancel</Button>
                     </DialogClose>
-                    <Button className="bg-red-600 hover:bg-red-700 px-4">Delete</Button>
+                    <Button className="bg-red-600 hover:bg-red-700 px-4" onClick={onDelete}>Delete</Button>
                   </div>
                 </DialogHeader>
               </DialogContent>

@@ -12,7 +12,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
-import { useQuery } from "@apollo/client";
+import { ApolloError, useQuery } from "@apollo/client";
 import { GET_EVENT_PACKAGE_BY_ID } from "@/graphql/people"; // You'll need to create this query
 import apolloClient from "@/graphql/apolloClient";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -232,6 +232,31 @@ const EditEventPackagePage = () => {
     }
   };
 
+
+  const onDelete = async () => {
+    setIsSubmitting(true);
+    try {
+      await api.delete(
+        `/o/events/event_package/${eventPackId}`
+      );
+
+      toast.success("Event Package Deleted Successfully");
+      router.push("/events");
+    } catch (error: any) {
+      let errorMessage = "Something went wrong. Please try again.";
+
+      if (error instanceof ApolloError) {
+        errorMessage = error.message;
+      } else if (error.response?.data?.detail?.[0]?.msg === "Field required") {
+        errorMessage = "Please fill in all the required fields.";
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
@@ -370,7 +395,7 @@ const EditEventPackagePage = () => {
                     <DialogClose asChild>
                       <Button variant="outline" className="px-4">Cancel</Button>
                     </DialogClose>
-                    <Button className="bg-red-600 hover:bg-red-700 px-4">Delete</Button>
+                    <Button className="bg-red-600 hover:bg-red-700 px-4" onClick={onDelete}>Delete</Button>
                   </div>
                 </DialogHeader>
               </DialogContent>
