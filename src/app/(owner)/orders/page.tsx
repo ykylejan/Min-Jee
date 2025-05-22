@@ -129,9 +129,7 @@ const page = () => {
                 >
                   {/* <TableCell className="font-medium">{order.id}</TableCell> */}
                   <TableCell>
-                    {order.customer
-                      ? `${order.customer.firstName} ${order.customer.lastName}`
-                      : "N/A"}
+                    {order.name}
                   </TableCell>
                   <TableCell>
                     {order.orderDate

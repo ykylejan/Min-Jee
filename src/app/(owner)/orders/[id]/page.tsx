@@ -78,9 +78,7 @@ const page = () => {
           >
             <MoveLeft width={20} height={20} className="text-neutral-600" />
           </button>
-          <h1 className="font-afacad_medium text-3xl">
-            Order Details
-          </h1>
+          <h1 className="font-afacad_medium text-3xl">Order Details</h1>
           <StatusLabel label={order?.orderStatus || "Pending"} />
         </div>
         <Link href={`/orders/${order?.id}/edit-order`}>
@@ -136,7 +134,7 @@ const page = () => {
         />
       </div> */}
 
-      <Link href={`/orders/order-item/receipt?id=${order?.id}`}>
+      <Link href={`/orders/${order?.id}/receipt/`}>
         <Button className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
           View Receipt
         </Button>

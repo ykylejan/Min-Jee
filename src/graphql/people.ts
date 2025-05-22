@@ -496,6 +496,7 @@ export const GET_ALL_ORDERS_OWNER = gql`
     }
   }
 `;
+
 export const GET_ORDER_BY_ID_OWNER = gql`
   query getOrderById($id: UUID!) {
     getOrdersById(id: $id) {
@@ -573,6 +574,157 @@ export const GET_ORDER_BY_ID_OWNER = gql`
         payment
         paymentStatus
       }
+    }
+  }
+`;
+
+export const GET_ALL_EVENTS_OWNER = gql`
+  query getAllEvents {
+    getEvents {
+      addonsList {
+        addons {
+          availability
+          id
+          name
+          price
+        }
+        addonsId
+        eventsId
+        id
+      }
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
+        id
+        isActive
+        lastName
+        userId
+        verifyEmail
+        verifyNumber
+      }
+      customerId
+      customizations
+      customizationsPrice
+      eventAddress
+      eventDate
+      eventEnd
+      eventStart
+      eventStatus
+      id
+      isDone
+      location
+      minjeeVenue
+      name
+      pax {
+        description
+        eventPackageId
+        eventPackages {
+          id
+          img
+          name
+        }
+        id
+        name
+        price
+      }
+      paxId
+      transactionDetails {
+        date
+        eventId
+        id
+        img
+        isEvent
+        isVerified
+        orderId
+        payment
+        paymentStatus
+      }
+    }
+  }
+`;
+
+export const GET_EVENT_BY_ID_OWNER = gql`
+  query getIndividualEventById($id: UUID!) {
+    getEventsById(id: $id) {
+      addonsList {
+        addons {
+          availability
+          id
+          name
+          price
+        }
+        addonsId
+        eventsId
+        id
+      }
+      customer {
+        address
+        bookings
+        contactNumber
+        email
+        firstName
+        id
+        isActive
+        lastName
+        userId
+        verifyNumber
+        verifyEmail
+      }
+      customerId
+      customizations
+      customizationsPrice
+      eventAddress
+      eventDate
+      eventEnd
+      eventStart
+      eventStatus
+      id
+      isDone
+      location
+      minjeeVenue
+      name
+      pax {
+        description
+        eventPackageId
+        eventPackages {
+          id
+          img
+          name
+        }
+        id
+        name
+        price
+      }
+      paxId
+      transactionDetails {
+        date
+        eventId
+        id
+        img
+        isVerified
+        isEvent
+        orderId
+        payment
+        paymentStatus
+      }
+    }
+  }
+`;
+export const GET_TRANSACTION_BY_ID = gql`
+  query getIndividualTransactionById($id: UUID!) {
+    getTransactionsById(id: $id) {
+      date
+      eventId
+      id
+      img
+      isEvent
+      isVerified
+      orderId
+      payment
+      paymentStatus
     }
   }
 `;

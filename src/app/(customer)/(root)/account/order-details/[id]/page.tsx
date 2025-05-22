@@ -61,7 +61,7 @@ const Page = () => {
   const router = useRouter();
   const params = useParams();
   const orderId = params?.id as string;
-    
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -110,11 +110,11 @@ const Page = () => {
       //   formData.append("payment", Number(paymentAmount));
       formData.append("payment", String(paymentAmount));
       formData.append("payment_status", "partial");
-      formData.append("is_verified", "false");
+      formData.append("is_verified", "true");
       formData.append("order_id", orderId);
       formData.append("file", receiptFile);
 
-      await api.post(
+      const res = await api.post(
         "http://localhost:8000/api/v1/u/transactions/orders",
         formData,
         {
@@ -122,8 +122,13 @@ const Page = () => {
         }
       );
 
+      // console.log();
+
       toast.success("Payment submitted successfully!");
-      router.push("/account");
+      // router.push("/account");
+      router.push(
+        `/account/order-details/${orderId}/receipt/${res.data.transaction.id}`
+      );
       setPaymentConfirmed(true);
       setDialogOpen(false);
       // Optionally, refresh or redirect
