@@ -728,3 +728,18 @@ export const GET_TRANSACTION_BY_ID = gql`
     }
   }
 `;
+export const GET_TRANSACTIONS = gql`
+  query getAllTransactions {
+    getTransactions {
+      date
+      eventId
+      id
+      img
+      isEvent
+      isVerified
+      orderId
+      payment
+      paymentStatus
+    }
+  }
+`;

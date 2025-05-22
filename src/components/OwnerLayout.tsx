@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
   Contact,
-  DoorOpen,
-  History,
-  ShoppingCart,
-  Tag,
+  DoorOpen, 
+  History, Utensils,
+  ShoppingCart, Cake, HandPlatter,
   Users,
 } from "lucide-react";
 import {
@@ -36,27 +35,23 @@ const navLinks = [
   {
     name: "Bookings",
     href: "/bookings",
-    icon: <ShoppingCart />,
+    icon: <CalendarDays />,
   },
-  // {
-  //   name: "Products",
-  //   href: "/products",
-  //   icon: <Tag />,
-  // },
+ 
   {
     name: "Rentals",
     href: "/rentals",
-    icon: <Tag />,
+    icon: <Utensils />,
   },
   {
     name: "Services",
     href: "/services",
-    icon: <Tag />,
+    icon: <HandPlatter />,
   },
   {
     name: "Events",
     href: "/events",
-    icon: <Tag />,
+    icon: <Cake />,
   },
   {
     name: "Customers",

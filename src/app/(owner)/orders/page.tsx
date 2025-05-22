@@ -43,13 +43,17 @@ const page = () => {
       return customerName.includes(search.toLowerCase());
     });
 
-    // Sort: verified first, then by most recent orderDate
+    // Sort: verified first, then pending, then completed/rejected at the bottom, then by most recent orderDate
     filtered.sort((a: any, b: any) => {
-      // Verified orders first
-      if (a.orderStatus === "verified" && b.orderStatus !== "verified")
-        return -1;
-      if (a.orderStatus !== "verified" && b.orderStatus === "verified")
-        return 1;
+      const statusPriority = (status: string) => {
+        if (status === "verified") return 1;
+        if (status === "pending") return 0;
+        if (status === "completed" || status === "rejected") return 2;
+        return 3;
+      };
+      const aPriority = statusPriority(a.orderStatus);
+      const bPriority = statusPriority(b.orderStatus);
+      if (aPriority !== bPriority) return aPriority - bPriority;
       // Then by most recent date
       const dateA = new Date(a.orderDate).getTime();
       const dateB = new Date(b.orderDate).getTime();
@@ -128,9 +132,7 @@ const page = () => {
                   onClick={() => handleRowClick(order.id)}
                 >
                   {/* <TableCell className="font-medium">{order.id}</TableCell> */}
-                  <TableCell>
-                    {order.name}
-                  </TableCell>
+                  <TableCell>{order.name}</TableCell>
                   <TableCell>
                     {order.orderDate
                       ? new Date(order.orderDate).toLocaleDateString()
