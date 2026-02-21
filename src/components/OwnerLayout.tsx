@@ -9,6 +9,7 @@ import {
   History, Utensils,
   ShoppingCart, Cake, HandPlatter,
   Users,
+  Tag,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -62,6 +63,11 @@ const navLinks = [
     name: "Partners",
     href: "/partners",
     icon: <Contact />,
+  },
+  {
+    name: "Categories",
+    href: "/categories",
+    icon: <Tag />,
   },
   // {
   //   name: "Calendar",

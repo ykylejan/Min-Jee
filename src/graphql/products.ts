@@ -39,4 +39,14 @@ export const GET_RENTAL_BY_ID = gql`
   }
 `;
 
+export const GET_CATEGORY_BY_ID = gql`
+  query getCategoryById($id: UUID!) {
+    getCategoriesById(id: $id) {
+      id
+      name
+      type
+    }
+  }
+`;
+
 

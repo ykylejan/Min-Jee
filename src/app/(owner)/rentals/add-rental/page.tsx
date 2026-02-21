@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +17,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CATEGORIES } from "@/graphql/products";
+import apolloClient from "@/graphql/apolloClient";
 
 // Define validation schema
 const rentalSchema = z.object({
@@ -34,6 +37,27 @@ const page = () => {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categories, setCategories] = useState<
+    { id: string; name: string; type: string }[]
+  >([]);
+
+  const { loading: categoriesLoading, data: categoriesData } = useQuery(
+    GET_ALL_CATEGORIES,
+    { client: apolloClient }
+  );
+
+  useEffect(() => {
+    if (categoriesData?.getCategories) {
+      const rentalCategories = categoriesData.getCategories.filter(
+        (cat: { type: string }) => cat.type.toLowerCase() === "rental"
+      );
+      setCategories(rentalCategories);
+      // Debug: log all categories if none match
+      if (rentalCategories.length === 0) {
+        console.log("All categories:", categoriesData.getCategories);
+      }
+    }
+  }, [categoriesData]);
 
   const {
     register,
@@ -53,13 +77,9 @@ const page = () => {
     },
   });
 
-  const category = watch("categoryId")
-    ? {
-        "03614735-c12b-484e-871e-3d48fb29f9bb": "Cutlery",
-        "1af9151d-ec1e-4def-9814-8830f7ac4270": "Furniture",
-        "b62f5333-2e7e-4510-ae3d-36fcabfd12ed": "Electronics",
-      }[watch("categoryId")]
-    : "";
+  const selectedCategoryName = categories.find(
+    (cat) => cat.id === watch("categoryId")
+  )?.name || "";
 
   const onSubmit = async (data: RentalFormValues) => {
     setIsSubmitting(true);
@@ -80,7 +100,7 @@ const page = () => {
       }
 
       // Make API call
-      const response = await api.post("/o/rental", formData, {
+      const response = await api.post("/o/rental/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -92,16 +112,15 @@ const page = () => {
       });
       router.push("/rentals"); // Redirect to rentals page
     } catch (error: any) {
-      // console.log("ERROR:", error.response.data.detail[0].msg);
-      if (error.response.data.detail[0].msg == "Field required") {
+      const errorMsg = error?.response?.data?.detail?.[0]?.msg;
+      if (errorMsg === "Field required") {
         toast("All fields are required", {
           description: "Please fill in all the required fields.",
           className: "bg-red-500/80 border border-none text-white",
         });
       } else {
-        let errorMessage = "Something went wrong. Please try again.";
-        toast("All fields are required", {
-          description: errorMessage,
+        toast("Error adding rental", {
+          description: errorMsg || error?.response?.data?.detail || "Something went wrong. Please try again.",
           className: "bg-red-500/80 border border-none text-white",
         });
       }
@@ -221,34 +240,26 @@ const page = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Input
-                      placeholder="Select the category"
-                      value={category}
+                      placeholder={categoriesLoading ? "Loading..." : "Select the category"}
+                      value={selectedCategoryName}
                       className="bg-neutral-100/50 w-80 h-12 px-5"
                       readOnly
                     />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="font-afacad">
-                    <DropdownMenuItem
-                      onClick={() => {
-                        field.onChange("03614735-c12b-484e-871e-3d48fb29f9bb");
-                      }}
-                    >
-                      Cutlery
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        field.onChange("1af9151d-ec1e-4def-9814-8830f7ac4270");
-                      }}
-                    >
-                      Furniture
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        field.onChange("b62f5333-2e7e-4510-ae3d-36fcabfd12ed");
-                      }}
-                    >
-                      Electronics
-                    </DropdownMenuItem>
+                    {categories.map((cat) => (
+                      <DropdownMenuItem
+                        key={cat.id}
+                        onClick={() => field.onChange(cat.id)}
+                      >
+                        {cat.name}
+                      </DropdownMenuItem>
+                    ))}
+                    {categories.length === 0 && !categoriesLoading && (
+                      <DropdownMenuItem disabled>
+                        No categories found
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
@@ -296,7 +307,7 @@ const page = () => {
               className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Updating..." : "Update Rental"}
+              {isSubmitting ? "Adding..." : "Add Rental"}
             </Button>
           </div>
         </form>

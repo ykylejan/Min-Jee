@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
 import { useQuery } from "@apollo/client";
-import { GET_RENTAL_BY_ID } from "@/graphql/products";
+import { GET_RENTAL_BY_ID, GET_ALL_CATEGORIES } from "@/graphql/products";
 import { ApolloError } from "@apollo/client";
 import apolloClient from "@/graphql/apolloClient";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -42,17 +42,33 @@ const EditRentalPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
+  const [categories, setCategories] = useState<
+    { id: string; name: string; type: string }[]
+  >([]);
 
   const { data, loading, error } = useQuery(GET_RENTAL_BY_ID, {
     variables: { id: rentalId },
     client: apolloClient,
   });
 
+  const { loading: categoriesLoading, data: categoriesData } = useQuery(
+    GET_ALL_CATEGORIES,
+    { client: apolloClient }
+  );
+
+  useEffect(() => {
+    if (categoriesData?.getCategories) {
+      const rentalCategories = categoriesData.getCategories.filter(
+        (cat: { type: string }) => cat.type.toLowerCase() === "rental"
+      );
+      setCategories(rentalCategories);
+    }
+  }, [categoriesData]);
+
   const {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm<RentalFormValues>({
     resolver: zodResolver(rentalSchema),
@@ -82,8 +98,6 @@ const EditRentalPage = () => {
       }
     }
   }, [data, reset]);
-
-  const categoryId = watch("categoryId");
 
   const onSubmit = async (data: RentalFormValues) => {
     setIsSubmitting(true);
@@ -302,46 +316,34 @@ const EditRentalPage = () => {
               name="categoryId"
               control={control}
               render={({ field }) => {
-                const categoryName = field.value
-                  ? {
-                      "03614735-c12b-484e-871e-3d48fb29f9bb": "Cutlery",
-                      "1af9151d-ec1e-4def-9814-8830f7ac4270": "Furniture",
-                      "b62f5333-2e7e-4510-ae3d-36fcabfd12ed": "Electronics",
-                    }[field.value] || ""
-                  : "";
+                const categoryName = categories.find(
+                  (cat) => cat.id === field.value
+                )?.name || "";
 
                 return (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Input
-                        placeholder="Select the category"
+                        placeholder={categoriesLoading ? "Loading..." : "Select the category"}
                         value={categoryName}
                         className=" bg-neutral-100/50 w-80 h-12 px-5"
                         readOnly
                       />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="font-afacad">
-                      <DropdownMenuItem
-                        onClick={() =>
-                          field.onChange("03614735-c12b-484e-871e-3d48fb29f9bb")
-                        }
-                      >
-                        Cutlery
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          field.onChange("1af9151d-ec1e-4def-9814-8830f7ac4270")
-                        }
-                      >
-                        Furniture
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          field.onChange("b62f5333-2e7e-4510-ae3d-36fcabfd12ed")
-                        }
-                      >
-                        Electronics
-                      </DropdownMenuItem>
+                      {categories.map((cat) => (
+                        <DropdownMenuItem
+                          key={cat.id}
+                          onClick={() => field.onChange(cat.id)}
+                        >
+                          {cat.name}
+                        </DropdownMenuItem>
+                      ))}
+                      {categories.length === 0 && !categoriesLoading && (
+                        <DropdownMenuItem disabled>
+                          No categories found
+                        </DropdownMenuItem>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 );
