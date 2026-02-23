@@ -40,21 +40,21 @@ const RentalsSection = ({ label }: RentalsSectionProps) => {
     }, [rentalsData]);
 
     return (
-        <div className="pb-24">
+        <div className="pb-12 md:pb-24">
             <section className="relative">
-                <h1 className="flex justify-between mb-3">
-                    <span className="text-3xl font-afacad_semibold">
+                <h1 className="flex justify-between items-center mb-3">
+                    <span className="text-2xl md:text-3xl font-afacad_semibold">
                         {label ? label : "Our Rentals"}
                     </span>
                     <Link href="/shop">
-                        <span className="text-xl font-afacad_medium flex items-center gap-x-2 hover:text-[#778768] cursor-pointer">
-                            View all <ArrowRight size={20} />
+                        <span className="text-base md:text-xl font-afacad_medium flex items-center gap-x-1 md:gap-x-2 hover:text-[#778768] cursor-pointer">
+                            View all <ArrowRight size={18} className="md:w-5 md:h-5" />
                         </span>
                     </Link>
                 </h1>
 
                 <button
-                    className="absolute left-1 top-[48%] transform -translate-y-[50%] bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-200"
+                    className="hidden md:block absolute left-1 top-[48%] transform -translate-y-[50%] bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-200"
                     onClick={scrollLeft}
                     aria-label="Scroll Left"
                 >
@@ -89,7 +89,7 @@ const RentalsSection = ({ label }: RentalsSectionProps) => {
                 </ScrollArea>
 
                 <button
-                    className="absolute right-1 top-[48%] transform -translate-y-[50%] bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-200"
+                    className="hidden md:block absolute right-1 top-[48%] transform -translate-y-[50%] bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-200"
                     onClick={scrollRight}
                     aria-label="Scroll Right"
                 >

@@ -37,7 +37,7 @@ const page = () => {
                 </div>
             </div>
             
-            <div className="px-10 lg:px-24 py-16">
+            <div className="px-4 sm:px-8 md:px-10 lg:px-24 py-8 md:py-12 lg:py-16">
                 <LandingProvide />
 
                 <RentalsSection />
