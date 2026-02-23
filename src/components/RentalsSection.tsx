@@ -69,7 +69,7 @@ const RentalsSection = ({ label }: RentalsSectionProps) => {
                             <div className="text-red-400 py-6">Failed to load rentals.</div>
                         ) : rentals.length > 0 ? (
                             rentals.map((rental) => (
-                                <Link key={rental.id} href={`/shop/rental/${rental.id}`}>
+                                <Link key={rental.id} href={`/shop/rental/${rental.id}`} className="w-[200px] md:w-[250px] lg:w-[280px] flex-shrink-0">
                                     <ProductItem
                                         image={rental.img?.toString() || "/placeholder-product.jpg"}
                                         name={rental.name}

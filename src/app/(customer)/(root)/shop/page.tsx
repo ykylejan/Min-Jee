@@ -164,14 +164,14 @@ const ShopPage = () => {
   const currentData = getCurrentTabData();
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40">
+    <div className="min-h-screen bg-[#FFFBF5] pt-[100px] md:pt-[120px] pb-20 md:pb-40">
       <div className="text-[#778768] flex flex-col items-center justify-center text-center">
-        <h1 className="text-8xl font-caveat_semibold mt-5">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-caveat_semibold mt-3 md:mt-5">
           {isTitle.charAt(0).toUpperCase() + isTitle.slice(1).toLowerCase()}
         </h1>
       </div>
 
-      <div className="px-24 pt-8 pb-4">
+      <div className="px-4 sm:px-8 md:px-12 lg:px-24 pt-6 md:pt-8 pb-4">
         <Tabs
           defaultValue={isTitle}
           onValueChange={(value) => {
@@ -182,32 +182,32 @@ const ShopPage = () => {
             <TabsList>
               <TabsTrigger
                 value="rentals"
-                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
+                className="text-base md:text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
               >
                 Rentals
               </TabsTrigger>
               <TabsTrigger
                 value="services"
-                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
+                className="text-base md:text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
               >
                 Services
               </TabsTrigger>
               <TabsTrigger
                 value="events"
-                className="text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
+                className="text-base md:text-xl font-afacad data-[state=active]:text-white data-[state=active]:bg-camouflage-400 data-[state=active]:font-afacad_semibold"
               >
                 Events
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <div className="flex justify-center pb-10">
-            <div className="relative w-[530px]">
+          <div className="flex justify-center pb-6 md:pb-10">
+            <div className="relative w-full max-w-[530px]">
               <Input
                 placeholder={`Search for ${isTitle.toLowerCase()}`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white p-6 w-full pl-10"
+                className="bg-white p-5 md:p-6 w-full pl-10"
               />
               <Search
                 size={20}
@@ -218,7 +218,7 @@ const ShopPage = () => {
 
           <TabsContent
             value={isTitle}
-            className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-20 gap-y-10"
+            className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-10 lg:gap-x-16 md:gap-y-8"
           >
             {currentData.length > 0 ? (
               currentData.map((item) => (
