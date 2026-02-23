@@ -203,15 +203,15 @@ const ShopPage = () => {
 
           <div className="flex justify-center pb-6 md:pb-10">
             <div className="relative w-full max-w-[530px]">
+              <Search
+                size={18}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10"
+              />
               <Input
                 placeholder={`Search for ${isTitle.toLowerCase()}`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white p-5 md:p-6 w-full pl-10"
-              />
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="bg-white py-5 md:py-6 pr-4 w-full !pl-12"
               />
             </div>
           </div>
