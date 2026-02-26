@@ -55,20 +55,20 @@ const OrderDetailsPayment = () => {
 
   return (
     <div>
-      <hr className="my-3" />
+      <hr className="my-2 sm:my-3" />
       <div className="flex items-center">
-        <IoIosCheckmark color="transparent" size={40} />
-        <h1 className="text-2xl font-afacad_medium">Payment Details</h1>
+        <IoIosCheckmark color="transparent" className="w-8 h-8 sm:w-10 sm:h-10" />
+        <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Payment Details</h1>
       </div>
 
-      <div className="bg-[#EFF6FF] w-full h-10 rounded-md flex items-center px-5 mt-2 mb-5">
-        <FcInfo size={20} />
-        <h1 className="text-[#2196F3] font-afacad pl-5">
+      <div className="bg-[#EFF6FF] w-full h-auto min-h-[40px] rounded-md flex items-center px-3 sm:px-5 py-2 mt-2 mb-4 sm:mb-5">
+        <FcInfo size={20} className="flex-shrink-0" />
+        <h1 className="text-[#2196F3] font-afacad pl-3 sm:pl-5 text-sm sm:text-base">
           Choose your payment option
         </h1>
       </div>
 
-      <div className="flex gap-x-4 mb-8">
+      <div className="flex flex-wrap gap-3 sm:gap-x-4 mb-6 sm:mb-8">
         <div onClick={() => setPaymentOption("GCash")}>
           <PaymentButtons
             text="GCash"

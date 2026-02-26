@@ -119,11 +119,11 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[120px] flex justify-center">
-      <div className="pb-[80px] px-24">
-        <h1 className="text-2xl font-intermedium py-2">Checkout</h1>
-        <div className="flex gap-x-10">
-          <div className="space-y-10">
+    <div className="min-h-screen bg-[#FFFBF5] pt-[100px] sm:pt-[120px] flex justify-center">
+      <div className="pb-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 w-full max-w-[1280px]">
+        <h1 className="text-xl sm:text-2xl font-intermedium py-2 sm:py-4">Checkout</h1>
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-x-8 items-start">
+          <div className="space-y-6 sm:space-y-10 w-full xl:flex-1 xl:max-w-[750px]">
             <BasketList />
             {showPaymentForm ? (
               <div>

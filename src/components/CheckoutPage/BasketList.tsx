@@ -10,19 +10,23 @@ const BasketList = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   return (
-    <div className="bg-white border border-[#D2D6DA] w-[750px] h-[350px] rounded-lg px-12 pt-6">
-      <div className="font-afacad">
-        <h1 className="text-2xl font-afacad_medium">
+    <div className="bg-white border border-[#D2D6DA] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+      <div className="font-afacad mb-2">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
           <span>Basket List </span>
-          {/* <span>(2 item)</span> */}
+          {cartItems.length > 0 && (
+            <span className="text-[#6B7280] text-sm sm:text-base font-normal">
+              ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})
+            </span>
+          )}
         </h1>
-        <h1 className="text-[#6B7280]">This is your current order</h1>
+        <h1 className="text-[#6B7280] text-sm sm:text-base">This is your current order</h1>
       </div>
 
-      <ScrollArea className="h-60">
-        <div>
+      <ScrollArea className={`${cartItems.length > 2 ? 'max-h-[280px] sm:max-h-[320px]' : ''}`}>
+        <div className="space-y-2">
           {cartItems.length === 0 ? (
-            <p className="text-gray-500">Your cart is empty.</p>
+            <p className="text-gray-500 py-4">Your cart is empty.</p>
           ) : (
             cartItems.map((item) => (
               <ProductItemCheckout

@@ -13,14 +13,14 @@ const OrderDetailsSet = ({ onOrderableChange }: OrderDetailsSetProps) => {
 
     return (
         <div>
-            <hr className="my-3" />
+            <hr className="my-2 sm:my-3" />
             <div className="flex items-center">
-                <IoIosCheckmark color="green" size={40} />
-                <h1 className="text-2xl font-afacad_medium">Order Details</h1>
+                <IoIosCheckmark color="green" className="w-8 h-8 sm:w-10 sm:h-10" />
+                <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Order Details</h1>
             </div>
 
-            <div className="flex justify-between pl-10">
-                <div className="font-afacad">
+            <div className="flex justify-between pl-4 sm:pl-6 md:pl-10">
+                <div className="font-afacad text-sm sm:text-base">
                     <h1 className="font-afacad_semibold">Shipping Address</h1>
                     <p>Art Montebon</p>
                     <p>Red Stone, Calinan</p>
@@ -28,7 +28,7 @@ const OrderDetailsSet = ({ onOrderableChange }: OrderDetailsSetProps) => {
                 </div>
                 <h1 
                     onClick={handleEdit} 
-                    className="text-[#6B7280] text-lg font-afacad underline hover:text-black cursor-pointer"
+                    className="text-[#6B7280] text-sm sm:text-base md:text-lg font-afacad underline hover:text-black cursor-pointer"
                 >
                     Edit
                 </h1>

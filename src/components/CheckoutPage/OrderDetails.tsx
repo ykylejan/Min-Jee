@@ -13,18 +13,18 @@ interface OrderDetailsProps {
 
 const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
   return (
-    <div className="bg-white border border-[#545557] w-[750px] h-auto rounded-lg px-12 pt-6 pb-12">
+    <div className="bg-white border border-[#545557] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
       <div className="font-afacad">
-        <h1 className="text-2xl font-afacad_medium">Order Details</h1>
-        <h1 className="text-[#6B7280]">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Order Details</h1>
+        <h1 className="text-[#6B7280] text-sm sm:text-base">
           To order for approval, enter the following details
         </h1>
       </div>
 
       <div className="font-afacad">
-        <div className="pt-8">
+        <div className="pt-4 sm:pt-6 md:pt-8">
           <div className="flex items-center gap-x-3">
-            <h1 className="text-xl font-afacad_medium">Personal Information</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">Personal Information</h1>
           </div>
           <hr />
 
@@ -57,15 +57,15 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
           </div>
         </div>
 
-        <div className="pt-16">
+        <div className="pt-8 sm:pt-12 md:pt-16">
           <div className="flex items-center gap-x-3">
-            <h1 className="text-xl font-afacad_medium">Booking Schedule</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">Booking Schedule</h1>
           </div>
           <hr />
 
           <div className="space-y-3">
-            <div className="flex gap-x-3 mt-5">
-              <div>
+            <div className="flex flex-col sm:flex-row gap-3 mt-5">
+              <div className="flex-1">
                 <h1>Date of Order</h1>
                 <Input
                   type="date"
@@ -79,7 +79,7 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
                   </span>
                 )}
               </div>
-              <div>
+              <div className="flex-1">
                 <h1>Time of Order</h1>
                 <Input
                   type="time"
@@ -114,9 +114,9 @@ const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
           </div>
         </div>
 
-        <div className="pt-16">
+        <div className="pt-8 sm:pt-12 md:pt-16">
           <div className="flex items-center gap-x-3">
-            <h1 className="text-xl font-afacad_medium">Delivery Option</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">Delivery Option</h1>
           </div>
           <hr />
 

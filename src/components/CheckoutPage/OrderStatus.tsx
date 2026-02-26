@@ -74,20 +74,20 @@ const OrderStatus = ({
     orderStatus === "Completed";
 
   return (
-    <div className="bg-white border border-[#D2D6DA] w-[400px] h-fit rounded-lg font-afacad py-3">
-      <div className="flex justify-between px-12 py-6">
-        <h1>Order Status</h1>
+    <div className="bg-white border border-[#D2D6DA] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+      <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
+        <h1 className="text-sm sm:text-base">Order Status</h1>
         {orderStatus && children}
       </div>
 
       <hr />
 
-      <div className="py-6">
-        <div className="flex justify-between px-12">
+      <div className="py-4 sm:py-6">
+        <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
           <h1>Subtotal</h1>
           <h1>PHP {subtotal.toFixed(2)}</h1>
         </div>
-        <div className="flex justify-between px-12">
+        <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
           <h1>Delivery Fee</h1>
           <h1>PHP 250.00</h1>
         </div>
@@ -95,25 +95,25 @@ const OrderStatus = ({
 
       <hr />
 
-      <div className="flex justify-between px-12 py-6">
+      <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6 text-sm sm:text-base font-semibold">
         <h1>TOTAL</h1>
         <h1>PHP {(subtotal + 250).toFixed(2)}</h1>
       </div>
 
       <hr />
 
-      <div className="flex flex-col gap-y-3 px-12 py-6">
+      <div className="flex flex-col gap-y-2 sm:gap-y-3 px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
         <Button
           onClick={handleButtonClick}
           disabled={isButtonDisabled}
-          className="bg-[#0F172A] rounded-full"
+          className="bg-[#0F172A] rounded-full text-sm sm:text-base h-9 sm:h-10"
         >
           {getButtonText()}
         </Button>
-        <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA]">
+        <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
           Cancel Order
         </Button>
-        <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA]">
+        <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
           Empty Basket
         </Button>
       </div>

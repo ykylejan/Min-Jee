@@ -14,11 +14,11 @@ const PaymentButtons = ({ text, image, imageActive, isActive }: PaymentButtonPro
                 isActive
                     ? "border-2 border-[#2196F3] shadow-md"
                     : "border border-[#D2D6DA]"
-            } font-afacad hover:shadow-md hover:font-afacad_semibold cursor-pointer w-60 h-16 rounded-lg p-3`}
+            } font-afacad hover:shadow-md hover:font-afacad_semibold cursor-pointer w-full sm:w-48 md:w-60 h-14 sm:h-16 rounded-lg p-2 sm:p-3`}
         >
-            <img src={isActive ? imageActive : image} alt="payment_icon" className="h-5" />
+            <img src={isActive ? imageActive : image} alt="payment_icon" className="h-4 sm:h-5" />
             <h1
-                className={`${
+                className={`text-sm sm:text-base ${
                     isActive
                         ? "text-[#2196F3] font-afacad_semibold"
                         : "text-[#6B7280]"
