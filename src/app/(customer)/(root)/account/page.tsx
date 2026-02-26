@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ProfileScreen from "@/components/AccountPage/ProfileScreen";
 import OrdersScreen from "@/components/AccountPage/OrdersScreen";
 import EventsScreen from "@/components/AccountPage/EventsScreen";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/slices/authSlice";
 import api from "@/app/utils/api";
@@ -22,7 +22,9 @@ interface CustomerData {
 }
 
 const Page = () => {
-  const [isScreen, setIsScreen] = useState("Profile");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [isScreen, setIsScreen] = useState(tabParam || "Profile");
   const [customerData, setCustomerData] = useState<CustomerData | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();

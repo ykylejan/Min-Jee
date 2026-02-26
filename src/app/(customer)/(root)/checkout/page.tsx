@@ -105,7 +105,7 @@ const Page = () => {
       setOrderStatus("Pending");
 
       toast.success("Ordered Successfully!");
-      router.push("/account");
+      router.push("/account?tab=Orders");
       dispatch(clearCart());
     } catch (error: any) {
       toast.error("Order submission failed. Please try again.");
