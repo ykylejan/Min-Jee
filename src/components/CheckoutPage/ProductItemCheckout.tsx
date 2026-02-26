@@ -22,8 +22,8 @@ const ProductItemCheckout: React.FC<ProductItemCheckoutProps> = ({
   onRemove,
 }) => {
   return (
-    <div className="bg-white border border-[#D2D6DA] w-full rounded-lg flex flex-col sm:flex-row justify-between sm:items-center p-2 sm:p-3 font-afacad gap-2 sm:gap-0">
-      <div className="flex items-center min-w-0">
+    <div className="bg-white border border-[#D2D6DA] w-full rounded-lg flex items-center justify-between p-2 sm:p-3 font-afacad gap-2">
+      <div className="flex items-center min-w-0 flex-1">
         <img
           src={image}
           alt="product-item"
@@ -31,10 +31,10 @@ const ProductItemCheckout: React.FC<ProductItemCheckoutProps> = ({
         />
         <div className="pl-3 sm:pl-5 min-w-0 flex-1">
           <p className="text-gray-500 text-xs sm:text-sm">Rental</p>
-          <h1 className="font-afacad_medium text-base sm:text-lg md:text-xl truncate">{name}</h1>
+          <h1 className="font-afacad_medium text-sm sm:text-lg md:text-xl truncate">{name}</h1>
 
           {!onIncrease && !onDecrease && !onRemove && (
-            <span className="px-2 sm:px-3 text-sm sm:text-base">Quantity: {quantity}</span>
+            <span className="text-xs sm:text-sm text-gray-600">Quantity: {quantity}</span>
           )}
           {onDecrease && onIncrease && onRemove && (
             <div className="flex items-center mt-1 sm:mt-2 flex-wrap gap-2">
@@ -65,8 +65,8 @@ const ProductItemCheckout: React.FC<ProductItemCheckoutProps> = ({
           )}
         </div>
       </div>
-      <div className="flex-shrink-0 self-end sm:self-auto">
-        <h1 className="font-medium text-sm sm:text-base whitespace-nowrap">
+      <div className="flex-shrink-0 text-right">
+        <h1 className="font-medium text-xs sm:text-base whitespace-nowrap">
           PHP{" "}
           {(typeof price === "number" ? price : Number(price || 0)).toFixed(2)}
         </h1>

@@ -195,7 +195,7 @@ const Page = () => {
         <h1 className="text-xl sm:text-2xl font-intermedium py-2 sm:py-4">Order Details</h1>
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-x-8 items-start">
           <div className="space-y-6 sm:space-y-10 w-full xl:flex-1 xl:max-w-[750px]">
-            <div className="bg-white border border-[#D2D6DA] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+            <div className="bg-white border border-[#545557] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
               <div className="font-afacad mb-2">
                 <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
                   <span>Basket List </span>
@@ -617,7 +617,7 @@ const Page = () => {
 
           {/* ORDER STATUS CARD HERE */}
 
-          <div className="bg-white border border-[#D2D6DA] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+          <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
             <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
               <h1 className="text-sm sm:text-base">Order Status</h1>
               {/* Show the order status from the order data */}

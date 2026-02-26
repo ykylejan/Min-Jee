@@ -10,7 +10,7 @@ const BasketList = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   return (
-    <div className="bg-white border border-[#D2D6DA] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+    <div className="bg-white border border-[#545557] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
       <div className="font-afacad mb-2">
         <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
           <span>Basket List </span>

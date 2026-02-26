@@ -74,7 +74,7 @@ const OrderStatus = ({
     orderStatus === "Completed";
 
   return (
-    <div className="bg-white border border-[#D2D6DA] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+    <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
       <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
         <h1 className="text-sm sm:text-base">Order Status</h1>
         {orderStatus && children}
