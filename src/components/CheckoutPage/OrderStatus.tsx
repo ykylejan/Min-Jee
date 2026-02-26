@@ -3,8 +3,10 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
+import { clearCart } from "@/redux/slices/cartSlice";
+import { toast } from "sonner";
 
 interface OrderStatusProps {
   children: React.ReactNode;
@@ -28,6 +30,7 @@ const OrderStatus = ({
   onSubmit,
 }: OrderStatusProps) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
@@ -73,6 +76,20 @@ const OrderStatus = ({
     orderStatus === "Rejected" ||
     orderStatus === "Completed";
 
+  const handleCancelCheckout = () => {
+    if (confirm("Are you sure you want to cancel? Your cart items will be preserved.")) {
+      router.push("/");
+    }
+  };
+
+  const handleEmptyBasket = () => {
+    if (confirm("Are you sure you want to empty your basket?")) {
+      dispatch(clearCart());
+      toast.success("Basket emptied successfully!");
+      router.push("/");
+    }
+  };
+
   return (
     <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
       <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
@@ -110,10 +127,17 @@ const OrderStatus = ({
         >
           {getButtonText()}
         </Button>
-        <Button className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
-          Cancel Order
+        <Button 
+          onClick={handleCancelCheckout}
+          className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+        >
+          Cancel
         </Button>
-        <Button className="bg-transparent text-red-600 hover:bg-red-50 rounded-full shadow-none border border-red-300 text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
+        <Button 
+          onClick={handleEmptyBasket}
+          disabled={cartItems.length === 0}
+          className="bg-transparent text-red-600 hover:bg-red-50 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed rounded-full shadow-none border border-red-300 text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+        >
           Empty Basket
         </Button>
       </div>

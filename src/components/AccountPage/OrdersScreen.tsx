@@ -32,20 +32,25 @@ const OrdersScreen = () => {
 
   const orders = data?.getOrders || [];
 
-  // Example logic: current orders = not completed/cancelled, recent = completed/cancelled
+  // Current orders = not completed/cancelled, recent = completed/cancelled (case-insensitive)
   const currentOrders = orders.filter(
-    (order: any) =>
-      order.orderStatus !== "Completed" && order.orderStatus !== "Cancelled"
+    (order: any) => {
+      const status = order.orderStatus?.toLowerCase();
+      return status !== "completed" && status !== "cancelled";
+    }
   );
   const recentOrders = orders.filter(
-    (order: any) =>
-      order.orderStatus === "Completed" || order.orderStatus === "Cancelled"
+    (order: any) => {
+      const status = order.orderStatus?.toLowerCase();
+      return status === "completed" || status === "cancelled";
+    }
   );
 
   const getStatusLabel = (status: string) => {
-    if (status === "Verified") return <StatusLabel label="Verified" />;
-    if (status === "Completed") return <StatusLabel label="Completed" />;
-    if (status === "Cancelled") return <StatusLabel label="Cancelled" />;
+    const lowerStatus = status?.toLowerCase();
+    if (lowerStatus === "verified") return <StatusLabel label="Verified" />;
+    if (lowerStatus === "completed") return <StatusLabel label="Completed" />;
+    if (lowerStatus === "cancelled") return <StatusLabel label="Cancelled" />;
     return <StatusLabel label={status} />;
   };
 

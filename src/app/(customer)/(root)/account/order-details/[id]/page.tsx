@@ -94,10 +94,24 @@ const Page = () => {
   };
 
   // Fetch order details by ID using Apollo Client
-  const { data, loading, error } = useQuery(GET_ORDER_BY_ID, {
+  const { data, loading, error, refetch } = useQuery(GET_ORDER_BY_ID, {
     variables: { id: orderId },
     client: apolloClientCustomer,
   });
+
+  const handleCancelOrder = async () => {
+    if (!confirm("Are you sure you want to cancel this order?")) {
+      return;
+    }
+    try {
+      await api.patch(`http://localhost:8000/api/v1/u/order/${orderId}/cancel`);
+      toast.success("Order cancelled successfully!");
+      refetch();
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Failed to cancel order. Please try again.");
+      console.error(error);
+    }
+  };
 
   const handleCheckoutPayment = async () => {
     if (!receiptFile) {
@@ -654,11 +668,12 @@ const Page = () => {
               >
                 {getButtonText()}
               </Button>
-              <Button className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
-                Cancel Order
-              </Button>
-              <Button className="bg-transparent text-red-600 hover:bg-red-50 rounded-full shadow-none border border-red-300 text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
-                Empty Basket
+              <Button 
+                onClick={handleCancelOrder}
+                disabled={orderStatus === "cancelled" || orderStatus === "completed"}
+                className="bg-transparent text-[#0F172A] hover:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+              >
+                {orderStatus === "cancelled" ? "Order Cancelled" : "Cancel Order"}
               </Button>
             </div>
           </div>
