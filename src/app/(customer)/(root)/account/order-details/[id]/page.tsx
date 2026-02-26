@@ -650,16 +650,14 @@ const Page = () => {
               <Button
                 onClick={handleCheckoutPayment}
                 disabled={isButtonDisabled || !receiptFile}
-                className={`rounded-full text-sm sm:text-base h-9 sm:h-10 ${
-                  isButtonDisabled ? "bg-gray-400" : "bg-[#0F172A]"
-                }`}
+                className="bg-[#0F172A] hover:bg-[#1e293b] disabled:bg-gray-400 disabled:cursor-not-allowed rounded-full text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
               >
                 {getButtonText()}
               </Button>
-              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
+              <Button className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
                 Cancel Order
               </Button>
-              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
+              <Button className="bg-transparent text-red-600 hover:bg-red-50 rounded-full shadow-none border border-red-300 text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200">
                 Empty Basket
               </Button>
             </div>
