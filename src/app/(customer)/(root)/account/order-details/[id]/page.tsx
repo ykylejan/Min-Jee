@@ -190,21 +190,21 @@ const Page = () => {
     orderStatus === "completed";
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[120px] flex justify-center">
-      <div className="pb-[80px] px-24">
-        <h1 className="text-2xl font-intermedium py-2">Checkout</h1>
-        <div className="flex gap-x-10">
-          <div className="space-y-10">
-            <div className="bg-white border border-[#D2D6DA] w-[750px] h-[350px] rounded-lg px-12 pt-6">
-              <div className="font-afacad">
-                <h1 className="text-2xl font-afacad_medium">
+    <div className="min-h-screen bg-[#FFFBF5] pt-[100px] sm:pt-[120px] flex justify-center">
+      <div className="pb-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 w-full max-w-[1280px]">
+        <h1 className="text-xl sm:text-2xl font-intermedium py-2 sm:py-4">Order Details</h1>
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-x-8 items-start">
+          <div className="space-y-6 sm:space-y-10 w-full xl:flex-1 xl:max-w-[750px]">
+            <div className="bg-white border border-[#D2D6DA] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+              <div className="font-afacad mb-2">
+                <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
                   <span>Basket List </span>
                   {/* <span>(2 item)</span> */}
                 </h1>
-                <h1 className="text-[#6B7280]">This is your current order</h1>
+                <h1 className="text-[#6B7280] text-sm sm:text-base">This is your current order</h1>
               </div>
 
-              <ScrollArea className="h-60 overflow-hidden overflow-y-scroll">
+              <ScrollArea className="max-h-[280px] sm:max-h-[320px] overflow-hidden overflow-y-auto">
                 <div>
                   {!order?.rentalList?.length &&
                   !order?.servicesList?.length ? (
@@ -247,22 +247,22 @@ const Page = () => {
 
                 {/* INTEGRATE ORDER DETAILS PAYMENT HERE */}
                 <div>
-                  <hr className="my-3" />
+                  <hr className="my-2 sm:my-3" />
                   <div className="flex items-center">
-                    <IoIosCheckmark color="transparent" size={40} />
-                    <h1 className="text-2xl font-afacad_medium">
+                    <IoIosCheckmark color="transparent" className="w-8 h-8 sm:w-10 sm:h-10" />
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
                       Payment Details
                     </h1>
                   </div>
 
-                  <div className="bg-[#EFF6FF] w-full h-10 rounded-md flex items-center px-5 mt-2 mb-5">
-                    <FcInfo size={20} />
-                    <h1 className="text-[#2196F3] font-afacad pl-5">
+                  <div className="bg-[#EFF6FF] w-full h-auto min-h-[40px] rounded-md flex items-center px-3 sm:px-5 py-2 mt-2 mb-4 sm:mb-5">
+                    <FcInfo size={20} className="flex-shrink-0" />
+                    <h1 className="text-[#2196F3] font-afacad pl-3 sm:pl-5 text-sm sm:text-base">
                       Choose your payment option
                     </h1>
                   </div>
 
-                  <div className="flex gap-x-4 mb-8">
+                  <div className="flex flex-wrap gap-3 sm:gap-x-4 mb-6 sm:mb-8">
                     <div onClick={() => setPaymentOption("GCash")}>
                       <PaymentButtons
                         text="GCash"
@@ -302,8 +302,8 @@ const Page = () => {
                           isGcash="GCash"
                         />
                       </DialogTrigger>
-                      <div className="mt-4 bg-white rounded-md py-5 px-8 border border-[#D2D6DA]">
-                        <h3 className="text-[#0066DF] font-bold mb-2 ">
+                      <div className="mt-4 bg-white rounded-md py-3 sm:py-5 px-4 sm:px-8 border border-[#D2D6DA]">
+                        <h3 className="text-[#0066DF] font-bold mb-2 text-sm sm:text-base">
                           Payment Amount <span className="text-red-500">*</span>
                         </h3>
                         <Input
@@ -460,18 +460,18 @@ const Page = () => {
               </div>
             ) : (
               // INTEGRATE THIS PART, POPULATE THE DETAILS WITH THE ORDER DATA
-              <div className="bg-white border border-[#545557] w-[750px] h-auto rounded-lg px-12 pt-6 pb-12">
+              <div className="bg-white border border-[#545557] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
                 <div className="font-afacad">
-                  <h1 className="text-2xl font-afacad_medium">Order Details</h1>
-                  <h1 className="text-[#6B7280]">
+                  <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Order Details</h1>
+                  <h1 className="text-[#6B7280] text-sm sm:text-base">
                     To order for approval, enter the following details
                   </h1>
                 </div>
 
                 <div className="font-afacad">
-                  <div className="pt-8">
+                  <div className="pt-4 sm:pt-6 md:pt-8">
                     <div className="flex items-center gap-x-3">
-                      <h1 className="text-xl font-afacad_medium">
+                      <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">
                         Personal Information
                       </h1>
                     </div>
@@ -510,17 +510,17 @@ const Page = () => {
                     </div>
                   </div>
 
-                  <div className="pt-16">
+                  <div className="pt-8 sm:pt-12 md:pt-16">
                     <div className="flex items-center gap-x-3">
-                      <h1 className="text-xl font-afacad_medium">
+                      <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">
                         Order Schedule
                       </h1>
                     </div>
                     <hr />
 
                     <div className="space-y-3">
-                      <div className="flex gap-x-3 mt-5">
-                        <div>
+                      <div className="flex flex-col sm:flex-row gap-3 mt-5">
+                        <div className="flex-1">
                           <h1>Date of Order</h1>
                           <Controller
                             name="bookingDate"
@@ -532,7 +532,7 @@ const Page = () => {
                             rules={{ required: "Booking date is required" }}
                           />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h1>Time of Order</h1>
                           <Controller
                             name="bookingTime"
@@ -563,9 +563,9 @@ const Page = () => {
                     </div>
                   </div>
 
-                  <div className="pt-16">
+                  <div className="pt-8 sm:pt-12 md:pt-16">
                     <div className="flex items-center gap-x-3">
-                      <h1 className="text-xl font-afacad_medium">
+                      <h1 className="text-base sm:text-lg md:text-xl font-afacad_medium">
                         Delivery Option
                       </h1>
                     </div>
@@ -617,9 +617,9 @@ const Page = () => {
 
           {/* ORDER STATUS CARD HERE */}
 
-          <div className="bg-white border border-[#D2D6DA] w-[400px] h-fit rounded-lg font-afacad py-3">
-            <div className="flex justify-between px-12 py-6">
-              <h1>Order Status</h1>
+          <div className="bg-white border border-[#D2D6DA] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+            <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
+              <h1 className="text-sm sm:text-base">Order Status</h1>
               {/* Show the order status from the order data */}
               {order?.orderStatus && (
                 <span className="px-2 py-1 rounded bg-gray-200">
@@ -628,38 +628,38 @@ const Page = () => {
               )}
             </div>
             <hr />
-            <div className="py-6">
-              <div className="flex justify-between px-12">
+            <div className="py-4 sm:py-6">
+              <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
                 <h1>Subtotal</h1>
                 <h1>PHP {subtotal.toFixed(2)}</h1>
               </div>
-              <div className="flex justify-between px-12">
+              <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
                 <h1>Delivery Fee</h1>
-                <h1>{order.deliveryPrice}</h1>
+                <h1>PHP {order.deliveryPrice}</h1>
               </div>
             </div>
             <hr />
-            <div className="flex justify-between px-12 py-6">
+            <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6 text-sm sm:text-base font-semibold">
               <h1>TOTAL</h1>
               <h1>
                 PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}
               </h1>
             </div>
             <hr />
-            <div className="flex flex-col gap-y-3 px-12 py-6">
+            <div className="flex flex-col gap-y-2 sm:gap-y-3 px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
               <Button
                 onClick={handleCheckoutPayment}
                 disabled={isButtonDisabled || !receiptFile}
-                className={`rounded-full ${
+                className={`rounded-full text-sm sm:text-base h-9 sm:h-10 ${
                   isButtonDisabled ? "bg-gray-400" : "bg-[#0F172A]"
                 }`}
               >
                 {getButtonText()}
               </Button>
-              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA]">
+              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
                 Cancel Order
               </Button>
-              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA]">
+              <Button className="bg-transparent text-black rounded-full shadow-none border border-[#D2D6DA] text-sm sm:text-base h-9 sm:h-10">
                 Empty Basket
               </Button>
             </div>
