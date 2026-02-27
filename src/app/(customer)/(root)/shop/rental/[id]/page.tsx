@@ -12,6 +12,7 @@ import { RootState } from "@/redux/store";
 // UI Components (from your design system)
 import RentalsSection from "@/components/RentalsSection";
 import { Badge } from "@/components/ui/badge";
+import Loading from "./loading";
 import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
@@ -147,11 +148,7 @@ const Page = ({ params }: PageProps) => {
     setRentalQuantity(newValue);
   };
 
-  if (!isMounted) return null;
-  if (rentalLoading)
-    return (
-      <div className="min-h-screen bg-[#FFFBF5] px-4 sm:px-8 md:px-12 lg:px-24 pt-24 sm:pt-32 lg:pt-44">Loading...</div>
-    );
+  if (!isMounted || rentalLoading) return <Loading />;
   if (rentalError)
     return (
       <div className="min-h-screen bg-[#FFFBF5] px-4 sm:px-8 md:px-12 lg:px-24 pt-24 sm:pt-32 lg:pt-44">
