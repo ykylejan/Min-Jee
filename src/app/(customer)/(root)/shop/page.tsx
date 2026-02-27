@@ -3,6 +3,7 @@
 import ProductItem from "@/components/ProductItem";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from "lucide-react";
 import { TbListSearch } from "react-icons/tb";
 import React, { useEffect, useState } from "react";
@@ -163,6 +164,19 @@ const ShopPage = () => {
 
   const currentData = getCurrentTabData();
 
+  const isCurrentTabLoading = () => {
+    switch (isTitle) {
+      case "rentals":
+        return rentalsLoading;
+      case "services":
+        return servicesLoading;
+      case "events":
+        return eventsLoading;
+      default:
+        return false;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FFFBF5] pt-[100px] md:pt-[120px] pb-20 md:pb-40">
       <div className="text-[#778768] flex flex-col items-center justify-center text-center">
@@ -220,7 +234,16 @@ const ShopPage = () => {
             value={isTitle}
             className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-10 lg:gap-x-16 md:gap-y-8"
           >
-            {currentData.length > 0 ? (
+            {isCurrentTabLoading() ? (
+              // Skeleton loading state
+              Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <Skeleton className="w-full aspect-square rounded-md mb-2 md:mb-3 bg-camouflage-100" />
+                  <Skeleton className="h-4 md:h-5 w-3/4 bg-camouflage-100" />
+                  <Skeleton className="h-3 md:h-4 w-1/2 bg-camouflage-100" />
+                </div>
+              ))
+            ) : currentData.length > 0 ? (
               currentData.map((item) => (
                 <div
                   key={item.id}
