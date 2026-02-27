@@ -9,7 +9,7 @@ import { TbListSearch } from "react-icons/tb";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import apolloClient from "@/graphql/apolloClient";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_EVENT_PACKAGES, GET_ALL_SERVICES } from "@/graphql/people";
 import { GET_ALL_RENTALS } from "@/graphql/products";
 import { useRouter } from "next/navigation";
@@ -49,33 +49,41 @@ const ShopPage = () => {
   const [services, setServices] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
 
-  // Apollo queries
-  const {
-    loading: rentalsLoading,
-    error: rentalsError,
-    data: rentalsData,
-  } = useQuery(GET_ALL_RENTALS, {
+  // Apollo lazy queries - only fetch when tab is selected
+  const [
+    fetchRentals,
+    { loading: rentalsLoading, error: rentalsError, data: rentalsData },
+  ] = useLazyQuery(GET_ALL_RENTALS, {
     client: apolloClient,
     fetchPolicy: "network-only",
   });
 
-  const {
-    loading: servicesLoading,
-    error: servicesError,
-    data: servicesData,
-  } = useQuery(GET_ALL_SERVICES, {
+  const [
+    fetchServices,
+    { loading: servicesLoading, error: servicesError, data: servicesData },
+  ] = useLazyQuery(GET_ALL_SERVICES, {
     client: apolloClient,
     fetchPolicy: "network-only",
   });
 
-  const {
-    loading: eventsLoading,
-    error: eventsError,
-    data: eventsData,
-  } = useQuery(GET_ALL_EVENT_PACKAGES, {
+  const [
+    fetchEvents,
+    { loading: eventsLoading, error: eventsError, data: eventsData },
+  ] = useLazyQuery(GET_ALL_EVENT_PACKAGES, {
     client: apolloClient,
     fetchPolicy: "network-only",
   });
+
+  // Fetch data for the current tab when it changes
+  useEffect(() => {
+    if (isTitle === "rentals" && !rentalsData && !rentalsLoading) {
+      fetchRentals();
+    } else if (isTitle === "services" && !servicesData && !servicesLoading) {
+      fetchServices();
+    } else if (isTitle === "events" && !eventsData && !eventsLoading) {
+      fetchEvents();
+    }
+  }, [isTitle, rentalsData, servicesData, eventsData, rentalsLoading, servicesLoading, eventsLoading, fetchRentals, fetchServices, fetchEvents]);
 
   // Populate state when data changes
   useEffect(() => {
@@ -138,8 +146,21 @@ const ShopPage = () => {
   //   );
   // }
 
-  // Error state
-  if (rentalsError || servicesError || eventsError) {
+  // Error state - only show for current tab
+  const getCurrentTabError = () => {
+    switch (isTitle) {
+      case "rentals":
+        return rentalsError;
+      case "services":
+        return servicesError;
+      case "events":
+        return eventsError;
+      default:
+        return null;
+    }
+  };
+
+  if (getCurrentTabError()) {
     return (
       <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-40 flex justify-center items-center">
         <div className="text-red-500 text-xl">
@@ -167,11 +188,11 @@ const ShopPage = () => {
   const isCurrentTabLoading = () => {
     switch (isTitle) {
       case "rentals":
-        return rentalsLoading;
+        return rentalsLoading || (!rentalsData && !rentalsError);
       case "services":
-        return servicesLoading;
+        return servicesLoading || (!servicesData && !servicesError);
       case "events":
-        return eventsLoading;
+        return eventsLoading || (!eventsData && !eventsError);
       default:
         return false;
     }
