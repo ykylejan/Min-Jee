@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState, Fragment } from "react";
-import { useQuery } from "@apollo/client";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
-import Link from "next/link";
-import { Slash } from "lucide-react";
-import { IoMdHome } from "react-icons/io";
-import { MdContentCopy } from "react-icons/md";
-import { RootState } from "@/redux/store";
+import React, { useEffect, useState, Fragment } from 'react'
+import { useQuery } from '@apollo/client'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'sonner'
+import Link from 'next/link'
+import { Slash } from 'lucide-react'
+import { IoMdHome } from 'react-icons/io'
+import { MdContentCopy } from 'react-icons/md'
+import { RootState } from '@/redux/store'
 // UI Components (from your design system)
-import RentalsSection from "@/components/RentalsSection";
-import { Badge } from "@/components/ui/badge";
-import Loading from "./loading";
-import { Button } from "@/components/ui/button";
+import RentalsSection from '@/components/RentalsSection'
+import { Badge } from '@/components/ui/badge'
+import Loading from './loading'
+import { Button } from '@/components/ui/button'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,22 +21,22 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb'
 
 // GraphQL
-import apolloClient from "@/graphql/apolloClient";
-import { GET_RENTAL_BY_ID } from "@/graphql/products";
+import apolloClient from '@/graphql/apolloClient'
+import { GET_RENTAL_BY_ID } from '@/graphql/products'
 
 // Redux
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart } from '@/redux/slices/cartSlice'
 
 interface QuantityInputProps {
-  value: number;
-  onChange: (value: number) => void;
-  placeholder?: string;
-  className?: string;
-  max?: number;
-  disabled?: boolean;
+  value: number
+  onChange: (value: number) => void
+  placeholder?: string
+  className?: string
+  max?: number
+  disabled?: boolean
 }
 
 const QuantityInput: React.FC<QuantityInputProps> = ({
@@ -48,15 +48,15 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
   disabled,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value);
+    const val = Number(e.target.value)
     if (!isNaN(val)) {
       if (max !== undefined) {
-        onChange(Math.max(1, Math.min(val, max)));
+        onChange(Math.max(1, Math.min(val, max)))
       } else {
-        onChange(Math.max(1, val));
+        onChange(Math.max(1, val))
       }
     }
-  };
+  }
 
   return (
     <input
@@ -69,20 +69,20 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
       onChange={handleChange}
       placeholder={placeholder}
     />
-  );
-};
+  )
+}
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 const Page = ({ params }: PageProps) => {
-  const { id } = React.use(params);
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { id } = React.use(params)
+  const dispatch = useDispatch()
+  const cartItems = useSelector((state: RootState) => state.cart.items)
 
-  const [rentalQuantity, setRentalQuantity] = useState<number>(1);
-  const [isMounted, setIsMounted] = useState(false);
+  const [rentalQuantity, setRentalQuantity] = useState<number>(1)
+  const [isMounted, setIsMounted] = useState(false)
 
   const {
     data: rentalData,
@@ -91,40 +91,40 @@ const Page = ({ params }: PageProps) => {
   } = useQuery(GET_RENTAL_BY_ID, {
     variables: { id },
     client: apolloClient,
-  });
+  })
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    setIsMounted(true)
+  }, [])
 
   const formatPrice = (price: any) => {
-    if (typeof price === "number") {
-      return price.toFixed(2);
+    if (typeof price === 'number') {
+      return price.toFixed(2)
     }
-    if (typeof price === "string") {
-      const num = parseFloat(price);
-      return isNaN(num) ? price : num.toFixed(2);
+    if (typeof price === 'string') {
+      const num = parseFloat(price)
+      return isNaN(num) ? price : num.toFixed(2)
     }
-    return price;
-  };
+    return price
+  }
 
   const handleAddToCart = () => {
-    if (!rentalData?.getRentalsById) return;
+    if (!rentalData?.getRentalsById) return
 
-    const rental = rentalData.getRentalsById;
+    const rental = rentalData.getRentalsById
 
-    const cartItem = cartItems.find((item) => item.id === rental.id);
-    const existingQuantity = cartItem ? cartItem.quantity : 0;
-    const totalQuantity = existingQuantity + rentalQuantity;
+    const cartItem = cartItems.find((item) => item.id === rental.id)
+    const existingQuantity = cartItem ? cartItem.quantity : 0
+    const totalQuantity = existingQuantity + rentalQuantity
 
     if (totalQuantity > rental.currentQuantity) {
-      const remaining = rental.currentQuantity - existingQuantity;
+      const remaining = rental.currentQuantity - existingQuantity
       toast.error(
         remaining > 0
           ? `Only ${remaining} more ${rental.name}(s) can be added to your cart.`
-          : `${rental.name} is already fully added to your cart.`
-      );
-      return;
+          : `${rental.name} is already fully added to your cart.`,
+      )
+      return
     }
 
     dispatch(
@@ -134,36 +134,36 @@ const Page = ({ params }: PageProps) => {
         price: rental.price,
         quantity: rentalQuantity,
         image: rental.img,
-        category: "rental",
-      })
-    );
-    toast.success(`${rentalQuantity} ${rental.name}(s) added to cart`);
-  };
+        category: 'rental',
+      }),
+    )
+    toast.success(`${rentalQuantity} ${rental.name}(s) added to cart`)
+  }
 
   const handleQuantityChange = (value: number) => {
-    if (!rentalData?.getRentalsById) return;
+    if (!rentalData?.getRentalsById) return
 
-    const maxQuantity = rentalData.getRentalsById.currentQuantity;
-    const newValue = Math.max(1, Math.min(value, maxQuantity));
-    setRentalQuantity(newValue);
-  };
+    const maxQuantity = rentalData.getRentalsById.currentQuantity
+    const newValue = Math.max(1, Math.min(value, maxQuantity))
+    setRentalQuantity(newValue)
+  }
 
-  if (!isMounted || rentalLoading) return <Loading />;
+  if (!isMounted || rentalLoading) return <Loading />
   if (rentalError)
     return (
       <div className="min-h-screen bg-[#FFFBF5] px-4 sm:px-8 md:px-12 lg:px-24 pt-24 sm:pt-32 lg:pt-44">
         Error: {rentalError.message}
       </div>
-    );
+    )
   if (!rentalData?.getRentalsById)
     return (
       <div className="min-h-screen bg-[#FFFBF5] px-4 sm:px-8 md:px-12 lg:px-24 pt-24 sm:pt-32 lg:pt-44">
         Rental not found
       </div>
-    );
+    )
 
-  const rental = rentalData.getRentalsById;
-  const isOutOfStock = rental.currentQuantity === 0;
+  const rental = rentalData.getRentalsById
+  const isOutOfStock = rental.currentQuantity === 0
 
   return (
     <div className="min-h-screen bg-[#FFFBF5] px-4 sm:px-8 md:px-12 lg:px-24 pt-24 sm:pt-32 lg:pt-44">
@@ -171,7 +171,7 @@ const Page = ({ params }: PageProps) => {
         <Fragment key={rental.id}>
           <div className="w-full lg:w-auto flex justify-center">
             <img
-              src={rental.img || "/src/assets/images/halfsizedFoodWarmer.png"}
+              src={rental.img || '/src/assets/images/halfsizedFoodWarmer.png'}
               alt={rental.name}
               className="aspect-square w-full max-w-[350px] sm:max-w-[400px] lg:max-w-none lg:h-[500px] rounded-md object-cover"
             />
@@ -189,22 +189,20 @@ const Page = ({ params }: PageProps) => {
                   <Slash />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <Link href={"/shop"}>Shop</Link>
+                  <Link href={'/shop'}>Shop</Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator>
                   <Slash />
                 </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-base lg:text-lg">
-                    {rental.name}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
+                <BreadcrumbItem>Rental</BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
 
             <div className="flex items-center space-x-4 sm:space-x-8 mt-3 justify-between">
               <div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-afacad_semibold">{rental.name}</h1>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-afacad_semibold">
+                  {rental.name}
+                </h1>
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-afacad">
                   PHP {formatPrice(rental.price)}
                 </h1>
@@ -214,8 +212,8 @@ const Page = ({ params }: PageProps) => {
                 size={25}
                 className="text-[#6B7280] hover:text-black cursor-pointer flex-shrink-0"
                 onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success("Link copied to clipboard");
+                  navigator.clipboard.writeText(window.location.href)
+                  toast.success('Link copied to clipboard')
                 }}
               />
             </div>
@@ -242,18 +240,18 @@ const Page = ({ params }: PageProps) => {
             <Button
               className="bg-[#0F172A] font-poppins_bold w-full rounded-3xl h-12 mt-5 hover:bg-[#1E293B]"
               onClick={() => {
-                handleAddToCart();
-                console.log(rental.id);
+                handleAddToCart()
+                console.log(rental.id)
               }}
               disabled={isOutOfStock || rentalQuantity <= 0}
             >
-              {isOutOfStock ? "Out of Stock" : "Add to basket"}
+              {isOutOfStock ? 'Out of Stock' : 'Add to basket'}
             </Button>
 
             <div className="mt-8 sm:mt-12 lg:mt-16">
               <h1 className="font-afacad_semibold mb-2">Description</h1>
               <p className="text-stone-800 text-sm sm:text-base">
-                {rental.description || "No description available"}
+                {rental.description || 'No description available'}
               </p>
             </div>
 
@@ -271,7 +269,7 @@ const Page = ({ params }: PageProps) => {
         <RentalsSection label="Related Items" />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
