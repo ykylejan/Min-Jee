@@ -632,13 +632,11 @@ const Page = () => {
           {/* ORDER STATUS CARD HERE */}
 
           <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
-            <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
+            <div className="flex justify-between items-center px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
               <h1 className="text-sm sm:text-base">Order Status</h1>
               {/* Show the order status from the order data */}
               {order?.orderStatus && (
-                <span className="px-2 py-1 rounded bg-gray-200">
-                  {order.orderStatus.toUpperCase()}
-                </span>
+                <StatusLabel label={order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)} />
               )}
             </div>
             <hr />

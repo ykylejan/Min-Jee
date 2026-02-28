@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_EVENT_BY_ID } from "@/graphql/people";
 import apolloClientCustomer from "@/graphql/apolloClientCustomer";
+import StatusLabel from "@/components/StatusLabel";
 
 const Page = () => {
   const params = useParams();
@@ -219,9 +220,7 @@ const Page = () => {
             </div>
             <div className="grid grid-cols-1 gap-4 w-[300px]">
               <h1 className="font-afacad_semibold">Status</h1>
-              <h1 className="font-afacad text-[#6B7280]">
-                {event.eventStatus.toUpperCase()}
-              </h1>
+              <StatusLabel label={event.eventStatus.charAt(0).toUpperCase() + event.eventStatus.slice(1)} />
             </div>
           </div>
         </div>

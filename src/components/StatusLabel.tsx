@@ -2,6 +2,7 @@ import React from "react";
 
 interface StatusProps {
     label: string;
+    size?: "default" | "sm";
 }
 
 // Define styles for each status
@@ -15,20 +16,24 @@ const statusStyles: Record<
     completed: { bg: "#F9FBFF", border: "#D2D6DA", text: "#6B7280" },
 };
 
-const StatusLabel = ({ label }: StatusProps) => {
+const StatusLabel = ({ label, size = "default" }: StatusProps) => {
     const styles = statusStyles[label.toLowerCase()] || statusStyles["pending"]; // Default if the label doesn't match (aka customer didnt place order yet)
+
+    const sizeClasses = size === "sm" 
+        ? "px-2.5 py-0.5 text-xs" 
+        : "px-5 h-7 w-28 text-[13px]";
 
     return (
         <div
-            className={`border px-5 rounded-full flex items-center justify-center w-28 h-7`}
+            className={`border rounded-full flex items-center justify-center ${sizeClasses}`}
             style={{ backgroundColor: styles.bg, borderColor: styles.border }}
         >
-            <h1
-                className="text-[13px] font-interbold"
+            <span
+                className={`font-interbold whitespace-nowrap`}
                 style={{ color: styles.text }}
             >
                 {label}
-            </h1>
+            </span>
         </div>
     );
 };

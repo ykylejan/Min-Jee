@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_ORDER_BY_ID, GET_TRANSACTION_BY_ID } from "@/graphql/people";
 import apolloClientCustomer from "@/graphql/apolloClientCustomer";
+import StatusLabel from "@/components/StatusLabel";
 
 const Page = () => {
   const params = useParams();
@@ -237,9 +238,9 @@ const Page = () => {
               <span className="text-neutral-500">Order ID</span>
               <span className="font-afacad_semibold text-xs">{orderId.slice(0, 16)}...</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-neutral-500">Order Status</span>
-              <span className="capitalize">{order.orderStatus}</span>
+              <StatusLabel label={order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)} size="sm" />
             </div>
             <div className="flex justify-between">
               <span className="text-neutral-500">Order Date</span>
