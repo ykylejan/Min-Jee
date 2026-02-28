@@ -27,15 +27,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 
-import { Check, ScanQrCode, Upload, X } from "lucide-react";
+import { Check, Upload, X } from "lucide-react";
 
 import PaymentButtons from "@/components/CheckoutPage/Payment Details/PaymentButtons";
 import PaymentProcess from "@/components/CheckoutPage/Payment Details/PaymentProcess";
@@ -50,8 +43,6 @@ const Page = () => {
   const [paymentOption, setPaymentOption] = useState("GCash");
   const [receiptFile, setReceiptFile] = useState<any>(null);
   const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
-  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [paymentAmount, setPaymentAmount] = useState<number | string>("");
 
@@ -71,16 +62,6 @@ const Page = () => {
         setReceiptPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-    }
-  };
-
-  const handleConfirmPayment = () => {
-    if (receiptFile) {
-      setPaymentConfirmed(true);
-      toast.success("Payment receipt uploaded!");
-      setDialogOpen(false);
-    } else {
-      toast.error("Please upload a receipt before confirming payment.");
     }
   };
 
@@ -139,13 +120,9 @@ const Page = () => {
       // console.log();
 
       toast.success("Payment submitted successfully!");
-      // router.push("/account");
       router.push(
         `/account/order-details/${orderId}/receipt/${res.data.transaction.id}`
       );
-      setPaymentConfirmed(true);
-      setDialogOpen(false);
-      // Optionally, refresh or redirect
     } catch (error) {
       toast.error("Failed to submit payment. Please try again.");
       console.error(error);
@@ -296,168 +273,159 @@ const Page = () => {
                   </div>
 
                   {paymentOption === "GCash" && (
-                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                      <DialogTrigger className="w-full text-start">
-                        <PaymentProcess
-                          text="GCash Selected"
-                          image={icons.gcashActive.src}
-                          description={
-                            paymentConfirmed
-                              ? `Receipt: ${receiptFile?.name || "receipt.png"}`
-                              : "Click to scan the QR code"
-                          }
-                          icon={
-                            paymentConfirmed ? (
-                              <Check color="#22C55E" size={35} />
-                            ) : (
-                              <ScanQrCode color="#6B7280" size={35} />
-                            )
-                          }
-                          isGcash="GCash"
-                        />
-                      </DialogTrigger>
-                      <div className="mt-4 bg-white rounded-md py-3 sm:py-5 px-4 sm:px-8 border border-[#D2D6DA]">
-                        <h3 className="text-[#0066DF] font-bold mb-2 text-sm sm:text-base">
-                          Payment Amount <span className="text-red-500">*</span>
-                        </h3>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter payment amount"
-                          value={paymentAmount}
-                          onChange={(e) => setPaymentAmount(e.target.value)}
-                          className="w-full"
-                          required
-                        />
+                    <div className="space-y-5">
+                      {/* Step 1: Payment Amount */}
+                      <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-7 h-7 rounded-full bg-[#0066DF] text-white flex items-center justify-center text-sm font-bold">
+                            1
+                          </div>
+                          <h3 className="font-afacad_semibold text-[#0066DF]">Enter Payment Amount</h3>
+                        </div>
+                        <div className="ml-10">
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="₱ 0.00"
+                            value={paymentAmount}
+                            onChange={(e) => setPaymentAmount(e.target.value)}
+                            className="w-full max-w-xs bg-white border-blue-200 focus:border-[#0066DF] text-lg"
+                            required
+                          />
+                          <p className="text-xs text-neutral-500 mt-1.5">
+                            Order total: <span className="font-semibold text-[#0066DF]">PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}</span>
+                          </p>
+                        </div>
                       </div>
-                      <DialogContent className="sm:max-w-xl p-0 overflow-hidden border-0">
-                        <DialogHeader className="">
-                          <DialogTitle className="sr-only">
-                            GCash Payment
-                          </DialogTitle>
-                        </DialogHeader>
-                        {/* GCash header */}
-                        <div className="bg-[#0066DF] text-white text-center py-4 px-6">
-                          <div className="flex justify-between items-center">
-                            <div className="flex-1 flex justify-center">
-                              <h2 className="text-2xl font-bold">
-                                GCash Payment
-                              </h2>
+
+                      {/* Step 2: Scan QR */}
+                      <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-7 h-7 rounded-full bg-[#0066DF] text-white flex items-center justify-center text-sm font-bold">
+                            2
+                          </div>
+                          <h3 className="font-afacad_semibold text-[#0066DF]">Scan QR Code to Pay</h3>
+                        </div>
+                        <div className="ml-10 flex flex-col sm:flex-row gap-4 items-start">
+                          {/* QR Code */}
+                          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100 flex-shrink-0">
+                            <img
+                              src={images.qrCodeSample.src}
+                              alt="GCash QR Code"
+                              className="w-36 h-36 object-contain mx-auto"
+                            />
+                            <div className="mt-3 bg-[#0066DF] text-white text-center py-2 px-4 rounded-lg text-sm font-afacad_semibold">
+                              PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}
+                            </div>
+                          </div>
+                          
+                          {/* Instructions */}
+                          <div className="flex-1">
+                            <p className="text-sm text-neutral-600 mb-3">How to pay with GCash:</p>
+                            <div className="space-y-2">
+                              {[
+                                "Open GCash app on your phone",
+                                "Tap \"Scan QR\" or the camera icon",
+                                "Point camera at the QR code",
+                                "Enter amount and confirm payment",
+                                "Take a screenshot of the receipt"
+                              ].map((step, i) => (
+                                <div key={i} className="flex items-start gap-2 text-sm">
+                                  <div className="w-5 h-5 rounded-full bg-blue-100 text-[#0066DF] flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                    {i + 1}
+                                  </div>
+                                  <span className="text-neutral-600">{step}</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         </div>
+                      </div>
 
-                        {/* Payment content */}
-                        <div className="bg-white p-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Left side - QR code */}
-                            <div className="flex flex-col items-center justify-center">
-                              <div className="bg-white border-2 border-[#0066DF] rounded-md p-3 w-full max-w-xs">
-                                <div className="text-center mb-2 text-[#0066DF] font-medium">
-                                  Scan the QR code to pay
-                                </div>
-                                <div className="bg-[#E6F2FF] p-4 rounded-md flex justify-center items-center">
-                                  <img
-                                    src={images.qrCodeSample.src}
-                                    alt="QR Code"
-                                    className="w-full h-auto max-w-[200px]"
-                                  />
-                                </div>
-                                <div className="text-center mt-3 text-[#0066DF] font-semibold">
-                                  SCAN TO PAY
-                                </div>
-                                <div className="text-center mt-2 bg-[#0066DF] text-white py-2 rounded-md">
-                                  Amount: ₱ 500.00
-                                </div>
+                      {/* Step 3: Upload Receipt */}
+                      <div className={`rounded-xl p-4 border transition-all ${
+                        receiptFile 
+                          ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' 
+                          : 'bg-gradient-to-r from-blue-50 to-blue-100/50 border-blue-100'
+                      }`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                            receiptFile 
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-[#0066DF] text-white'
+                          }`}>
+                            {receiptFile ? <Check size={16} /> : '3'}
+                          </div>
+                          <h3 className={`font-afacad_semibold ${receiptFile ? 'text-green-700' : 'text-[#0066DF]'}`}>
+                            {receiptFile ? 'Receipt Uploaded!' : 'Upload Payment Receipt'}
+                          </h3>
+                        </div>
+                        
+                        <div className="ml-10">
+                          {receiptPreview ? (
+                            <div className="flex items-center gap-4 p-3 bg-white rounded-lg border border-green-200">
+                              <img
+                                src={receiptPreview}
+                                alt="Receipt"
+                                className="w-16 h-16 object-cover rounded-lg border"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="font-afacad_semibold text-sm text-neutral-800 truncate">
+                                  {receiptFile.name}
+                                </p>
+                                <p className="text-xs text-green-600 flex items-center gap-1 mt-0.5">
+                                  <Check size={12} /> Ready to submit
+                                </p>
                               </div>
-                            </div>
-
-                            {/* Right side - Instructions and upload */}
-                            <div className="flex flex-col">
-                              <div className="bg-[#E6F2FF] p-4 rounded-md mb-4">
-                                <h3 className="text-[#0066DF] font-bold mb-2">
-                                  Payment Instructions
-                                </h3>
-                                <ol className="list-decimal pl-5 text-[#0066DF]">
-                                  <li className="mb-1">Open your GCash app</li>
-                                  <li className="mb-1">Tap on "Scan QR"</li>
-                                  <li className="mb-1">
-                                    Point your camera to the QR code
-                                  </li>
-                                  <li className="mb-1">Confirm the payment</li>
-                                </ol>
-                              </div>
-
-                              <div className="mt-4">
-                                <h3 className="text-[#0066DF] font-bold mb-2">
-                                  Upload Receipt
-                                </h3>
-                                {receiptPreview ? (
-                                  <div className="border-2 border-[#0066DF] rounded-md p-2 text-center relative">
-                                    <button
-                                      onClick={handleClearReceipt}
-                                      className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-full p-1"
-                                      type="button"
-                                    >
-                                      <X size={16} />
-                                    </button>
-                                    <div className="flex flex-col items-center">
-                                      <div className="w-full pb-2 overflow-hidden">
-                                        <img
-                                          src={receiptPreview}
-                                          alt="Receipt Preview"
-                                          className="max-h-40 max-w-full object-contain"
-                                        />
-                                      </div>
-                                      <p className="text-sm text-[#0066DF] font-medium truncate max-w-full">
-                                        {receiptFile.name}
-                                      </p>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="border-2 border-dashed border-[#0066DF] rounded-md p-4 text-center">
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      className="hidden"
-                                      id="gcash-receipt"
-                                      ref={fileInputRef}
-                                      onChange={handleFileChange}
-                                    />
-                                    <label
-                                      htmlFor="gcash-receipt"
-                                      className="cursor-pointer block w-full"
-                                    >
-                                      <div className="flex flex-col items-center justify-center py-3">
-                                        <Upload size={36} color="#0066DF" />
-                                        <span className="mt-2 text-[#0066DF] font-medium">
-                                          Choose file or drag & drop
-                                        </span>
-                                        <span className="mt-1 text-sm text-[#0066DF]/70">
-                                          JPEG, PNG or PDF (max. 5MB)
-                                        </span>
-                                      </div>
-                                    </label>
-                                  </div>
-                                )}
-                              </div>
-
                               <button
-                                className={`mt-6 ${
-                                  receiptFile
-                                    ? "bg-[#0066DF] hover:bg-[#0055c8]"
-                                    : "bg-gray-400 cursor-not-allowed"
-                                } text-white font-bold py-3 px-6 rounded-md w-full transition-colors`}
-                                onClick={handleConfirmPayment}
-                                disabled={!receiptFile}
+                                onClick={handleClearReceipt}
+                                className="p-2 text-neutral-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                type="button"
                               >
-                                Confirm Payment
+                                <X size={18} />
                               </button>
                             </div>
-                          </div>
+                          ) : (
+                            <label
+                              htmlFor="gcash-receipt-inline"
+                              className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-blue-300 rounded-xl bg-white/50 hover:bg-white hover:border-[#0066DF] cursor-pointer transition-all group"
+                            >
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                id="gcash-receipt-inline"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                              />
+                              <div className="w-12 h-12 rounded-full bg-blue-100 group-hover:bg-[#0066DF] flex items-center justify-center transition-colors">
+                                <Upload size={24} className="text-[#0066DF] group-hover:text-white transition-colors" />
+                              </div>
+                              <p className="mt-3 font-afacad_semibold text-sm text-neutral-700">
+                                Click to upload receipt
+                              </p>
+                              <p className="text-xs text-neutral-400 mt-1">
+                                PNG, JPG up to 5MB
+                              </p>
+                            </label>
+                          )}
                         </div>
-                      </DialogContent>
-                    </Dialog>
+                      </div>
+
+                      {/* Status Summary */}
+                      <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg border">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${paymentAmount && receiptFile ? 'bg-green-500' : 'bg-amber-400'}`} />
+                          <span className="text-sm text-neutral-600">
+                            {paymentAmount && receiptFile 
+                              ? 'Ready to checkout' 
+                              : `Complete ${!paymentAmount && !receiptFile ? 'steps 1 & 3' : !paymentAmount ? 'step 1' : 'step 3'} to continue`
+                            }
+                          </span>
+                        </div>
+                        <img src={icons.gcashActive.src} alt="GCash" className="h-6" />
+                      </div>
+                    </div>
                   )}
 
                   {paymentOption === "COD" && (
