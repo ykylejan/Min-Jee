@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import ProductDetailsItem from "@/components/OwnerPage/Order/ProductDetailsItem";
 import Link from "next/link";
 import {
   Dialog,
@@ -113,142 +112,115 @@ const Page = () => {
 
   const computedOrderTotal =
     rentalsTotal + servicesTotal + deliveryFee + depositPrice;
+
   return (
-    <div className="flex justify-center items-center min-h-screen pt-[120px] pb-[80px] px-48 bg-[#FFFBF5]">
-      <div className="bg-white border border-[#D2D6DA] w-[750px] h-auto rounded-lg px-24 py-20">
-        <h1 className="text-[#6B7280] font-afacad_bold">Order Successful</h1>
-        <h1 className="font-poppins_extrabold text-5xl py-3">
-          Thanks for your order!
-        </h1>
-        <h1 className="text-[#6B7280] font-afacad pb-8">
-          We appreciate your order, we are currently processing it. Hang on
-          tight and we’ll send you confirmation soon!
-        </h1>
-        <hr />
+    <div className="min-h-screen bg-[#FFFBF5] pt-[100px] pb-20">
+      <div className="max-w-lg mx-auto px-4">
+        {/* Success Header */}
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 className="font-poppins_extrabold text-xl sm:text-2xl">Order Successful!</h1>
+          <p className="text-[#6B7280] font-afacad text-sm mt-1">
+            Thank you for your order
+          </p>
+        </div>
 
-        {/* Product Details */}
-        <div className="py-6">
-          <h2 className="font-afacad_semibold text-xl mb-4">
-            Products Ordered
-          </h2>
-          {allProducts.length > 0 ? (
-            allProducts.map((product) => (
-              <ProductDetailsItem key={product.id} product={product} />
-            ))
-          ) : (
-            <div className="text-neutral-400">No products found.</div>
-          )}
-        </div>
-        <hr />
-
-        {/* Order Summary */}
-        <div className="font-afacad py-8 space-y-2">
-          <h1 className="flex justify-between">
-            <span className="text-[#6B7280] font-afacad_bold">
-              Delivery Fee
-            </span>
-            <span className="font-afacad_semibold">
-              PHP{" "}
-              {order.deliveryPrice
-                ? Number(order.deliveryPrice).toFixed(2)
-                : "0.00"}
-            </span>
-          </h1>
-          <h1 className="flex justify-between">
-            <span className="text-[#6B7280] font-afacad_bold">
-              Deposit Price
-            </span>
-            <span className="font-afacad_semibold">
-              PHP{" "}
-              {order.depositPrice
-                ? Number(order.depositPrice).toFixed(2)
-                : "0.00"}
-            </span>
-          </h1>
-        </div>
-        <hr />
-        <div className="font-afacad py-8 space-y-2">
-          <h1 className="flex justify-between">
-            <span className="text-[#6B7280] font-afacad_bold text-xl">
-              TOTAL
-            </span>
-            <span className="font-afacad_semibold text-xl">
-              PHP {computedOrderTotal.toFixed(2)}
-            </span>
-          </h1>
-        </div>
-        <hr />
-        {/* Customer & Shipping Details */}
-        <div className="py-8">
-          <div className="flex space-x-20">
-            <div className="grid grid-cols-1 gap-4 w-[300px]">
-              <h1 className="font-afacad_semibold">Customer Details</h1>
-              <div className="font-afacad text-[#6B7280]">
-                <h1>
-                  {customer
-                    ? `${customer.firstName} ${customer.lastName}`
-                    : "N/A"}
-                </h1>
-                <h1>{customer?.email}</h1>
-                <h1>{customer?.contactNumber}</h1>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 w-[300px]">
-              <h1 className="font-afacad_semibold">Shipping Address</h1>
-              <div className="font-afacad text-[#6B7280]">
-                <h1>{order.location}</h1>
-              </div>
+        {/* Receipt Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+          {/* Products Section */}
+          <div className="p-4 border-b border-neutral-100">
+            <h2 className="font-afacad_semibold text-base mb-3">Products Ordered</h2>
+            <div className="space-y-3">
+              {allProducts.length > 0 ? (
+                allProducts.map((product) => (
+                  <div key={product.id} className="flex gap-3">
+                    <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100">
+                      {product.img ? (
+                        <img
+                          src={product.img}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-neutral-300 text-xs">
+                          No img
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-afacad_semibold text-sm leading-tight line-clamp-2">
+                        {product.name}
+                      </p>
+                      <p className="text-xs text-neutral-500 capitalize">{product.type}</p>
+                      <p className="text-xs text-neutral-500">x{product.quantity}</p>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-afacad_semibold text-sm text-primary">
+                        PHP {Number(product.price || 0).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-neutral-400 text-sm">No products found.</p>
+              )}
             </div>
           </div>
-        </div>
-        <hr />
 
-        {/* Order Details */}
-        <div className="py-8">
-          <div className="flex space-x-20">
-            <div className="grid grid-cols-1 gap-4 w-[300px]">
-              <h1 className="font-afacad_semibold">Order Details</h1>
-              <div className="font-afacad text-[#6B7280]">
-                <h1>
-                  <span className="font-semibold">Order Status: </span>
-                  {order.orderStatus}
-                </h1>
-                <h1>
-                  <span className="font-semibold">Order Date: </span>
-                  {order.orderDate ? formatDate(order.orderDate) : "N/A"}
-                </h1>
-              </div>
+          {/* Pricing Breakdown */}
+          <div className="p-4 border-b border-neutral-100 space-y-2 font-afacad text-sm">
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Subtotal</span>
+              <span>PHP {(rentalsTotal + servicesTotal).toFixed(2)}</span>
             </div>
-            <div className="grid grid-cols-1 gap-4 w-[300px]">
-              <h1 className="font-afacad_semibold">Payment Details</h1>
-              <div className="font-afacad text-[#6B7280]">
-                <h1>
-                  <span className="font-semibold">Payment: </span>
-                  PHP{" "}
-                  {transaction?.payment
-                    ? Number(transaction.payment).toFixed(2)
-                    : "0.00"}
-                </h1>
-                <h1>
-                  <span className="font-semibold">Payment Status: </span>
-                  {transaction?.paymentStatus
-                    ? transaction.paymentStatus.charAt(0).toUpperCase() +
-                      transaction.paymentStatus.slice(1)
-                    : "N/A"}
-                </h1>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Delivery Fee</span>
+              <span>PHP {deliveryFee.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Deposit</span>
+              <span>PHP {depositPrice.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {/* Order Total */}
+          <div className="p-4 border-b border-neutral-100 flex justify-between items-center">
+            <span className="font-afacad_semibold">Order Total</span>
+            <span className="font-afacad_bold text-lg text-primary">
+              PHP {computedOrderTotal.toFixed(2)}
+            </span>
+          </div>
+
+          {/* Payment Method */}
+          <div className="p-4 border-b border-neutral-100">
+            <div className="flex justify-between items-start">
+              <span className="font-afacad_semibold text-sm">Payment</span>
+              <div className="text-right">
+                <p className="font-afacad text-sm">
+                  PHP {transaction?.payment ? Number(transaction.payment).toFixed(2) : "0.00"}
+                </p>
+                <p className="text-xs text-neutral-500 capitalize">
+                  {transaction?.paymentStatus || "Pending"}
+                </p>
                 {transaction?.img && (
                   <Dialog>
-                    <DialogTrigger>
-                      <h1 className="underline">Receipt.png</h1>
+                    <DialogTrigger asChild>
+                      <button className="text-xs text-primary underline mt-1">
+                        View Receipt
+                      </button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="max-w-[90vw] sm:max-w-md">
                       <DialogHeader>
                         <DialogTitle>Payment Receipt</DialogTitle>
-                        <DialogDescription className="max-h-[70vh] overflow-y-auto">
+                        <DialogDescription className="max-h-[60vh] overflow-y-auto mt-2">
                           <img
                             src={transaction.img}
                             alt="Receipt"
-                            className="h-auto w-auto object-cover"
+                            className="w-full h-auto object-contain rounded"
                           />
                         </DialogDescription>
                       </DialogHeader>
@@ -258,14 +230,42 @@ const Page = () => {
               </div>
             </div>
           </div>
-        </div>
-        <hr />
 
-        <div className="pt-16">
+          {/* Order Info Section */}
+          <div className="p-4 space-y-3 text-sm font-afacad">
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Order ID</span>
+              <span className="font-afacad_semibold text-xs">{orderId.slice(0, 16)}...</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Order Status</span>
+              <span className="capitalize">{order.orderStatus}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Order Date</span>
+              <span>{order.orderDate ? formatDate(order.orderDate) : "N/A"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Customer</span>
+              <span>{customer ? `${customer.firstName} ${customer.lastName}` : "N/A"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Contact</span>
+              <span>{customer?.contactNumber || "N/A"}</span>
+            </div>
+            <div className="flex justify-between items-start">
+              <span className="text-neutral-500">Delivery Address</span>
+              <span className="text-right max-w-[60%]">{order.location || "N/A"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="mt-6">
           <Link href="/shop">
-            <h1 className="font-afacad text-[#6B7280] underline text-end hover:font-afacad_semibold cursor-pointer">
+            <button className="w-full py-3 bg-primary text-white font-afacad_semibold rounded-lg hover:bg-primary/90 transition-colors">
               Continue Shopping
-            </h1>
+            </button>
           </Link>
         </div>
       </div>
