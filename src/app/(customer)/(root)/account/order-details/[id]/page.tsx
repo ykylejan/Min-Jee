@@ -624,6 +624,18 @@ const Page = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Show "Proceed to Payment" button when order is verified */}
+                  {orderStatus === "verified" && (
+                    <div className="pt-8 sm:pt-10">
+                      <Button
+                        onClick={() => setShowPaymentForm(true)}
+                        className="w-full bg-[#0F172A] hover:bg-[#1e293b] rounded-full text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+                      >
+                        Proceed to Payment
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
