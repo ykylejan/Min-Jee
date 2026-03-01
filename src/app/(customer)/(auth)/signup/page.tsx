@@ -124,7 +124,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[80px]">
+    <div className="min-h-screen bg-[#FFFBF5] lg:pt-20 md:pt-16 pt-12">
       <div className="flex flex-col justify-center items-center pt-[80px]">
         <h1 className="font-intersemibold text-2xl">Sign Up</h1>
         <h1 className="font-interlight text-sm text-[#3F454E] leading-tight max-w-[300px] text-center mt-3">
@@ -230,11 +230,61 @@ const SignUpPage = () => {
                   Privacy Policy
                 </span>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Privacy Policy</DialogTitle>
-                  <DialogDescription>
-                    {/* Add your actual privacy policy content here */}
+                  <DialogDescription asChild>
+                    <div className="text-left text-sm text-gray-600 space-y-4 mt-4">
+                      <p className="text-xs text-gray-400">Last Updated: March 1, 2026</p>
+                      
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">1. Information We Collect</h3>
+                        <p>When you create an account or place an order with Min-Jee, we collect:</p>
+                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                          <li>Personal information (name, email, phone number, address)</li>
+                          <li>Event details (date, time, location, type of event)</li>
+                          <li>Payment information (processed securely through our payment providers)</li>
+                          <li>Rental preferences and order history</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">2. How We Use Your Information</h3>
+                        <p>We use your information to:</p>
+                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                          <li>Process and fulfill your rental orders and event bookings</li>
+                          <li>Communicate about your orders, deliveries, and pickups</li>
+                          <li>Send booking confirmations and reminders</li>
+                          <li>Improve our services and customer experience</li>
+                          <li>Send promotional offers (with your consent)</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">3. Information Sharing</h3>
+                        <p>We do not sell your personal information. We may share your information with:</p>
+                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                          <li>Delivery partners to fulfill your orders</li>
+                          <li>Payment processors to complete transactions</li>
+                          <li>Service providers who assist our operations</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">4. Data Security</h3>
+                        <p>We implement appropriate security measures to protect your personal information from unauthorized access, alteration, or disclosure.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">5. Your Rights</h3>
+                        <p>You have the right to access, update, or delete your personal information. Contact us to exercise these rights.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">6. Contact Us</h3>
+                        <p>For privacy-related inquiries, please contact our support team through the app or website.</p>
+                      </section>
+                    </div>
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>
@@ -246,11 +296,70 @@ const SignUpPage = () => {
                   Terms of Use
                 </span>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Terms of Use</DialogTitle>
-                  <DialogDescription>
-                    {/* Add your actual terms of use content here */}
+                  <DialogDescription asChild>
+                    <div className="text-left text-sm text-gray-600 space-y-4 mt-4">
+                      <p className="text-xs text-gray-400">Last Updated: March 1, 2026</p>
+                      
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">1. Acceptance of Terms</h3>
+                        <p>By accessing or using Min-Jee's services, you agree to be bound by these Terms of Use. If you do not agree, please do not use our services.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">2. Services Overview</h3>
+                        <p>Min-Jee provides party rental equipment and event booking services. Our offerings include but are not limited to tables, chairs, linens, decorations, and event coordination services.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">3. Rental Terms</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li><strong>Rental Period:</strong> Standard rental period is specified at checkout. Extensions may incur additional charges.</li>
+                          <li><strong>Condition of Items:</strong> Items must be returned in the same condition as received. You are responsible for any damage, loss, or excessive cleaning required.</li>
+                          <li><strong>Delivery & Pickup:</strong> Delivery and pickup times are estimates. We will communicate any changes promptly.</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">4. Booking & Payment</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>A deposit may be required to confirm your booking</li>
+                          <li>Full payment is due as specified in your order confirmation</li>
+                          <li>Prices are subject to change but confirmed orders will honor the quoted price</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">5. Cancellation Policy</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li><strong>More than 7 days before event:</strong> Full refund minus processing fees</li>
+                          <li><strong>3-7 days before event:</strong> 50% refund</li>
+                          <li><strong>Less than 3 days before event:</strong> No refund</li>
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">6. Liability</h3>
+                        <p>You agree to use rented items responsibly. Min-Jee is not liable for injuries or damages resulting from misuse of rental items. Users are responsible for ensuring items are used safely and appropriately.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">7. Account Responsibility</h3>
+                        <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">8. Modifications</h3>
+                        <p>Min-Jee reserves the right to modify these terms at any time. Continued use of our services constitutes acceptance of updated terms.</p>
+                      </section>
+
+                      <section>
+                        <h3 className="font-semibold text-gray-800 mb-2">9. Contact</h3>
+                        <p>For questions about these terms, please contact our customer support team.</p>
+                      </section>
+                    </div>
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>
