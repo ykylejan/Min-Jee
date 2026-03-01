@@ -117,13 +117,13 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
 
   if (variant === "compact") {
     return (
-      <div className={`max-w-lg mx-auto ${className}`}>
+      <div className={`max-w-xl mx-auto ${className}`}>
         {/* Success Header */}
         {showHeader && (
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
               <svg
-                className="w-8 h-8 text-green-600"
+                className="w-10 h-10 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -136,10 +136,10 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
                 />
               </svg>
             </div>
-            <h1 className="font-poppins_extrabold text-xl sm:text-2xl">
+            <h1 className="font-poppins_extrabold text-2xl sm:text-3xl">
               {headerTitle}
             </h1>
-            <p className="text-[#6B7280] font-afacad text-sm mt-1">
+            <p className="text-[#6B7280] font-afacad text-base mt-2">
               {headerSubtitle}
             </p>
           </div>
@@ -148,11 +148,11 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
         {/* Receipt Card */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
           {/* Products Section */}
-          <div className="p-4 border-b border-neutral-100">
-            <h2 className="font-afacad_semibold text-base mb-3">
+          <div className="p-6 border-b border-neutral-100">
+            <h2 className="font-afacad_semibold text-lg mb-4">
               Products Ordered
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {products.length > 0 ? (
                 products.map((product) => (
                   <OrderReceiptItem
@@ -162,13 +162,13 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
                   />
                 ))
               ) : (
-                <p className="text-neutral-400 text-sm">No products found.</p>
+                <p className="text-neutral-400">No products found.</p>
               )}
             </div>
           </div>
 
           {/* Pricing Breakdown */}
-          <div className="p-4 border-b border-neutral-100 space-y-2 font-afacad text-sm">
+          <div className="p-6 border-b border-neutral-100 space-y-3 font-afacad text-base">
             <div className="flex justify-between">
               <span className="text-neutral-500">Subtotal</span>
               <span>PHP {subtotal.toFixed(2)}</span>
@@ -184,25 +184,25 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
           </div>
 
           {/* Order Total */}
-          <div className="p-4 border-b border-neutral-100 flex justify-between items-center">
-            <span className="font-afacad_semibold">Order Total</span>
-            <span className="font-afacad_bold text-lg text-primary">
+          <div className="p-6 border-b border-neutral-100 flex justify-between items-center">
+            <span className="font-afacad_semibold text-lg">Order Total</span>
+            <span className="font-afacad_bold text-xl text-primary">
               PHP {total.toFixed(2)}
             </span>
           </div>
 
           {/* Payment Method */}
-          <div className="p-4 border-b border-neutral-100">
+          <div className="p-6 border-b border-neutral-100">
             <div className="flex justify-between items-start">
-              <span className="font-afacad_semibold text-sm">Payment</span>
+              <span className="font-afacad_semibold">Payment</span>
               <div className="text-right">
-                <p className="font-afacad text-sm">
+                <p className="font-afacad">
                   PHP{" "}
                   {transaction?.payment
                     ? Number(transaction.payment).toFixed(2)
                     : "0.00"}
                 </p>
-                <p className="text-xs text-neutral-500 capitalize">
+                <p className="text-sm text-neutral-500 capitalize">
                   {transaction?.paymentStatus || "Pending"}
                 </p>
                 {transaction?.img && (
@@ -231,10 +231,10 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
           </div>
 
           {/* Order Info Section */}
-          <div className="p-4 space-y-3 text-sm font-afacad">
+          <div className="p-6 space-y-4 font-afacad">
             <div className="flex justify-between">
               <span className="text-neutral-500">Order ID</span>
-              <span className="font-afacad_semibold text-xs">
+              <span className="font-afacad_semibold text-sm">
                 {orderId.slice(0, 16)}...
               </span>
             </div>
@@ -274,17 +274,17 @@ const OrderReceipt: React.FC<OrderReceiptProps> = ({
 
         {/* Action Button */}
         {actionButton && (
-          <div className="mt-6">
+          <div className="mt-8">
             {actionButton.href ? (
               <Link href={actionButton.href}>
-                <button className="w-full py-3 bg-primary text-white font-afacad_semibold rounded-lg hover:bg-primary/90 transition-colors">
+                <button className="w-full py-4 bg-primary text-white font-afacad_semibold text-lg rounded-lg hover:bg-primary/90 transition-colors">
                   {actionButton.label}
                 </button>
               </Link>
             ) : (
               <button
                 onClick={actionButton.onClick}
-                className="w-full py-3 bg-primary text-white font-afacad_semibold rounded-lg hover:bg-primary/90 transition-colors"
+                className="w-full py-4 bg-primary text-white font-afacad_semibold text-lg rounded-lg hover:bg-primary/90 transition-colors"
               >
                 {actionButton.label}
               </button>

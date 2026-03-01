@@ -95,8 +95,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="space-y-3">
+    <div className="flex justify-center py-8">
+      <div className="space-y-3 w-full max-w-2xl px-6">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors py-2"

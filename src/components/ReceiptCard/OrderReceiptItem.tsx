@@ -22,8 +22,8 @@ const OrderReceiptItem: React.FC<OrderReceiptItemProps> = ({
 }) => {
   if (variant === "compact") {
     return (
-      <div className="flex gap-3">
-        <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100">
+      <div className="flex gap-4">
+        <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100">
           {img ? (
             <img
               src={img}
@@ -31,22 +31,22 @@ const OrderReceiptItem: React.FC<OrderReceiptItemProps> = ({
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-neutral-300 text-xs">
+            <div className="w-full h-full flex items-center justify-center text-neutral-300 text-sm">
               No img
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-afacad_semibold text-sm leading-tight line-clamp-2">
+          <p className="font-afacad_semibold text-base leading-tight line-clamp-2">
             {name}
           </p>
-          <p className="text-xs text-neutral-500 capitalize">
+          <p className="text-sm text-neutral-500 capitalize">
             {type || category}
           </p>
-          <p className="text-xs text-neutral-500">x{quantity || 1}</p>
+          <p className="text-sm text-neutral-500">x{quantity || 1}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="font-afacad_semibold text-sm text-primary">
+          <p className="font-afacad_semibold text-base text-primary">
             PHP {Number(price || 0).toFixed(2)}
           </p>
         </div>
