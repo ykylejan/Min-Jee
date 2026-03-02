@@ -1,15 +1,22 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
+import { useRouter } from "next/navigation";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
+import { Loader2 } from "lucide-react";
 
 const customerSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -21,8 +28,9 @@ const customerSchema = z.object({
 
 type CustomerFormValues = z.infer<typeof customerSchema>;
 
-const page = () => {
+const AddCustomerPage = () => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const {
     register,
@@ -40,6 +48,7 @@ const page = () => {
   });
 
   const onSubmit = async (data: CustomerFormValues) => {
+    setIsSubmitting(true);
     try {
       const payload = {
         first_name: data.firstName,
@@ -50,143 +59,106 @@ const page = () => {
         isActive: true,
         bookings: 0,
       };
-      
-      const response = await api.post("o/customer", payload, {
+
+      await api.post("o/customer", payload, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      toast("Customer Added Successfully", {
+      toast.success("Customer Added Successfully", {
         description: "New customer is added to the repository",
-        className: "bg-green-500/80 border border-none text-white",
       });
       router.push("/customers");
     } catch (error) {
       toast.error("Failed to add customer. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center mb-12">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <div className="flex justify-between items-center w-full">
-            <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
-              Add Customer
-            </h1>
+    <FormPageLayout title="Add Customer" status="Active">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <FormSection title="Customer Information">
+          <div className="space-y-4">
+            <FormRow>
+              <FormField label="First Name" error={errors.firstName?.message}>
+                <Input
+                  placeholder="John"
+                  className="bg-gray-50 h-11 px-4"
+                  {...register("firstName")}
+                />
+              </FormField>
 
-            <div className="flex items-center gap-x-3">
-              <div className="rounded-full bg-[#A6E7D8] border border-[#008767] w-2 h-2" />
-              <h1 className="font-afacad pr-5">Active</h1>
-            </div>
-          </div>
-        </div>
+              <FormField label="Last Name" error={errors.lastName?.message}>
+                <Input
+                  placeholder="Doe"
+                  className="bg-gray-50 h-11 px-4"
+                  {...register("lastName")}
+                />
+              </FormField>
+            </FormRow>
 
-        <div>
-          <h1 className="font-afacad text-neutral-500">Customer Information</h1>
-          <hr />
-        </div>
+            <FormRow>
+              <FormField label="Email" error={errors.email?.message}>
+                <Input
+                  placeholder="johndoe@gmail.com"
+                  type="email"
+                  className="bg-gray-50 h-11 px-4"
+                  {...register("email")}
+                />
+              </FormField>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="pt-6 pb-10 space-y-6"
-        >
-          <div className="flex justify-between">
-            <div>
-              <h1 className="text-sm text-neutral-500">First Name</h1>
-              <Input
-                placeholder="John"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("firstName")}
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.firstName.message}
-                </p>
-              )}
-            </div>
+              <FormField
+                label="Contact Number"
+                error={errors.contactNumber?.message}
+              >
+                <Input
+                  placeholder="09123456789"
+                  className="bg-gray-50 h-11 px-4"
+                  {...register("contactNumber")}
+                />
+              </FormField>
+            </FormRow>
 
-            <div>
-              <h1 className="text-sm text-neutral-500">Last Name</h1>
-              <Input
-                placeholder="Doe"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("lastName")}
-              />
-              {errors.lastName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.lastName.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-between">
-            <div>
-              <h1 className="text-sm text-neutral-500">Email</h1>
-              <Input
-                placeholder="johndoe@gmail.com"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <h1 className="text-sm text-neutral-500">Contact Number</h1>
-              <Input
-                placeholder="09123456789"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
-                {...register("contactNumber")}
-              />
-              {errors.contactNumber && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.contactNumber.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-between">
-            <div>
-              <h1 className="text-sm text-neutral-500">Address</h1>
+            <FormField label="Address" error={errors.address?.message}>
               <Input
                 placeholder="33 Countryside, Bangkal, D.C"
-                className="bg-neutral-100/50 min-w-80 h-12 px-5"
+                className="bg-gray-50 h-11 px-4"
                 {...register("address")}
               />
-              {errors.address && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.address.message}
-                </p>
-              )}
-            </div>
+            </FormField>
           </div>
+        </FormSection>
 
-          <div className="pt-16 flex justify-end">
-            <Button
-              onClick={handleSubmit(onSubmit)}
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-            >
-              Add Customer
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <FormActions>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            className="w-full sm:w-auto"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-500 text-white w-full sm:w-auto"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              "Add Customer"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 
-export default page;
+export default AddCustomerPage;

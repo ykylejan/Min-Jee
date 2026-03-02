@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import {
   Select,
@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import StatusLabel from "@/components/StatusLabel";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 import { useForm, Controller } from "react-hook-form";
 import { useQuery } from "@apollo/client";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
@@ -146,206 +152,158 @@ const EditBookingPage = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        Error loading event booking.
-      </div>
-    );
-  }
+  const eventStatus = data?.getEventsById?.eventStatus || "Pending";
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex justify-center">
-        <div className="bg-white w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-          <div className="flex gap-x-3 items-center">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-            >
-              <MoveLeft width={20} height={20} className="text-neutral-600" />
-            </button>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
-                Edit Event Booking
-              </h1>
-              <StatusLabel
-                label={data?.getEventsById?.eventStatus || "Pending"}
+    <FormPageLayout
+      title="Edit Event Booking"
+      status={eventStatus}
+      isLoading={loading}
+      loadingText="Loading booking details..."
+      error={error ? "Error loading event booking." : null}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Customer Information */}
+        <FormSection title="Customer Information">
+          <div className="space-y-4">
+            <FormRow>
+              <FormField label="Customer Name">
+                <Controller
+                  name="customerName"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      className="bg-gray-50 h-11 px-4"
+                      readOnly
+                    />
+                  )}
+                />
+              </FormField>
+              <FormField label="Contact Number">
+                <Controller
+                  name="contactNumber"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      className="bg-gray-50 h-11 px-4"
+                    />
+                  )}
+                />
+              </FormField>
+            </FormRow>
+            <FormField label="Event Address">
+              <Controller
+                name="location"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    className="bg-gray-50 h-11 px-4 w-full"
+                  />
+                )}
               />
-            </div>
+            </FormField>
           </div>
+        </FormSection>
 
-          {/* Customer Information */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">
-                Customer Information
-              </h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Customer Name</h1>
-                  <Controller
-                    name="customerName"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                        readOnly
-                      />
-                    )}
-                  />
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Contact Number</h1>
-                  <Controller
-                    name="contactNumber"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-sm text-neutral-500">Event Address</h1>
+        {/* Event Schedule */}
+        <FormSection title="Event Details">
+          <div className="space-y-4">
+            <FormRow>
+              <FormField label="Event Date">
                 <Controller
-                  name="location"
+                  name="eventDate"
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      className="bg-neutral-100/50 w-full h-12 px-5"
+                      className="bg-gray-50 h-11 px-4"
+                      type="date"
                     />
                   )}
                 />
-              </div>
-            </div>
-          </div>
-
-          {/* Booking Schedule */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Event Schedule</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Event Date</h1>
-                  <Controller
-                    name="eventDate"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                        type="date"
-                      />
-                    )}
-                  />
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Event Start Time</h1>
-                  <Controller
-                    name="eventStart"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                        type="time"
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Event End Time</h1>
-                  <Controller
-                    name="eventEnd"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                        type="time"
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Customizations */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Customizations</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">Customizations</h1>
+              </FormField>
+              <FormField label="Event Start Time">
                 <Controller
-                  name="customizations"
-                  control={control}
-                  render={({ field }) => (
-                    <Textarea
-                      {...field}
-                      className="bg-neutral-100/50 w-full h-20 px-5"
-                    />
-                  )}
-                />
-              </div>
-              <div>
-                <h1 className="text-sm text-neutral-500">Customization Price</h1>
-                <Controller
-                  name="customizationsPrice"
+                  name="eventStart"
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      className="bg-neutral-100/50 w-full h-12 px-5"
-                      type="number"
-                      min="0"
+                      className="bg-gray-50 h-11 px-4"
+                      type="time"
                     />
                   )}
                 />
-              </div>
-            </div>
+              </FormField>
+            </FormRow>
+            <FormRow>
+              <FormField label="Event End Time">
+                <Controller
+                  name="eventEnd"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      className="bg-gray-50 h-11 px-4"
+                      type="time"
+                    />
+                  )}
+                />
+              </FormField>
+              <div></div>
+            </FormRow>
           </div>
+        </FormSection>
 
-          {/* Obtainment Method */}
-          {/* <div>
-            <h1 className="text-sm text-neutral-500">Venue</h1>
+        {/* Customizations */}
+        <FormSection title="Additional Details">
+          <div className="space-y-4">
+            <FormField label="Customizations">
+              <Controller
+                name="customizations"
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    className="bg-gray-50 min-h-[80px] px-4 py-3"
+                  />
+                )}
+              />
+            </FormField>
+            <FormField label="Customization Price">
+              <Controller
+                name="customizationsPrice"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    className="bg-gray-50 h-11 px-4"
+                    type="number"
+                    min="0"
+                  />
+                )}
+              />
+            </FormField>
+          </div>
+        </FormSection>
+
+        {/* Event Status */}
+        <FormSection title="Event Status">
+          <FormField label="Select Status for this event">
             <Controller
-              name="obtainmentMethod"
+              name="eventStatus"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
-                    <SelectValue placeholder="Select Venue" />
+                  <SelectTrigger className="bg-gray-50 h-11 px-4 max-w-xs">
+                    <SelectValue placeholder="Select event status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
-                      {obtainmentOptions.map((option) => (
+                    <SelectGroup className="font-afacad">
+                      {eventStatusOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -355,55 +313,35 @@ const EditBookingPage = () => {
                 </Select>
               )}
             />
-          </div> */}
+          </FormField>
+        </FormSection>
 
-          {/* Event Status */}
-          <div className="mt-6">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Event Status</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">
-                  Select Status for this event
-                </h1>
-                <Controller
-                  name="eventStatus"
-                  control={control}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
-                        <SelectValue placeholder="Select event status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup className="font-afacad">
-                          {eventStatusOptions.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-16 pb-10 flex justify-end">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              Finalize Booking
-            </Button>
-          </div>
-        </div>
-      </div>
-    </form>
+        <FormActions>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            className="px-6"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white font-afacad px-6"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Finalize Booking"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

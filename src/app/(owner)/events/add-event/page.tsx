@@ -1,7 +1,7 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 
 // Define validation schema for event package
 const eventPackageSchema = z.object({
@@ -21,7 +28,7 @@ const eventPackageSchema = z.object({
       price: z.number().min(0, "Price must be at least 0"),
       description: z.string().optional(),
     })
-  ).length(1, "Only one package is allowed"), // Changed to length(1)
+  ).length(1, "Only one package is allowed"),
 });
 
 type EventPackageFormValues = z.infer<typeof eventPackageSchema>;
@@ -84,117 +91,85 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Add Event Package</h1>
-        </div>
+    <FormPageLayout title="Add Event Package">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Event Package Name */}
+        <FormSection title="Event Package Information">
+          <FormField label="Event Package Name" error={errors.name?.message}>
+            <Input
+              placeholder="Enter the event package name"
+              className="bg-gray-50 w-full h-11 px-4"
+              {...register("name")}
+            />
+          </FormField>
+        </FormSection>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Event Package Name */}
-          <div className="mt-12">
-            <h1 className="font-afacad text-neutral-500">
-              Event Package Information
-            </h1>
-            <hr />
-            <div className="pt-6 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">Event Package Name</h1>
-                <Input
-                  placeholder="Enter the event package name"
-                  className="bg-neutral-100/50 w-full h-12 px-5"
-                  {...register("name")}
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Pax Data (Single Package) */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Package Details</h1>
-            <hr />
-            <div className="pt-6 pb-4 space-y-6">
-              {fields.map((field, index) => (
-                <div key={field.id} className="space-y-4 border-b pb-4">
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Pax Name</h1>
+        {/* Pax Data (Single Package) */}
+        <FormSection title="Package Details">
+          <div className="space-y-6">
+            {fields.map((field, index) => (
+              <div key={field.id} className="space-y-4 border-b pb-4">
+                <FormRow>
+                  <FormField label="Pax Name" error={errors.pax_data?.[index]?.name?.message}>
                     <Input
                       placeholder="Enter package name"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
+                      className="bg-gray-50 w-full h-11 px-4"
                       {...register(`pax_data.${index}.name`)}
                     />
-                    {errors.pax_data?.[index]?.name && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.pax_data[index].name?.message}
-                      </p>
-                    )}
-                  </div>
+                  </FormField>
 
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Price</h1>
+                  <FormField label="Price" error={errors.pax_data?.[index]?.price?.message}>
                     <Input
                       placeholder="Set the price"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
+                      className="bg-gray-50 w-full h-11 px-4"
                       type="number"
                       step="0.01"
                       {...register(`pax_data.${index}.price`, {
                         valueAsNumber: true,
                       })}
                     />
-                    {errors.pax_data?.[index]?.price && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.pax_data[index].price?.message}
-                      </p>
-                    )}
-                  </div>
+                  </FormField>
+                </FormRow>
 
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Description</h1>
-                    <Textarea
-                      placeholder="Write the package description here.."
-                      className="bg-neutral-100/50 w-full h-20 px-5 py-3"
-                      {...register(`pax_data.${index}.description`)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+                <FormField label="Description">
+                  <Textarea
+                    placeholder="Write the package description here.."
+                    className="bg-gray-50 w-full h-20 px-4 py-3"
+                    {...register(`pax_data.${index}.description`)}
+                  />
+                </FormField>
+              </div>
+            ))}
           </div>
+        </FormSection>
 
-          {/* Image Uploader */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Event Image</h1>
-            <hr />
-            <ImageUploader
-              onImageSelect={(file) => setSelectedImage(file)}
-              supportedFormats={["JPEG", "JPG", "PNG"]}
-            />
-          </div>
+        {/* Image Uploader */}
+        <FormSection title="Event Image">
+          <ImageUploader
+            onImageSelect={(file) => setSelectedImage(file)}
+            supportedFormats={["JPEG", "JPG", "PNG"]}
+          />
+        </FormSection>
 
-          {/* Submit Button */}
-          <div className="pt-16 pb-10 flex justify-end">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Add Event Package"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+        {/* Submit Button */}
+        <FormActions>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              "Add Event Package"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

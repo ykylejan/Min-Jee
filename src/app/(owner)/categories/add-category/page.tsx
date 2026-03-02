@@ -1,15 +1,23 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +41,6 @@ const Page = () => {
     register,
     handleSubmit,
     control,
-    watch,
     formState: { errors },
   } = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -42,8 +49,6 @@ const Page = () => {
       type: "",
     },
   });
-
-  const selectedType = watch("type");
 
   const onSubmit = async (data: CategoryFormValues) => {
     setIsSubmitting(true);
@@ -81,88 +86,59 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
+    <FormPageLayout title="Add Category">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormSection title="Category Information">
+          <FormRow>
+            <FormField label="Name" error={errors.name?.message}>
+              <Input
+                placeholder="Enter the category name"
+                className="bg-gray-50 h-11 px-4"
+                {...register("name")}
+              />
+            </FormField>
+
+            <FormField label="Type" error={errors.type?.message}>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="bg-gray-50 h-11 px-4">
+                      <SelectValue placeholder="Select the type" />
+                    </SelectTrigger>
+                    <SelectContent className="font-afacad">
+                      {categoryTypes.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FormField>
+          </FormRow>
+        </FormSection>
+
+        <FormActions>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+            disabled={isSubmitting}
           >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Add Category</h1>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Category Information</h1>
-            <hr />
-          </div>
-
-          <div className="pt-6 pb-10 space-y-6">
-            <div className="flex justify-between w-full">
-              <div>
-                <h1 className="text-sm text-neutral-500">Name</h1>
-                <Input
-                  placeholder="Enter the category name"
-                  className="bg-neutral-100/50 w-80 h-12 px-5"
-                  {...register("name")}
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <h1 className="text-sm text-neutral-500">Type</h1>
-                <Controller
-                  name="type"
-                  control={control}
-                  render={({ field }) => (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Input
-                          placeholder="Select the type"
-                          value={selectedType}
-                          className="bg-neutral-100/50 w-80 h-12 px-5 cursor-pointer"
-                          readOnly
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="font-afacad w-80">
-                        {categoryTypes.map((type) => (
-                          <DropdownMenuItem
-                            key={type}
-                            onClick={() => field.onChange(type)}
-                          >
-                            {type}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                />
-                {errors.type && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.type.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-16 pb-10 flex justify-end">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Adding..." : "Add Category"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              "Add Category"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

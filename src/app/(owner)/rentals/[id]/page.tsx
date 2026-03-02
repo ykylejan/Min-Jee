@@ -1,16 +1,18 @@
 "use client";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ImageUploader from "@/components/ImageUploader";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
@@ -21,8 +23,13 @@ import { useQuery } from "@apollo/client";
 import { GET_RENTAL_BY_ID, GET_ALL_CATEGORIES } from "@/graphql/products";
 import { ApolloError } from "@apollo/client";
 import apolloClient from "@/graphql/apolloClient";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { UUID } from "crypto";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 
 const rentalSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
@@ -41,6 +48,8 @@ const EditRentalPage = () => {
   const rentalId = params.id as string;
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   const [categories, setCategories] = useState<
     { id: string; name: string; type: string }[]
@@ -49,6 +58,7 @@ const EditRentalPage = () => {
   const { data, loading, error } = useQuery(GET_RENTAL_BY_ID, {
     variables: { id: rentalId },
     client: apolloClient,
+    fetchPolicy: "network-only",
   });
 
   const { loading: categoriesLoading, data: categoriesData } = useQuery(
@@ -99,7 +109,7 @@ const EditRentalPage = () => {
     }
   }, [data, reset]);
 
-  const onSubmit = async (data: RentalFormValues) => {
+  const onSubmit = async (formData: RentalFormValues) => {
     setIsSubmitting(true);
     try {
       const formPayload = new FormData();
@@ -110,16 +120,16 @@ const EditRentalPage = () => {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
-      
+
       await api.patch(
         `/o/rental/${rentalId}`,
         {
-          name: data.name,
-          description: data.description || "",
-          current_quantity: data.currentQuantity,
-          total_quantity: data.totalQuantity,
-          price: data.price,
-          category_id: data.categoryId,
+          name: formData.name,
+          description: formData.description || "",
+          current_quantity: formData.currentQuantity,
+          total_quantity: formData.totalQuantity,
+          price: formData.price,
+          category_id: formData.categoryId,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -143,13 +153,10 @@ const EditRentalPage = () => {
     }
   };
 
-    const onDelete = async () => {
-    setIsSubmitting(true);
+  const onDelete = async () => {
+    setIsDeleting(true);
     try {
-      await api.delete(
-        `/o/rental/${rentalId}`
-      );
-
+      await api.delete(`/o/rental/${rentalId}`);
       toast.success("Rental Deleted Successfully");
       router.push("/rentals");
     } catch (error: any) {
@@ -157,272 +164,203 @@ const EditRentalPage = () => {
 
       if (error instanceof ApolloError) {
         errorMessage = error.message;
-      } else if (error.response?.data?.detail?.[0]?.msg === "Field required") {
-        errorMessage = "Please fill in all the required fields.";
       }
 
       toast.error(errorMessage);
     } finally {
-      setIsSubmitting(false);
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
     }
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading rental data...
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex justify-center items-center h-screen text-red-500">
-        Error loading rental: {error.message}
-      </div>
-    );
-
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center mb-12">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Edit Rental</h1>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <h1 className="font-afacad text-neutral-500">Rental Information</h1>
-            <hr />
-          </div>
-
-          <div className="pt-6 pb-10 space-y-6">
-            <div className="flex justify-between w-full">
-              <div>
-                <h1 className="text-sm text-neutral-500">Name</h1>
+    <FormPageLayout
+      title="Edit Rental"
+      status="Active"
+      isLoading={loading}
+      loadingText="Loading rental data..."
+      error={error?.message}
+      showDeleteButton
+      onDelete={onDelete}
+      isDeleting={isDeleting}
+      deleteDialogOpen={deleteDialogOpen}
+      setDeleteDialogOpen={setDeleteDialogOpen}
+      deleteTitle="Delete Rental?"
+      deleteDescription="This action cannot be undone. This will permanently delete this rental item and all associated data."
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <FormSection title="Rental Information">
+          <div className="space-y-4">
+            <FormRow>
+              <FormField label="Name" error={errors.name?.message}>
                 <Controller
                   name="name"
                   control={control}
                   render={({ field }) => (
                     <Input
                       placeholder="Enter the rental name"
-                      className="bg-neutral-100/50 min-w-80 h-12 px-5"
+                      className="bg-gray-50 h-11 px-4"
                       {...field}
                     />
                   )}
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
+              </FormField>
 
-              <div className="">
-                <div className="flex justify-between w-full">
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Pricing</h1>
-                    <Controller
-                      name="price"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Set the price"
-                          className="bg-neutral-100/50 w-80 h-12 px-5"
-                          type="number"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
-                          }
-                        />
-                      )}
+              <FormField label="Price" error={errors.price?.message}>
+                <Controller
+                  name="price"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      placeholder="Set the price"
+                      className="bg-gray-50 h-11 px-4"
+                      type="number"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value) || 0)
+                      }
                     />
-                    {errors.price && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.price.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h1 className="font-afacad text-neutral-500">Quantity</h1>
-            <hr />
-            <div className="pt-6 pb-10 space-y-6 ">
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Current Quantity</h1>
-                  <Controller
-                    name="currentQuantity"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        placeholder="Set the rental's current quantity"
-                        className="bg-neutral-100/50 w-80 h-12 px-5 "
-                        type="number"
-                        value={field.value}
-                        onChange={(e) =>
-                          field.onChange(parseInt(e.target.value) || 0)
-                        }
-                      />
-                    )}
-                  />
-                  {errors.currentQuantity && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.currentQuantity.message}
-                    </p>
                   )}
-                </div>
+                />
+              </FormField>
+            </FormRow>
+          </div>
+        </FormSection>
 
-                <div>
-                  <h1 className="text-sm text-neutral-500">Total Quantity</h1>
-                  <Controller
-                    name="totalQuantity"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        placeholder="Set the rental's total quantity"
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
-                        type="number"
-                        value={field.value}
-                        onChange={(e) =>
-                          field.onChange(parseInt(e.target.value) || 0)
-                        }
-                      />
-                    )}
-                  />
-                  {errors.totalQuantity && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.totalQuantity.message}
-                    </p>
+        <FormSection title="Quantity">
+          <div className="space-y-4">
+            <FormRow>
+              <FormField
+                label="Current Quantity"
+                error={errors.currentQuantity?.message}
+              >
+                <Controller
+                  name="currentQuantity"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      placeholder="Set the rental's current quantity"
+                      className="bg-gray-50 h-11 px-4"
+                      type="number"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
+                    />
                   )}
-                </div>
-              </div>
-            </div>
-          </div>
+                />
+              </FormField>
 
-          <div>
-            <h1 className="font-afacad text-neutral-500">Category</h1>
-            <hr />
+              <FormField
+                label="Total Quantity"
+                error={errors.totalQuantity?.message}
+              >
+                <Controller
+                  name="totalQuantity"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      placeholder="Set the rental's total quantity"
+                      className="bg-gray-50 h-11 px-4"
+                      type="number"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  )}
+                />
+              </FormField>
+            </FormRow>
           </div>
-          <div className="pt-6 pb-10 space-y-6">
+        </FormSection>
+
+        <FormSection title="Category">
+          <FormField label="Category" error={errors.categoryId?.message}>
             <Controller
               name="categoryId"
               control={control}
-              render={({ field }) => {
-                const categoryName = categories.find(
-                  (cat) => cat.id === field.value
-                )?.name || "";
-
-                return (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Input
-                        placeholder={categoriesLoading ? "Loading..." : "Select the category"}
-                        value={categoryName}
-                        className=" bg-neutral-100/50 w-80 h-12 px-5"
-                        readOnly
-                      />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="font-afacad">
-                      {categories.map((cat) => (
-                        <DropdownMenuItem
-                          key={cat.id}
-                          onClick={() => field.onChange(cat.id)}
-                        >
-                          {cat.name}
-                        </DropdownMenuItem>
-                      ))}
-                      {categories.length === 0 && !categoriesLoading && (
-                        <DropdownMenuItem disabled>
-                          No categories found
-                        </DropdownMenuItem>
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                );
-              }}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={categoriesLoading}
+                >
+                  <SelectTrigger className="bg-gray-50 h-11 px-4">
+                    <SelectValue
+                      placeholder={
+                        categoriesLoading ? "Loading..." : "Select a category"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                    {categories.length === 0 && !categoriesLoading && (
+                      <SelectItem value="" disabled>
+                        No categories found
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
             />
-            {errors.categoryId && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.categoryId.message}
-              </p>
-            )}
-          </div>
+          </FormField>
+        </FormSection>
 
-          <div>
-            <h1 className="font-afacad text-neutral-500">Extras</h1>
-            <hr />
-          </div>
-          <div className="pt-6 pb-10 space-y-6">
-            <div>
-              <h1 className="text-sm text-neutral-500">Description</h1>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
-                  <Textarea
-                    placeholder="Write the product's description here.."
-                    className="bg-neutral-100/50 w-full h-28 px-5 py-3"
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </div>
-                
-          <div>
-            <h1 className="font-afacad text-neutral-500">Media</h1>
-            <hr />
-          </div>
+        <FormSection title="Extras">
+          <FormField label="Description">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  placeholder="Write the rental's description here..."
+                  className="bg-gray-50 min-h-[100px] px-4 py-3"
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
+        </FormSection>
+
+        <FormSection title="Media">
           <ImageUploader
             onImageSelect={(file) => setSelectedImage(file)}
             supportedFormats={["JPEG", "JPG", "PNG"]}
             currentImageUrl={currentImageUrl}
           />
+        </FormSection>
 
-          <div className="pt-16 pb-10 flex items-center justify-end gap-x-4">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Update Rental"}
-            </Button>
-
-
-            
-            <Dialog>
-              <DialogTrigger>
-                <Trash2 className="text-red-700 hover:text-red-700/80 cursor-pointer" />
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-xl font-medium">Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete this rental item
-                    and remove your data from our servers.
-                  </DialogDescription>
-                  <div className="flex justify-end gap-3 pt-6">
-                    <DialogClose asChild>
-                      <Button variant="outline" className="px-4">Cancel</Button>
-                    </DialogClose>
-                    <Button className="bg-red-600 hover:bg-red-700 px-4" onClick={onDelete}>Delete</Button>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-
-          </div>
-        </form>
-      </div>
-    </div>
+        <FormActions>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            className="w-full sm:w-auto"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-500 text-white w-full sm:w-auto"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              "Update Rental"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
-import StatusLabel from "@/components/StatusLabel";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusBadge } from "@/components/OwnerPage";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
@@ -8,10 +9,8 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_EVENT_BY_ID_OWNER } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, Loader2, AlertCircle, Calendar, User, MapPin, Clock, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-// import { GET_EVENT_BY_ID_OWNER } from "@/graphql/people";
-
 
 const page = () => {
   const params = useParams();
@@ -24,17 +23,36 @@ const page = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-10 h-10 animate-spin text-camouflage-400 mb-4" />
+        <p className="text-gray-500 font-medium">Loading booking details...</p>
       </div>
     );
   }
 
   if (error || !data?.getEventsById) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        Error loading event booking details.
-      </div>
+      <Card className="border-red-200 bg-red-50 max-w-3xl mx-auto">
+        <CardContent className="flex flex-col items-center justify-center py-16">
+          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
+            <AlertCircle className="w-8 h-8 text-red-500" />
+          </div>
+          <h3 className="text-lg font-semibold text-red-800 mb-2">
+            Error loading data
+          </h3>
+          <p className="text-red-600 text-center max-w-md mb-4">
+            Error loading event booking details.
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="border-red-300 text-red-700 hover:bg-red-100"
+          >
+            <MoveLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -77,84 +95,91 @@ const page = () => {
     addons.reduce((sum: any, addon: any) => sum + Number(addon.price || 0), 0);
 
   return (
-    <div className="bg-white min-h-screen rounded-lg border border-neutral-200 px-12 py-8">
-      <div className="flex justify-between">
-        <div className="flex flex-row gap-x-6 items-center">
+    <div className="bg-white min-h-screen rounded-lg border border-neutral-200 p-4 sm:px-8 sm:py-6 lg:px-12 lg:py-8">
+      <div className="flex flex-col sm:flex-row justify-between gap-4">
+        <div className="flex flex-row gap-x-4 items-center">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all flex-shrink-0"
           >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
+            <MoveLeft className="w-5 h-5 text-gray-600" />
           </button>
-          <h1 className="font-afacad_medium text-3xl">Event Booking Details</h1>
-          <StatusLabel label={event?.eventStatus || "Pending"} />
+          <h1 className="font-afacad_medium text-2xl sm:text-3xl">Event Booking Details</h1>
+          <StatusBadge status={event?.eventStatus || "Pending"} size="lg" />
         </div>
         <Link href={`/bookings/${eventId}/edit-booking`}>
-          <Button className="bg-camouflage-400 w-44 h-12 font-afacad text-white hover:bg-camouflage-400/80">
+          <Button className="bg-camouflage-400 h-11 px-6 font-afacad text-white hover:bg-camouflage-400/80 flex items-center gap-2">
+            <Pencil className="w-4 h-4" />
             Edit Booking
           </Button>
         </Link>
       </div>
 
-      {/* Pretty Customer and Event Details */}
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+      {/* Customer and Event Details */}
+      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Customer Details Card */}
-        <div className="bg-[#F8FAFC] rounded-xl shadow-sm p-6 border border-neutral-200">
-          <h2 className="font-afacad_medium text-xl mb-4 text-camouflage-700 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-camouflage-400 rounded-full"></span>
-            Customer Details
-          </h2>
-          <div className="font-afacad text-[#334155] space-y-3 text-base">
-            <div>
-              <span className="font-semibold">Name:</span>
-              <span className="ml-2">
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="font-afacad_medium text-xl text-gray-900 flex items-center gap-2">
+              <User className="w-5 h-5 text-camouflage-400" />
+              Customer Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="font-afacad text-gray-700 space-y-3">
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Name:</span>
+              <span>
                 {customer
                   ? `${customer.firstName} ${customer.lastName}`
                   : "N/A"}
               </span>
             </div>
-            <div>
-              <span className="font-semibold">Contact Number:</span>
-              <span className="ml-2">{customer?.contactNumber || "N/A"}</span>
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Contact:</span>
+              <span>{customer?.contactNumber || "N/A"}</span>
             </div>
-            <div>
-              <span className="font-semibold">Email:</span>
-              <span className="ml-2">{customer?.email || "N/A"}</span>
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Email:</span>
+              <span>{customer?.email || "N/A"}</span>
             </div>
-            <div>
-              <span className="font-semibold">Address:</span>
-              <span className="ml-2">{customer?.address || "N/A"}</span>
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Address:</span>
+              <span>{customer?.address || "N/A"}</span>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+        
         {/* Event Details Card */}
-        <div className="bg-[#F8FAFC] rounded-xl shadow-sm p-6 border border-neutral-200">
-          <h2 className="font-afacad_medium text-xl mb-4 text-camouflage-700 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-camouflage-400 rounded-full"></span>
-            Event Details
-          </h2>
-          <div className="font-afacad text-[#334155] space-y-3 text-base">
-            <div>
-              <span className="font-semibold">Name:</span>
-              <span className="ml-2">{event.name || "N/A"}</span>
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="font-afacad_medium text-xl text-gray-900 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-camouflage-400" />
+              Event Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="font-afacad text-gray-700 space-y-3">
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Name:</span>
+              <span>{event.name || "N/A"}</span>
             </div>
-            <div>
-              <span className="font-semibold">Event Address:</span>
-              <span className="ml-2">
-                {event.eventAddress || event.location || "N/A"}
-              </span>
+            <div className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+              <span className="font-semibold text-gray-600 min-w-[100px]">Address:</span>
+              <span>{event.eventAddress || event.location || "N/A"}</span>
             </div>
-            <div>
-              <span className="font-semibold">Event Date:</span>
-              <span className="ml-2">
+            <div className="flex items-start gap-2">
+              <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+              <span className="font-semibold text-gray-600 min-w-[100px]">Date:</span>
+              <span>
                 {event.eventDate
                   ? new Date(event.eventDate).toLocaleDateString()
                   : "N/A"}
               </span>
             </div>
-            <div>
-              <span className="font-semibold">Event Start:</span>
-              <span className="ml-2">
+            <div className="flex items-start gap-2">
+              <Clock className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+              <span className="font-semibold text-gray-600 min-w-[100px]">Start:</span>
+              <span>
                 {event.eventStart
                   ? new Date(
                       `1970-01-01T${event.eventStart}`
@@ -165,9 +190,10 @@ const page = () => {
                   : "N/A"}
               </span>
             </div>
-            <div>
-              <span className="font-semibold">Event End:</span>
-              <span className="ml-2">
+            <div className="flex items-start gap-2">
+              <Clock className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+              <span className="font-semibold text-gray-600 min-w-[100px]">End:</span>
+              <span>
                 {event.eventEnd
                   ? new Date(`1970-01-01T${event.eventEnd}`).toLocaleTimeString(
                       [],
@@ -176,83 +202,96 @@ const page = () => {
                   : "N/A"}
               </span>
             </div>
-            <div>
-              <span className="font-semibold">Venue:</span>
-              <span className="ml-2">
-                {event.minjeeVenue ? "Minjee Venue" : "Other"}
-              </span>
+            <div className="flex items-start gap-2">
+              <span className="font-semibold text-gray-600 min-w-[120px]">Venue:</span>
+              <span>{event.minjeeVenue ? "Minjee Venue" : "Other"}</span>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Product Details */}
-      <div className="mt-10">
-        <div className="flex items-center justify-between mb-10">
-          <div className="font-afacad_medium text-2xl">
-            Event Package & Addons
-          </div>
-        </div>
-        {selectedProducts.length > 0 ? (
-          selectedProducts.map((product) => (
-            <div
-              key={product.id}
-              className="flex items-center gap-x-4 border-b py-4"
-            >
-              <img
-                src={product.img}
-                alt={product.name}
-                className="w-20 h-20 object-cover rounded"
-              />
-              <div className="flex-1">
-                <div className="font-afacad_semibold text-lg">
-                  {product.name}
+      <div className="mt-8">
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="font-afacad_medium text-xl text-gray-900">
+              Event Package & Addons
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {selectedProducts.length > 0 ? (
+              selectedProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="flex items-center gap-x-4 border-b border-gray-100 py-4 last:border-b-0"
+                >
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <div className="font-afacad_semibold text-lg text-gray-900">
+                      {product.name}
+                    </div>
+                    <div className="text-gray-500 font-afacad">
+                      {product.type === "event-package"
+                        ? `Pax: ${product.quantity}`
+                        : `Qty: ${product.quantity}`}
+                    </div>
+                  </div>
+                  <div className="font-afacad_semibold text-lg text-gray-900">
+                    PHP {product.price ? Number(product.price).toFixed(2) : "0.00"}
+                  </div>
                 </div>
-                <div className="text-[#6B7280] font-afacad">
-                  {product.type === "event-package"
-                    ? `Pax: ${product.quantity}`
-                    : `Qty: ${product.quantity}`}
-                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No event package or addons.
               </div>
-              <div className="font-afacad_semibold text-lg">
-                PHP {product.price ? Number(product.price).toFixed(2) : "0.00"}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            No event package or addons.
-          </div>
-        )}
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Customizations */}
-      <div className="mt-10">
-        <div className="font-afacad_medium text-2xl mb-2">Customizations</div>
-        <div className="font-afacad text-[#6B7280]">
-          {event.customizations || "None"}
-        </div>
-        <div className="font-afacad text-[#6B7280] mt-2">
-          <span className="font-semibold">Customization Price: </span>
-          PHP{" "}
-          {event.customizationsPrice
-            ? Number(event.customizationsPrice).toFixed(2)
-            : "0.00"}
-        </div>
+      <div className="mt-8">
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="font-afacad_medium text-xl text-gray-900">
+              Customizations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="font-afacad text-gray-600">
+              {event.customizations || "None"}
+            </div>
+            <div className="font-afacad text-gray-600 mt-2">
+              <span className="font-semibold">Customization Price: </span>
+              PHP{" "}
+              {event.customizationsPrice
+                ? Number(event.customizationsPrice).toFixed(2)
+                : "0.00"}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Total Price */}
-      <div className="flex justify-end mt-10 pr-5">
-        <div className="font-afacad_medium text-xl">
+      <div className="flex justify-end mt-8 pr-2">
+        <div className="font-afacad_medium text-xl text-gray-900">
           Total: PHP {totalPrice.toFixed(2)}
         </div>
       </div>
 
-      <Link href="/bookings">
-        <Button className="bg-transparent border border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white mt-24 w-32">
-          Back to Bookings
-        </Button>
-      </Link>
+      <div className="mt-12">
+        <Link href="/bookings">
+          <Button variant="outline" className="border-camouflage-400 text-camouflage-400 hover:bg-camouflage-400 hover:text-white">
+            <MoveLeft className="w-4 h-4 mr-2" />
+            Back to Bookings
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

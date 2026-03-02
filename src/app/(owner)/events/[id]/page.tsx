@@ -2,20 +2,25 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft, Trash2, X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
 import { ApolloError, useQuery } from "@apollo/client";
-import { GET_EVENT_PACKAGE_BY_ID } from "@/graphql/people"; // You'll need to create this query
+import { GET_EVENT_PACKAGE_BY_ID } from "@/graphql/people";
 import apolloClient from "@/graphql/apolloClient";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormActions,
+} from "@/components/OwnerPage";
 
 // Zod schemas
 const eventPackageSchema = z.object({
@@ -54,15 +59,16 @@ const EditEventPackagePage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isAddingPax, setIsAddingPax] = useState(false);
   const [paxItems, setPaxItems] = useState<PaxItem[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Main event package form
   const {
-    register,
     handleSubmit,
     control,
     reset,
@@ -114,8 +120,8 @@ const EditEventPackagePage = () => {
 
   useEffect(() => {
     if (data && data.getEventsPackageById) {
-       console.log("DATA:", data.getEventsPackageById);
-        
+      console.log("DATA:", data.getEventsPackageById);
+
       const eventPackage = data.getEventsPackageById;
       reset({
         name: eventPackage.name || "",
@@ -189,7 +195,7 @@ const EditEventPackagePage = () => {
   const onEditPax = async (values: EditPaxFormValues) => {
     if (editingIndex === null) return;
     try {
-      const response = await api.patch(
+      await api.patch(
         `/o/events/event_package/${eventPackId}/pax/${values.editId}`,
         {
           name: values.editName,
@@ -232,13 +238,10 @@ const EditEventPackagePage = () => {
     }
   };
 
-
   const onDelete = async () => {
-    setIsSubmitting(true);
+    setIsDeleting(true);
     try {
-      await api.delete(
-        `/o/events/event_package/${eventPackId}`
-      );
+      await api.delete(`/o/events/event_package/${eventPackId}`);
 
       toast.success("Event Package Deleted Successfully");
       router.push("/events");
@@ -253,312 +256,260 @@ const EditEventPackagePage = () => {
 
       toast.error(errorMessage);
     } finally {
-      setIsSubmitting(false);
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
     }
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
-            Edit Event Package
-          </h1>
-        </div>
+    <FormPageLayout
+      title="Edit Event Package"
+      isLoading={loading}
+      loadingText="Loading event package..."
+      error={error?.message}
+      showDeleteButton
+      onDelete={onDelete}
+      isDeleting={isDeleting}
+      deleteDialogOpen={deleteDialogOpen}
+      setDeleteDialogOpen={setDeleteDialogOpen}
+      deleteTitle="Delete Event Package?"
+      deleteDescription="This action cannot be undone. This will permanently delete this event package and all associated pax data."
+    >
+      {/* Main Event Package Form */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Event Package Name */}
+        <FormSection title="Event Package Information">
+          <FormField label="Event Package Name" error={errors.name?.message}>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field }) => (
+                <Input
+                  placeholder="Enter the event package name"
+                  className="bg-gray-50 w-full h-11 px-4"
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
+        </FormSection>
 
-        {/* Main Event Package Form */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Event Package Name */}
-          <div className="mt-12">
-            <h1 className="font-afacad text-neutral-500">
-              Event Package Information
-            </h1>
-            <hr />
-            <div className="pt-6 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">Event Package Name</h1>
+        {/* Add Pax Button */}
+        <FormSection title="Add Pax">
+          <div className="flex w-full justify-end">
+            <Button
+              type="button"
+              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white w-fit"
+              onClick={() => setShowAddModal(true)}
+            >
+              Add Pax
+            </Button>
+          </div>
+        </FormSection>
+
+        {/* Display Pax Items */}
+        <FormSection title="Pax List">
+          <div className="space-y-4">
+            {paxItems.length > 0 ? (
+              paxItems.map((item, index) => (
+                <div
+                  key={item.id || index}
+                  className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white cursor-pointer hover:border-gray-300 transition-colors"
+                  onClick={() => {
+                    setEditingIndex(index);
+                    editReset({
+                      editName: item.name,
+                      editPrice: Number(item.price),
+                      editDescription: item.description || "",
+                      editId: item.id,
+                    });
+                    setShowEditModal(true);
+                  }}
+                >
+                  <h2 className="text-lg font-semibold text-neutral-800">
+                    {item.name}
+                  </h2>
+                  <p className="text-sm text-neutral-500 mt-2">
+                    {item.description || "No description provided."}
+                  </p>
+                  <p className="text-base font-bold text-neutral-800 mt-4">
+                    Price: ₱{item.price}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-neutral-500">No pax available.</p>
+            )}
+          </div>
+        </FormSection>
+
+        {/* Image Uploader */}
+        <FormSection title="Media">
+          <ImageUploader
+            onImageSelect={(file) => setSelectedImage(file)}
+            supportedFormats={["JPEG", "JPG", "PNG"]}
+            currentImageUrl={currentImageUrl}
+          />
+        </FormSection>
+
+        {/* Submit Button */}
+        <FormActions>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              "Update Event Package"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+
+      {/* Add Pax Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
+            <h2 className="font-afacad text-xl mb-4">Add Pax</h2>
+            <form onSubmit={handleAddSubmit(onAddPax)} className="space-y-4">
+              <FormField label="Pax Name" error={addErrors.addName?.message}>
+                <Input
+                  placeholder="Enter pax name"
+                  className="bg-gray-50 w-full h-11 px-4"
+                  {...addRegister("addName")}
+                />
+              </FormField>
+              <FormField label="Price" error={addErrors.addPrice?.message}>
+                <Input
+                  placeholder="Set the price"
+                  className="bg-gray-50 w-full h-11 px-4"
+                  type="number"
+                  step="0.01"
+                  {...addRegister("addPrice", { valueAsNumber: true })}
+                />
+              </FormField>
+              <FormField label="Description">
+                <Textarea
+                  placeholder="Write the pax description here.."
+                  className="bg-gray-50 w-full h-20 px-4 py-3"
+                  {...addRegister("addDescription")}
+                />
+              </FormField>
+              <div className="flex justify-end gap-2 mt-8">
+                <Button
+                  type="button"
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800"
+                  onClick={() => {
+                    setShowAddModal(false);
+                    resetAddForm();
+                  }}
+                  disabled={isAddingPax}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
+                  disabled={isAddingPax}
+                >
+                  {isAddingPax ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    "Add Pax"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Pax Modal */}
+      {showEditModal && editingIndex !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
+            <div className="w-full flex flex-row justify-between items-center mb-4">
+              <h2 className="font-afacad text-xl">Edit Pax</h2>
+              <X
+                className="cursor-pointer hover:text-gray-600"
+                onClick={() => setShowEditModal(false)}
+              />
+            </div>
+            <form onSubmit={editHandleSubmit(onEditPax)} className="space-y-4">
+              <FormField label="Pax Name" error={editErrors.editName?.message}>
                 <Controller
-                  control={control}
-                  name="name"
+                  control={editControl}
+                  name="editName"
                   render={({ field }) => (
                     <Input
-                      placeholder="Enter the event package name"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
+                      placeholder="Enter pax name"
+                      className="bg-gray-50 w-full h-11 px-4"
                       {...field}
                     />
                   )}
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Add Pax Button */}
-          <div className="mt-6 pb-10">
-            <div className="flex flex-col justify-between gap-y-2">
-              <h1 className="font-afacad text-neutral-500">Add Pax</h1>
-              <hr />
-
-              <div className="flex w-full justify-end mt-3">
+              </FormField>
+              <FormField label="Price" error={editErrors.editPrice?.message}>
+                <Controller
+                  control={editControl}
+                  name="editPrice"
+                  render={({ field }) => (
+                    <Input
+                      placeholder="Set the price"
+                      className="bg-gray-50 w-full h-11 px-4"
+                      type="number"
+                      step="0.01"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value === "" ? 0 : Number(e.target.value)
+                        )
+                      }
+                    />
+                  )}
+                />
+              </FormField>
+              <FormField label="Description">
+                <Controller
+                  control={editControl}
+                  name="editDescription"
+                  render={({ field }) => (
+                    <Textarea
+                      placeholder="Write the pax description here.."
+                      className="bg-gray-50 w-full h-20 px-4 py-3"
+                      {...field}
+                    />
+                  )}
+                />
+              </FormField>
+              <div className="flex justify-end gap-2 mt-8">
                 <Button
                   type="button"
-                  className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white w-fit"
-                  onClick={() => setShowAddModal(true)}
+                  className="bg-transparent border-red-500 border hover:bg-gray-300 text-red-600"
+                  onClick={onDeletePax}
                 >
-                  Add Pax
+                  Delete
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
+                >
+                  Update Pax
                 </Button>
               </div>
-            </div>
+            </form>
           </div>
-
-          {/* Display Pax Items */}
-          <div className="mt-6 pb-10">
-            <h1 className="font-afacad text-neutral-500">Pax List</h1>
-            <hr />
-            <div className="pt-6 space-y-4">
-              {paxItems.length > 0 ? (
-                paxItems.map((item, index) => (
-                  <div
-                    key={item.id || index}
-                    className="border border-neutral-200 rounded-lg p-4 shadow-sm bg-white cursor-pointer"
-                    onClick={() => {
-                      setEditingIndex(index);
-                      editReset({
-                        editName: item.name,
-                        editPrice: Number(item.price),
-                        editDescription: item.description || "",
-                        editId: item.id,
-                      });
-                      setShowEditModal(true);
-                    }}
-                  >
-                    <h2 className="text-lg font-semibold text-neutral-800">
-                      {item.name}
-                    </h2>
-                    <p className="text-sm text-neutral-500 mt-2">
-                      {item.description || "No description provided."}
-                    </p>
-                    <p className="text-base font-bold text-neutral-800 mt-4">
-                      Price: ₱{item.price}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-neutral-500">No pax available.</p>
-              )}
-            </div>
-          </div>
-
-          {/* Image Uploader */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Media</h1>
-            <hr />
-            <ImageUploader
-              onImageSelect={(file) => setSelectedImage(file)}
-              supportedFormats={["JPEG", "JPG", "PNG"]}
-              currentImageUrl={currentImageUrl}
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="pt-16 pb-10 flex items-center justify-end gap-x-4">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Update Event Package"}
-            </Button>
-
-            <Dialog>
-              <DialogTrigger>
-                <Trash2 className="text-red-700 hover:text-red-700/80 cursor-pointer" />
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-xl font-medium">Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete this rental item
-                    and remove your data from our servers.
-                  </DialogDescription>
-                  <div className="flex justify-end gap-3 pt-6">
-                    <DialogClose asChild>
-                      <Button variant="outline" className="px-4">Cancel</Button>
-                    </DialogClose>
-                    <Button className="bg-red-600 hover:bg-red-700 px-4" onClick={onDelete}>Delete</Button>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </form>
-
-        {/* Add Pax Modal */}
-        {showAddModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
-              <h2 className="font-afacad text-xl mb-4">Add Pax</h2>
-              <form onSubmit={handleAddSubmit(onAddPax)} className="space-y-4">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Pax Name</h1>
-                  <Input
-                    placeholder="Enter pax name"
-                    className="bg-neutral-100/50 w-full h-12 px-5"
-                    {...addRegister("addName")}
-                  />
-                  {addErrors.addName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {addErrors.addName.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Price</h1>
-                  <Input
-                    placeholder="Set the price"
-                    className="bg-neutral-100/50 w-full h-12 px-5"
-                    type="number"
-                    step="0.01"
-                    {...addRegister("addPrice", { valueAsNumber: true })}
-                  />
-                  {addErrors.addPrice && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {addErrors.addPrice.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Description</h1>
-                  <Textarea
-                    placeholder="Write the pax description here.."
-                    className="bg-neutral-100/50 w-full h-20 px-5 py-3"
-                    {...addRegister("addDescription")}
-                  />
-                </div>
-                <div className="flex justify-end gap-2 mt-8">
-                  <Button
-                    type="button"
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-800"
-                    onClick={() => {
-                      setShowAddModal(false);
-                      resetAddForm();
-                    }}
-                    disabled={isAddingPax}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
-                    disabled={isAddingPax}
-                  >
-                    {isAddingPax ? "Adding..." : "Add Pax"}
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Edit Pax Modal */}
-        {showEditModal && editingIndex !== null && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
-              <div className="w-full flex flex-row justify-between items-center mb-4">
-                <h2 className="font-afacad text-xl">Edit Pax</h2>
-                <X onClick={() => setShowEditModal(false)} />
-              </div>
-              <form onSubmit={editHandleSubmit(onEditPax)} className="space-y-4">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Pax Name</h1>
-                  <Controller
-                    control={editControl}
-                    name="editName"
-                    render={({ field }) => (
-                      <Input
-                        placeholder="Enter pax name"
-                        className="bg-neutral-100/50 w-full h-12 px-5"
-                        {...field}
-                      />
-                    )}
-                  />
-                  {editErrors.editName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {editErrors.editName.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Price</h1>
-                  <Controller
-                    control={editControl}
-                    name="editPrice"
-                    render={({ field }) => (
-                      <Input
-                        placeholder="Set the price"
-                        className="bg-neutral-100/50 w-full h-12 px-5"
-                        type="number"
-                        step="0.01"
-                        value={field.value}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === "" ? 0 : Number(e.target.value)
-                          )
-                        }
-                      />
-                    )}
-                  />
-                  {editErrors.editPrice && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {editErrors.editPrice.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Description</h1>
-                  <Controller
-                    control={editControl}
-                    name="editDescription"
-                    render={({ field }) => (
-                      <Textarea
-                        placeholder="Write the pax description here.."
-                        className="bg-neutral-100/50 w-full h-20 px-5 py-3"
-                        {...field}
-                      />
-                    )}
-                  />
-                </div>
-                <div className="flex justify-end gap-2 mt-8">
-                  <Button
-                    type="button"
-                    className="bg-transparent border-red-500 border hover:bg-gray-300 text-red-600"
-                    onClick={onDeletePax}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white"
-                  >
-                    Update Pax
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </FormPageLayout>
   );
 };
 

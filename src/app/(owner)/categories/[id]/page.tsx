@@ -1,24 +1,23 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { MoveLeft, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +54,6 @@ const Page = () => {
     register,
     handleSubmit,
     control,
-    watch,
     reset,
     formState: { errors },
   } = useForm<CategoryFormValues>({
@@ -75,8 +73,6 @@ const Page = () => {
       });
     }
   }, [data, reset]);
-
-  const selectedType = watch("type");
 
   const onSubmit = async (formData: CategoryFormValues) => {
     setIsSubmitting(true);
@@ -137,131 +133,72 @@ const Page = () => {
     }
   };
 
-  if (loading) return <p className="p-8">Loading...</p>;
-  if (error) return <p className="p-8">Error: {error.message}</p>;
-
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center justify-between">
-          <div className="flex gap-x-3 items-center">
-            <button
-              onClick={() => router.back()}
-              className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-            >
-              <MoveLeft width={20} height={20} className="text-neutral-600" />
-            </button>
-            <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Edit Category</h1>
-          </div>
+    <FormPageLayout
+      title="Edit Category"
+      isLoading={loading}
+      loadingText="Loading category..."
+      error={error?.message}
+      showDeleteButton
+      onDelete={onDelete}
+      isDeleting={isDeleting}
+      deleteDialogOpen={deleteDialogOpen}
+      setDeleteDialogOpen={setDeleteDialogOpen}
+      deleteTitle="Delete Category"
+      deleteDescription="This action cannot be undone. This will permanently delete the category."
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormSection title="Category Information">
+          <FormRow>
+            <FormField label="Name" error={errors.name?.message}>
+              <Input
+                placeholder="Enter the category name"
+                className="bg-gray-50 h-11 px-4"
+                {...register("name")}
+              />
+            </FormField>
 
-          <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="destructive"
-                className="flex items-center gap-x-2"
-              >
-                <Trash2 width={16} height={16} />
-                Delete
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  category.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setDeleteDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={onDelete}
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? "Deleting..." : "Delete"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Category Information</h1>
-            <hr />
-          </div>
-
-          <div className="pt-6 pb-10 space-y-6">
-            <div className="flex justify-between w-full">
-              <div>
-                <h1 className="text-sm text-neutral-500">Name</h1>
-                <Input
-                  placeholder="Enter the category name"
-                  className="bg-neutral-100/50 w-80 h-12 px-5"
-                  {...register("name")}
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
+            <FormField label="Type" error={errors.type?.message}>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="bg-gray-50 h-11 px-4">
+                      <SelectValue placeholder="Select the type" />
+                    </SelectTrigger>
+                    <SelectContent className="font-afacad">
+                      {categoryTypes.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 )}
-              </div>
+              />
+            </FormField>
+          </FormRow>
+        </FormSection>
 
-              <div>
-                <h1 className="text-sm text-neutral-500">Type</h1>
-                <Controller
-                  name="type"
-                  control={control}
-                  render={({ field }) => (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Input
-                          placeholder="Select the type"
-                          value={selectedType}
-                          className="bg-neutral-100/50 w-80 h-12 px-5 cursor-pointer"
-                          readOnly
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="font-afacad w-80">
-                        {categoryTypes.map((type) => (
-                          <DropdownMenuItem
-                            key={type}
-                            onClick={() => field.onChange(type)}
-                          >
-                            {type}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                />
-                {errors.type && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.type.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-16 pb-10 flex justify-end">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Update Category"}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <FormActions>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              "Update Category"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

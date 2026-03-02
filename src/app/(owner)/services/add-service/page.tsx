@@ -1,7 +1,7 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/app/utils/api";
 import { toast } from "sonner";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 
 // Define validation schema
 const serviceSchema = z.object({
@@ -86,117 +93,89 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white min-h-screen w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-        <div className="flex gap-x-3 items-center">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            <MoveLeft width={20} height={20} className="text-neutral-600" />
-          </button>
-          <h1 className="font-afacad_medium text-3xl pl-3 ml-1">Add Service</h1>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Service Name */}
-          <div className="mt-12">
-            <h1 className="font-afacad text-neutral-500">
-              Service Information
-            </h1>
-            <hr />
-            <div className="pt-6 pb-10 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">Service Name</h1>
-                <Input
-                  placeholder="Enter the service name"
-                  className="bg-neutral-100/50 w-full h-12 px-5"
-                  {...register("name")}
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Service Items */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Service Items</h1>
-            <hr />
-            <div className="pt-6 pb-4 space-y-6">
-              {fields.map((field, index) => (
-                <div key={field.id} className="space-y-4 border-b pb-4">
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Item Name</h1>
-                    <Input
-                      placeholder="Enter item name"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
-                      {...register(`service_items.${index}.name`)}
-                    />
-                    {errors.service_items?.[index]?.name && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.service_items[index].name?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Price</h1>
-                    <Input
-                      placeholder="Set the price"
-                      className="bg-neutral-100/50 w-full h-12 px-5"
-                      type="number"
-                      step="0.01"
-                      {...register(`service_items.${index}.price`, {
-                        valueAsNumber: true,
-                      })}
-                    />
-                    {errors.service_items?.[index]?.price && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.service_items[index].price?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h1 className="text-sm text-neutral-500">Description</h1>
-                    <Textarea
-                      placeholder="Write the item description here.."
-                      className="bg-neutral-100/50 w-full h-20 px-5 py-3"
-                      {...register(`service_items.${index}.description`)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Image Uploader */}
-          <div className="mt-6">
-            <h1 className="font-afacad text-neutral-500">Media</h1>
-            <hr />
-            <ImageUploader
-              onImageSelect={(file) => setSelectedImage(file)}
-              supportedFormats={["JPEG", "JPG", "PNG"]}
+    <FormPageLayout title="Add Service">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Service Information */}
+        <FormSection title="Service Information">
+          <FormField label="Service Name" error={errors.name?.message}>
+            <Input
+              placeholder="Enter the service name"
+              className="bg-gray-50 h-11 px-4"
+              {...register("name")}
             />
-          </div>
+          </FormField>
+        </FormSection>
 
-          {/* Submit Button */}
-          <div className="pt-16 pb-10 flex justify-end">
-            <Button
-              type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Add Service"}
-            </Button>
+        {/* Service Items */}
+        <FormSection title="Service Items">
+          <div className="space-y-6">
+            {fields.map((field, index) => (
+              <div key={field.id} className="space-y-4 border-b pb-4">
+                <FormField
+                  label="Item Name"
+                  error={errors.service_items?.[index]?.name?.message}
+                >
+                  <Input
+                    placeholder="Enter item name"
+                    className="bg-gray-50 h-11 px-4"
+                    {...register(`service_items.${index}.name`)}
+                  />
+                </FormField>
+
+                <FormField
+                  label="Price"
+                  error={errors.service_items?.[index]?.price?.message}
+                >
+                  <Input
+                    placeholder="Set the price"
+                    className="bg-gray-50 h-11 px-4"
+                    type="number"
+                    step="0.01"
+                    {...register(`service_items.${index}.price`, {
+                      valueAsNumber: true,
+                    })}
+                  />
+                </FormField>
+
+                <FormField label="Description">
+                  <Textarea
+                    placeholder="Write the item description here.."
+                    className="bg-gray-50 h-20 px-4 py-3"
+                    {...register(`service_items.${index}.description`)}
+                  />
+                </FormField>
+              </div>
+            ))}
           </div>
-        </form>
-      </div>
-    </div>
+        </FormSection>
+
+        {/* Media */}
+        <FormSection title="Media">
+          <ImageUploader
+            onImageSelect={(file) => setSelectedImage(file)}
+            supportedFormats={["JPEG", "JPG", "PNG"]}
+          />
+        </FormSection>
+
+        {/* Submit Button */}
+        <FormActions>
+          <Button
+            type="submit"
+            className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              "Add Service"
+            )}
+          </Button>
+        </FormActions>
+      </form>
+    </FormPageLayout>
   );
 };
 

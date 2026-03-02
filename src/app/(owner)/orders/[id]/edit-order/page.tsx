@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { MoveLeft } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import {
   Select,
@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import StatusLabel from "@/components/StatusLabel";
+import {
+  FormPageLayout,
+  FormSection,
+  FormField,
+  FormRow,
+  FormActions,
+} from "@/components/OwnerPage";
 import { useForm, Controller } from "react-hook-form";
 import { useQuery } from "@apollo/client";
 import { GET_ORDER_BY_ID_OWNER } from "@/graphql/people";
@@ -161,179 +167,128 @@ const EditOrderPage = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        Error loading order.
-      </div>
-    );
-  }
+  const orderStatus = data?.getOrdersById?.orderStatus || "pending";
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex justify-center">
-        <div className="bg-white w-[800px] rounded-lg border border-neutral-200 px-12 py-8">
-          <div className="flex gap-x-3 items-center">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex items-center gap-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-            >
-              <MoveLeft width={20} height={20} className="text-neutral-600" />
-            </button>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-afacad_medium text-3xl pl-3 ml-1">
-                Edit Order
-              </h1>
-              <StatusLabel
-                label={data?.getOrdersById?.orderStatus || "Pending"}
-              />
-            </div>
-          </div>
-
-          {/* Customer Information */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">
-                Customer Information
-              </h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Customer Name</h1>
+    <FormPageLayout
+      title="Edit Order"
+      status={orderStatus}
+      isLoading={loading}
+      loadingText="Loading order details..."
+      error={error ? "Error loading order." : null}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-8">
+          <FormSection title="Customer Information">
+            <div className="space-y-6">
+              <FormRow cols={2}>
+                <FormField label="Customer Name">
                   <Controller
                     name="customerName"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                         readOnly
                       />
                     )}
                   />
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Contact Number</h1>
+                </FormField>
+                <FormField label="Contact Number">
                   <Controller
                     name="contactNumber"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                       />
                     )}
                   />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-sm text-neutral-500">Location</h1>
+                </FormField>
+              </FormRow>
+              <FormField label="Location">
                 <Controller
                   name="location"
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      className="bg-neutral-100/50 w-full h-12 px-5"
+                      className="bg-gray-50 h-11 px-4"
                     />
                   )}
                 />
-              </div>
+              </FormField>
             </div>
-          </div>
+          </FormSection>
 
-          {/* Booking Schedule */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Booking Schedule</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Date of Booking</h1>
+          <FormSection title="Booking Schedule">
+            <div className="space-y-6">
+              <FormRow cols={2}>
+                <FormField label="Date of Booking">
                   <Controller
                     name="orderDate"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                         type="date"
                       />
                     )}
                   />
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Time of Booking</h1>
+                </FormField>
+                <FormField label="Time of Booking">
                   <Controller
                     name="orderTime"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                         type="time"
                       />
                     )}
                   />
-                </div>
-              </div>
-              <div className="flex justify-between w-full">
-                <div>
-                  <h1 className="text-sm text-neutral-500">Date of Return</h1>
+                </FormField>
+              </FormRow>
+              <FormRow cols={2}>
+                <FormField label="Date of Return">
                   <Controller
                     name="returnDate"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                         type="date"
                       />
                     )}
                   />
-                </div>
-                <div>
-                  <h1 className="text-sm text-neutral-500">Time of Return</h1>
+                </FormField>
+                <FormField label="Time of Return">
                   <Controller
                     name="returnTime"
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        className="bg-neutral-100/50 w-80 h-12 px-5"
+                        className="bg-gray-50 h-11 px-4"
                         type="time"
                       />
                     )}
                   />
-                </div>
-              </div>
+                </FormField>
+              </FormRow>
             </div>
-          </div>
+          </FormSection>
 
-          {/* Delivery Option */}
-          <div className="mt-12">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Delivery Option</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div className="space-y-3">
-                <div className="flex items-center gap-x-12">
-                  <h1 className="text-sm text-neutral-500">Delivery Fee</h1>
-                  <div className="relative w-80">
+          <FormSection title="Delivery Option">
+            <div className="space-y-6">
+              <FormRow cols={2}>
+                <FormField label="Delivery Fee">
+                  <div className="relative">
                     <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-500">
                       ₱
                     </span>
@@ -343,17 +298,16 @@ const EditOrderPage = () => {
                       render={({ field }) => (
                         <Input
                           {...field}
-                          className="bg-neutral-100/50 w-full h-12 pl-10 pr-5"
+                          className="bg-gray-50 h-11 pl-10 pr-4"
                           type="number"
                           min="0"
                         />
                       )}
                     />
                   </div>
-                </div>
-                <div className="flex items-center gap-x-12">
-                  <h1 className="text-sm text-neutral-500">Deposit Fee</h1>
-                  <div className="relative w-80">
+                </FormField>
+                <FormField label="Deposit Fee">
+                  <div className="relative">
                     <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-500">
                       ₱
                     </span>
@@ -363,65 +317,27 @@ const EditOrderPage = () => {
                       render={({ field }) => (
                         <Input
                           {...field}
-                          className="bg-neutral-100/50 w-full h-12 pl-10 pr-5"
+                          className="bg-gray-50 h-11 pl-10 pr-4"
                           type="number"
                           min="0"
                         />
                       )}
                     />
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Obtainment Method */}
-          <div>
-            <h1 className="text-sm text-neutral-500">Obtainment Method</h1>
-            <Controller
-              name="obtainmentMethod"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
-                    <SelectValue placeholder="Select Obtainment Method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {obtainmentOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </div>
-
-          {/* Order Status */}
-          <div className="mt-6">
-            <div>
-              <h1 className="font-afacad text-neutral-500">Order Status</h1>
-              <hr />
-            </div>
-            <div className="pt-6 pb-10 space-y-6">
-              <div>
-                <h1 className="text-sm text-neutral-500">
-                  Select Status for this order item
-                </h1>
+                </FormField>
+              </FormRow>
+              <FormField label="Obtainment Method">
                 <Controller
-                  name="orderStatus"
+                  name="obtainmentMethod"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-80 h-12 bg-neutral-100/50 px-5">
-                        <SelectValue placeholder="Select order status" />
+                      <SelectTrigger className="bg-gray-50 h-11 w-full sm:w-80">
+                        <SelectValue placeholder="Select Obtainment Method" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectGroup className="font-afacad">
-                          {orderStatusOptions.map((option) => (
+                        <SelectGroup>
+                          {obtainmentOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
@@ -431,22 +347,54 @@ const EditOrderPage = () => {
                     </Select>
                   )}
                 />
-              </div>
+              </FormField>
             </div>
-          </div>
+          </FormSection>
 
-          <div className="pt-16 pb-10 flex justify-end">
+          <FormSection title="Order Status">
+            <FormField label="Select Status for this order item">
+              <Controller
+                name="orderStatus"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="bg-gray-50 h-11 w-full sm:w-80">
+                      <SelectValue placeholder="Select order status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup className="font-afacad">
+                        {orderStatusOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FormField>
+          </FormSection>
+
+          <FormActions>
             <Button
               type="submit"
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-6"
+              className="bg-camouflage-400 hover:bg-camouflage-400/80 text-white text-base font-afacad px-8 h-11"
               disabled={isSubmitting}
             >
-              Finalize Order
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Finalize Order"
+              )}
             </Button>
-          </div>
+          </FormActions>
         </div>
-      </div>
-    </form>
+      </form>
+    </FormPageLayout>
   );
 };
 
