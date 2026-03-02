@@ -28,9 +28,10 @@ import {
   GET_ALL_EVENTS_OWNER,
 } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
-import ReceiptModal from "@/components/ReceiptCard/ReceiptModal";
+import { useRouter } from "next/navigation";
 
 const HistoryPage = () => {
+  const router = useRouter();
   const [search, setSearch] = useState("");
 
   const {
@@ -74,97 +75,6 @@ const HistoryPage = () => {
         : "N/A";
       const phone = customer?.contactNumber || "N/A";
 
-      let receiptProps = null;
-      if (order) {
-        const rentalProducts =
-          order.rentalList?.map((item: any) => ({
-            id: item.id,
-            name: item.rentals?.name,
-            price: item.rentalTotal,
-            quantity: item.rentalQuantity,
-            img: item.rentals?.img,
-            category: "Rental",
-          })) || [];
-        const serviceProducts =
-          order.servicesList?.map((item: any) => ({
-            id: item.id,
-            name: item.servicesItems?.name,
-            price: item.serviceTotal,
-            quantity: item.serviceQuantity,
-            img: item.servicesItems?.services?.img,
-            category: "Service",
-          })) || [];
-        const allProducts = [...rentalProducts, ...serviceProducts];
-        const subtotal = allProducts.reduce(
-          (sum, item) => sum + Number(item.price || 0),
-          0
-        );
-        const deliveryFee = Number(order.deliveryPrice || 0);
-        const depositPrice = Number(order.depositPrice || 0);
-        const total = subtotal + deliveryFee + depositPrice;
-        receiptProps = {
-          type: "order" as const,
-          customer: order.customer,
-          transaction: txn,
-          items: allProducts,
-          subtotal,
-          deliveryFee,
-          depositPrice,
-          total,
-          address: order.location,
-          dateOfUse: order.orderDate,
-          dateOfReturn: order.returnDate,
-          minjeeVenue: order.minjeeVenue,
-        };
-      } else if (event) {
-        const eventPackage = event.pax?.eventPackages;
-        const eventPackageProduct = eventPackage
-          ? [
-              {
-                id: eventPackage.id,
-                name: eventPackage.name,
-                price: event.pax?.price,
-                quantity: event.pax?.name,
-                img: eventPackage.img,
-                category: "Event Package",
-              },
-            ]
-          : [];
-        const addons = Array.isArray(event.addonsList)
-          ? event.addonsList.map((addon: any) => ({
-              id: addon.id,
-              name: addon.name,
-              price: addon.price,
-              quantity: addon.quantity,
-              img: addon.img,
-              category: "Addon",
-            }))
-          : [];
-        const items = [...eventPackageProduct, ...addons];
-        const subtotal =
-          (Number(event.pax?.price) || 0) +
-          addons.reduce(
-            (sum: any, addon: any) => sum + Number(addon.price || 0),
-            0
-          );
-        const customizationPrice = Number(event.customizationsPrice || 0);
-        const total = subtotal + customizationPrice;
-        receiptProps = {
-          type: "event" as const,
-          customer: event.customer,
-          transaction: txn,
-          items,
-          subtotal,
-          customizationPrice,
-          total,
-          address: event.eventAddress || event.location,
-          schedule: event.eventDate,
-          status: event.eventStatus,
-          customizations: event.customizations,
-          minjeeVenue: event.minjeeVenue,
-        };
-      }
-
       return {
         id: txn.id,
         customerName: name,
@@ -173,7 +83,7 @@ const HistoryPage = () => {
         paymentStatus: txn.paymentStatus,
         isVerified: txn.isVerified,
         txn,
-        receiptProps,
+        hasReceipt: !!(order || event),
       };
     });
 
@@ -327,21 +237,16 @@ const HistoryPage = () => {
                         </span>
                       </TableCell>
                       <TableCell className="py-4 text-right">
-                        {data.receiptProps ? (
-                          <ReceiptModal
-                            trigger={
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="hover:bg-camouflage-50 hover:text-camouflage-700 hover:border-camouflage-300 transition-colors"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <Receipt className="w-4 h-4 mr-1.5" />
-                                View Receipt
-                              </Button>
-                            }
-                            {...data.receiptProps}
-                          />
+                        {data.hasReceipt ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="hover:bg-camouflage-50 hover:text-camouflage-700 hover:border-camouflage-300 transition-colors"
+                            onClick={() => router.push(`/history/${data.id}`)}
+                          >
+                            <Receipt className="w-4 h-4 mr-1.5" />
+                            View Receipt
+                          </Button>
                         ) : (
                           <span className="text-gray-400 text-sm">
                             No receipt available
