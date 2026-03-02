@@ -1,45 +1,40 @@
 "use client";
+
 import React, { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { PackagePlus, Search } from "lucide-react";
-import OrderStatusTable from "@/components/OwnerPage/Order/OrderStatusTable";
+import { PackagePlus, ShoppingCart, Clock, CheckCircle, XCircle } from "lucide-react";
+import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_ORDERS_OWNER } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
 
-const page = () => {
+const OrdersPage = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const { data, loading, error } = useQuery(GET_ALL_ORDERS_OWNER, {
     client: apolloClientPartner,
   });
 
-  const filteredAndSortedOrders = useMemo(() => {
-    if (!data?.getOrders) return [];
+  const { filteredOrders, stats } = useMemo(() => {
+    if (!data?.getOrders) return { filteredOrders: [], stats: { pending: 0, verified: 0, completed: 0, rejected: 0 } };
+
+    const orders = data.getOrders;
+    
+    // Calculate stats
+    const stats = orders.reduce(
+      (acc: any, order: any) => {
+        const status = order.orderStatus?.toLowerCase() || "pending";
+        if (status in acc) acc[status]++;
+        return acc;
+      },
+      { pending: 0, verified: 0, completed: 0, rejected: 0 }
+    );
 
     // Filter by search (customer name)
-    let filtered = data.getOrders.filter((order: any) => {
+    let filtered = orders.filter((order: any) => {
       const customerName = order.customer
         ? `${order.customer.firstName} ${order.customer.lastName}`.toLowerCase()
-        : "";
+        : order.name?.toLowerCase() || "";
       return customerName.includes(search.toLowerCase());
     });
 
@@ -54,114 +49,117 @@ const page = () => {
       const aPriority = statusPriority(a.orderStatus);
       const bPriority = statusPriority(b.orderStatus);
       if (aPriority !== bPriority) return aPriority - bPriority;
-      // Then by most recent date
       const dateA = new Date(a.orderDate).getTime();
       const dateB = new Date(b.orderDate).getTime();
       return dateB - dateA;
     });
 
-    return filtered;
+    return { filteredOrders: filtered, stats };
   }, [data, search]);
 
-  const handleRowClick = (id: string) => {
-    router.push(`/orders/${id}`);
-  };
+  const columns = [
+    {
+      key: "name",
+      header: "Customer Name",
+      render: (order: any) => (
+        <div className="font-medium text-gray-900">{order.name || "N/A"}</div>
+      ),
+    },
+    {
+      key: "orderDate",
+      header: "Date Ordered",
+      render: (order: any) => (
+        <span className="text-gray-600">
+          {order.orderDate
+            ? new Date(order.orderDate).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })
+            : "N/A"}
+        </span>
+      ),
+    },
+    {
+      key: "quantity",
+      header: "Items",
+      render: (order: any) => {
+        const quantity = order.rentalList
+          ? order.rentalList.reduce(
+              (sum: number, item: any) => sum + (item.rentalQuantity || 0),
+              0
+            )
+          : 0;
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+            {quantity} {quantity === 1 ? "item" : "items"}
+          </span>
+        );
+      },
+    },
+    {
+      key: "orderStatus",
+      header: "Status",
+      className: "text-center",
+      render: (order: any) => (
+        <div className="flex justify-center">
+          <StatusBadge status={order.orderStatus || "Pending"} />
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="font-afacad font-light text-2xl">
-              Order List
-              <CardDescription className="text-base">
-                Click an order row to view its details.
-              </CardDescription>
-            </div>
-            <div className="flex gap-x-3">
-              <div className="relative w-fit">
-                <Input
-                  placeholder="Search an order item"
-                  className="w-fit font-light pr-8"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              </div>
-              <Button
-                onClick={() => router.push("/orders/add-order")}
-                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
-              >
-                <PackagePlus />
-                New Order
-              </Button>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {/* <TableHead className="w-[150px]">Order ID</TableHead> */}
-                <TableHead>Customer Name</TableHead>
-                <TableHead>Date Ordered</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead className="text-center">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading && (
-                <TableRow>
-                  <TableCell colSpan={5}>Loading...</TableCell>
-                </TableRow>
-              )}
-              {error && (
-                <TableRow>
-                  <TableCell colSpan={5}>Error loading orders.</TableCell>
-                </TableRow>
-              )}
-              {filteredAndSortedOrders.length === 0 && !loading && !error && (
-                <TableRow>
-                  <TableCell colSpan={5}>No orders found.</TableCell>
-                </TableRow>
-              )}
-              {filteredAndSortedOrders.map((order: any) => (
-                <TableRow
-                  key={order.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(order.id)}
-                >
-                  {/* <TableCell className="font-medium">{order.id}</TableCell> */}
-                  <TableCell>{order.name}</TableCell>
-                  <TableCell>
-                    {order.orderDate
-                      ? new Date(order.orderDate).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell>
-                    {order.rentalList
-                      ? order.rentalList.reduce(
-                          (sum: number, item: any) =>
-                            sum + (item.rentalQuantity || 0),
-                          0
-                        )
-                      : 0}
-                  </TableCell>
-                  <TableCell className="flex justify-center">
-                    <OrderStatusTable label={order.orderStatus || "N/A"} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatsCard
+          title="Pending Orders"
+          value={stats.pending}
+          icon={<Clock className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Verified Orders"
+          value={stats.verified}
+          icon={<CheckCircle className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Completed"
+          value={stats.completed}
+          icon={<ShoppingCart className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Rejected"
+          value={stats.rejected}
+          icon={<XCircle className="w-5 h-5" />}
+        />
+      </div>
+
+      {/* Page Header */}
+      <PageHeader
+        title="Order List"
+        description="Click an order row to view its details"
+        searchPlaceholder="Search by customer name..."
+        searchValue={search}
+        onSearchChange={setSearch}
+        actionLabel="New Order"
+        actionIcon={<PackagePlus className="w-4 h-4" />}
+        onAction={() => router.push("/orders/add-order")}
+      />
+
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={filteredOrders}
+        loading={loading}
+        error={error || null}
+        emptyTitle="No orders found"
+        emptyDescription="No orders match your search criteria. Try adjusting your search or create a new order."
+        onRowClick={(order: any) => router.push(`/orders/${order.id}`)}
+        keyExtractor={(order: any) => order.id}
+      />
+    </div>
   );
 };
 
-export default page;
+export default OrdersPage;

@@ -1,28 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Plus, Search, Tag, Tags, UserRoundPlus } from "lucide-react";
-import { AllCustomerSample, AllPartnerSample } from "@/constants";
-import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
+import { UserRoundPlus, Contact, MapPin, Phone, Building2 } from "lucide-react";
+import { PageHeader, DataTable, StatsCard } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import { GET_ALL_PARTNERS } from "@/graphql/people";
@@ -38,16 +19,11 @@ interface PartnerTypes {
   categoryId: string;
 }
 
-const page = () => {
+const PartnersPage = () => {
   const router = useRouter();
-
   const [partners, setPartners] = useState<PartnerTypes[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-
-  const handleRowClick = (id: string) => {
-    router.push(`/partners/${id}`);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     loading: partnersLoading,
@@ -73,7 +49,7 @@ const page = () => {
 
   const getCategoryName = (categoryId: string): string => {
     const category = categories.find((cat) => cat.id === categoryId);
-    return category ? category.name : "Unknown Category";
+    return category ? category.name : "Uncategorized";
   };
 
   useEffect(() => {
@@ -84,85 +60,132 @@ const page = () => {
         );
         setCategories(partnerCategories);
         setPartners(partnersData.getPartner);
-        console.log("DATA:", partnersData.getPartner);
-        console.log("Categories:", categoriesData.getCategories);
       }
     } catch (error) {
-      toast.error(
-        "An error occurred while fetching data. Please try again later."
-      );
+      toast.error("Failed to fetch data. Please try again later.");
     }
   }, [partnersData, partnersLoading, categoriesData, categoriesLoading]);
 
+  const { filteredPartners, stats } = useMemo(() => {
+    const filtered = partners.filter((partner) => {
+      const searchLower = searchTerm.toLowerCase();
+      return (
+        partner.name.toLowerCase().includes(searchLower) ||
+        partner.address.toLowerCase().includes(searchLower) ||
+        partner.contactNumber.includes(searchTerm) ||
+        getCategoryName(partner.categoryId).toLowerCase().includes(searchLower)
+      );
+    });
+
+    const categoryCounts = partners.reduce(
+      (acc: Record<string, number>, partner) => {
+        const cat = getCategoryName(partner.categoryId);
+        acc[cat] = (acc[cat] || 0) + 1;
+        return acc;
+      },
+      {}
+    );
+
+    return {
+      filteredPartners: filtered,
+      stats: {
+        total: partners.length,
+        categories: Object.keys(categoryCounts).length,
+      },
+    };
+  }, [partners, searchTerm, categories]);
+
+  const columns = [
+    {
+      key: "name",
+      header: "Partner",
+      render: (partner: PartnerTypes) => (
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-camouflage-300 to-camouflage-500 flex items-center justify-center flex-shrink-0">
+            <Building2 className="w-4 h-4 text-white" />
+          </div>
+          <div className="font-medium text-gray-900">{partner.name}</div>
+        </div>
+      ),
+    },
+    {
+      key: "address",
+      header: "Address",
+      render: (partner: PartnerTypes) => (
+        <span className="inline-flex items-center gap-1.5 text-gray-600">
+          <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+          <span className="line-clamp-1">{partner.address}</span>
+        </span>
+      ),
+    },
+    {
+      key: "contactNumber",
+      header: "Phone",
+      render: (partner: PartnerTypes) => (
+        <span className="inline-flex items-center gap-1.5 text-gray-600">
+          <Phone className="w-3.5 h-3.5" />
+          {partner.contactNumber}
+        </span>
+      ),
+    },
+    {
+      key: "category",
+      header: "Category",
+      render: (partner: PartnerTypes) => (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-camouflage-50 text-camouflage-700">
+          {getCategoryName(partner.categoryId)}
+        </span>
+      ),
+    },
+  ];
+
+  const isLoading = partnersLoading || categoriesLoading;
+  const hasError = partnersError || categoriesError;
+
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="font-afacad font-light text-2xl">
-              Parnter List
-              <CardDescription className="text-base">
-                Click an order row to view/edit a partner details.
-              </CardDescription>
-            </div>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatsCard
+          title="Total Partners"
+          value={stats.total}
+          icon={<Contact className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Partner Categories"
+          value={stats.categories}
+          icon={<Building2 className="w-5 h-5" />}
+        />
+      </div>
 
-            <div className="flex gap-x-3">
-              <div className="relative w-fit">
-                <Input
-                  placeholder="Search an order item"
-                  className="w-fit font-light pr-8"
-                />
-                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              </div>
+      {/* Page Header */}
+      <PageHeader
+        title="Partner List"
+        description="Click a partner row to view or edit details"
+        searchPlaceholder="Search by name, address, or category..."
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        actionLabel="Add Partner"
+        actionIcon={<UserRoundPlus className="w-4 h-4" />}
+        onAction={() => router.push("/partners/add-partner")}
+      />
 
-              <Button
-                onClick={() => router.push("/partners/add-partner")}
-                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
-              >
-                <UserRoundPlus />
-                Add Partner
-              </Button>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="">Partner Name</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Phone Number</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {/* 5 rows is ideal */}
-              {partners.map((data) => (
-                <TableRow
-                  key={data.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(data.id.toString())}
-                >
-                  <TableCell className="font-medium">{data.name}</TableCell>
-                  <TableCell>{data.address}</TableCell>
-                  <TableCell>{data.contactNumber}</TableCell>
-                  <TableCell>{getCategoryName(data.categoryId)}</TableCell>
-                  <TableCell className="hover:underline cursor-pointer">
-                    Edit
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </>
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={filteredPartners}
+        loading={isLoading}
+        error={hasError || null}
+        emptyTitle="No partners found"
+        emptyDescription="No partners match your search criteria. Try adjusting your search or add a new partner."
+        emptyIcon={<Contact className="w-10 h-10 text-gray-400" />}
+        onRowClick={(partner: PartnerTypes) =>
+          router.push(`/partners/${partner.id}`)
+        }
+        keyExtractor={(partner: PartnerTypes) => partner.id}
+      />
+    </div>
   );
 };
 
-export default page;
+export default PartnersPage;

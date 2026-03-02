@@ -1,15 +1,8 @@
 "use client";
+
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,9 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import PaymentStatus from "@/components/OwnerPage/History/PaymentStatus";
+import {
+  History,
+  Receipt,
+  ShoppingCart,
+  PartyPopper,
+  Phone,
+  Loader2,
+  FileText,
+} from "lucide-react";
+import { PageHeader, StatsCard, StatusBadge } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import {
   GET_TRANSACTIONS,
@@ -30,11 +30,9 @@ import {
 import apolloClientPartner from "@/graphql/apolloClientPartners";
 import ReceiptModal from "@/components/ReceiptCard/ReceiptModal";
 
-const page = () => {
-  const router = useRouter();
+const HistoryPage = () => {
   const [search, setSearch] = useState("");
 
-  // Fetch all transactions, orders, and events
   const {
     data: transactionsData,
     loading: transactionsLoading,
@@ -51,12 +49,15 @@ const page = () => {
     error: eventsError,
   } = useQuery(GET_ALL_EVENTS_OWNER, { client: apolloClientPartner });
 
-  // Combine all transactions with their related order or event
-  const historyRows = useMemo(() => {
-    if (!transactionsData?.getTransactions) return [];
+  const { historyRows, filteredRows, stats } = useMemo(() => {
+    if (!transactionsData?.getTransactions)
+      return {
+        historyRows: [],
+        filteredRows: [],
+        stats: { total: 0, orders: 0, events: 0 },
+      };
 
-    return transactionsData.getTransactions.map((txn: any) => {
-      // Try to find the order or event for this transaction
+    const rows = transactionsData.getTransactions.map((txn: any) => {
       let order = null;
       let event = null;
       if (txn.orderId && ordersData?.getOrders) {
@@ -66,7 +67,6 @@ const page = () => {
         event = eventsData.getEvents.find((e: any) => e.id === txn.eventId);
       }
 
-      // Prefer order if available, else event
       const customer = order?.customer || event?.customer;
       const category = order ? "Order" : event ? "Event" : "N/A";
       const name = customer
@@ -74,10 +74,8 @@ const page = () => {
         : "N/A";
       const phone = customer?.contactNumber || "N/A";
 
-      // Prepare receipt modal props
       let receiptProps = null;
       if (order) {
-        // Rentals and Services
         const rentalProducts =
           order.rentalList?.map((item: any) => ({
             id: item.id,
@@ -119,7 +117,6 @@ const page = () => {
           minjeeVenue: order.minjeeVenue,
         };
       } else if (event) {
-        // Event Package
         const eventPackage = event.pax?.eventPackages;
         const eventPackageProduct = eventPackage
           ? [
@@ -133,7 +130,6 @@ const page = () => {
               },
             ]
           : [];
-        // Addons (if any)
         const addons = Array.isArray(event.addonsList)
           ? event.addonsList.map((addon: any) => ({
               id: addon.id,
@@ -180,111 +176,188 @@ const page = () => {
         receiptProps,
       };
     });
-  }, [transactionsData, ordersData, eventsData]);
+
+    const filtered = rows.filter(
+      (row: any) =>
+        row.customerName.toLowerCase().includes(search.toLowerCase()) ||
+        row.phoneNumber.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const stats = {
+      total: rows.length,
+      orders: rows.filter((r: any) => r.category === "Order").length,
+      events: rows.filter((r: any) => r.category === "Event").length,
+    };
+
+    return { historyRows: rows, filteredRows: filtered, stats };
+  }, [transactionsData, ordersData, eventsData, search]);
+
+  const isLoading = transactionsLoading || ordersLoading || eventsLoading;
+  const hasError = transactionsError || ordersError || eventsError;
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="font-afacad font-light text-2xl">
-              History List
-              <CardDescription className="text-base">
-                Click a row to expand the transaction's order or event history.
-              </CardDescription>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatsCard
+          title="Total Transactions"
+          value={stats.total}
+          icon={<History className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Order Transactions"
+          value={stats.orders}
+          icon={<ShoppingCart className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Event Transactions"
+          value={stats.events}
+          icon={<PartyPopper className="w-5 h-5" />}
+        />
+      </div>
+
+      {/* Page Header */}
+      <PageHeader
+        title="Transaction History"
+        description="View all transaction history and receipts"
+        searchPlaceholder="Search by customer or phone..."
+        searchValue={search}
+        onSearchChange={setSearch}
+      />
+
+      {/* Content */}
+      {isLoading ? (
+        <Card className="border-gray-200 shadow-sm">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-camouflage-400 mb-4" />
+            <p className="text-gray-500">Loading transaction history...</p>
+          </CardContent>
+        </Card>
+      ) : hasError ? (
+        <Card className="border-gray-200 shadow-sm">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
+              <History className="w-8 h-8 text-red-500" />
             </div>
-            <div className="flex gap-x-3">
-              <div className="relative w-fit">
-                <Input
-                  placeholder="Search by customer or phone"
-                  className="w-56 font-light pr-8 "
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Error loading history
+            </h3>
+            <p className="text-gray-500">Please try again later.</p>
+          </CardContent>
+        </Card>
+      ) : filteredRows.length === 0 ? (
+        <Card className="border-gray-200 shadow-sm">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+              <FileText className="w-8 h-8 text-gray-400" />
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Customer Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Category</TableHead>
-                {/* <TableHead>Payment Status</TableHead> */}
-                <TableHead> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {(transactionsLoading || ordersLoading || eventsLoading) && (
-                <TableRow>
-                  <TableCell colSpan={5}>Loading...</TableCell>
-                </TableRow>
-              )}
-              {(transactionsError || ordersError || eventsError) && (
-                <TableRow>
-                  <TableCell colSpan={5}>Error loading data.</TableCell>
-                </TableRow>
-              )}
-              {historyRows
-                .filter(
-                  (row: any) =>
-                    row.customerName
-                      .toLowerCase()
-                      .includes(search.toLowerCase()) ||
-                    row.phoneNumber.toLowerCase().includes(search.toLowerCase())
-                )
-                .map((data: any) => (
-                  <TableRow key={data.id} className="hover:cursor-pointer">
-                    <TableCell className="font-medium">
-                      {data.customerName}
-                    </TableCell>
-                    <TableCell>{data.phoneNumber}</TableCell>
-                    <TableCell>{data.category}</TableCell>
-                    {/* <TableCell>
-                      <PaymentStatus status={data.paymentStatus} />
-                    </TableCell> */}
-                    <TableCell>
-                      {data.receiptProps ? (
-                        <ReceiptModal
-                          trigger={
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="font-afacad"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              View Receipt
-                            </Button>
-                          }
-                          {...data.receiptProps}
-                        />
-                      ) : (
-                        <span className="text-gray-400">No Receipt</span>
-                      )}
-                    </TableCell>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No transactions found
+            </h3>
+            <p className="text-gray-500">
+              {search
+                ? "Try adjusting your search criteria."
+                : "Transaction history will appear here."}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="border-gray-200 shadow-sm overflow-hidden">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50/80 hover:bg-gray-50/80 border-b border-gray-200">
+                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                      Customer
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                      Phone
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                      Type
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-600 text-sm py-4 text-right">
+                      Receipt
+                    </TableHead>
                   </TableRow>
-                ))}
-              {historyRows.length === 0 &&
-                !transactionsLoading &&
-                !ordersLoading &&
-                !eventsLoading && (
-                  <TableRow>
-                    <TableCell colSpan={5}>No history found.</TableCell>
-                  </TableRow>
-                )}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </>
+                </TableHeader>
+                <TableBody>
+                  {filteredRows.map((data: any) => (
+                    <TableRow
+                      key={data.id}
+                      className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
+                    >
+                      <TableCell className="py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-camouflage-300 to-camouflage-500 flex items-center justify-center flex-shrink-0">
+                            <span className="text-white text-xs font-semibold">
+                              {data.customerName
+                                .split(" ")
+                                .map((n: string) => n[0])
+                                .join("")
+                                .slice(0, 2)}
+                            </span>
+                          </div>
+                          <span className="font-medium text-gray-900">
+                            {data.customerName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <span className="inline-flex items-center gap-1.5 text-gray-600">
+                          <Phone className="w-3.5 h-3.5" />
+                          {data.phoneNumber}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                            data.category === "Order"
+                              ? "bg-blue-50 text-blue-700 border border-blue-200"
+                              : "bg-purple-50 text-purple-700 border border-purple-200"
+                          }`}
+                        >
+                          {data.category === "Order" ? (
+                            <ShoppingCart className="w-3 h-3" />
+                          ) : (
+                            <PartyPopper className="w-3 h-3" />
+                          )}
+                          {data.category}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-4 text-right">
+                        {data.receiptProps ? (
+                          <ReceiptModal
+                            trigger={
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="hover:bg-camouflage-50 hover:text-camouflage-700 hover:border-camouflage-300 transition-colors"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Receipt className="w-4 h-4 mr-1.5" />
+                                View Receipt
+                              </Button>
+                            }
+                            {...data.receiptProps}
+                          />
+                        ) : (
+                          <span className="text-gray-400 text-sm">
+                            No receipt available
+                          </span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 
-export default page;
+export default HistoryPage;

@@ -1,24 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, Tag, FolderTree, Layers } from "lucide-react";
+import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
@@ -29,10 +14,9 @@ interface CategoryTypes {
   type: string;
 }
 
-const Page: React.FC = () => {
+const CategoriesPage: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryTypes[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<CategoryTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { loading, error, data } = useQuery(GET_ALL_CATEGORIES, {
@@ -42,104 +26,128 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (data?.getCategories) {
       setCategories(data.getCategories);
-      setFilteredCategories(data.getCategories);
     }
   }, [data]);
 
-  useEffect(() => {
-    if (categories.length > 0) {
-      const filtered = categories.filter(
-        (category) =>
-          category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          category.type.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCategories(filtered);
+  const { filteredCategories, stats } = useMemo(() => {
+    const filtered = categories.filter(
+      (category) =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.type.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const typeCounts = categories.reduce(
+      (acc: Record<string, number>, cat) => {
+        acc[cat.type] = (acc[cat.type] || 0) + 1;
+        return acc;
+      },
+      {}
+    );
+
+    return {
+      filteredCategories: filtered,
+      stats: {
+        total: categories.length,
+        types: Object.keys(typeCounts).length,
+        rental: typeCounts["Rental"] || 0,
+        partner: typeCounts["Partner"] || 0,
+      },
+    };
+  }, [categories, searchTerm]);
+
+  const getTypeColor = (type: string) => {
+    switch (type.toLowerCase()) {
+      case "rental":
+        return "bg-blue-50 text-blue-700 border-blue-200";
+      case "partner":
+        return "bg-purple-50 text-purple-700 border-purple-200";
+      case "service":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      default:
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
-  }, [searchTerm, categories]);
-
-  const handleRowClick = (id: string): void => {
-    router.push(`/categories/${id}`);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchTerm(e.target.value);
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const columns = [
+    {
+      key: "name",
+      header: "Category Name",
+      render: (category: CategoryTypes) => (
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-camouflage-100 to-camouflage-200 flex items-center justify-center flex-shrink-0">
+            <Tag className="w-4 h-4 text-camouflage-600" />
+          </div>
+          <span className="font-medium text-gray-900">{category.name}</span>
+        </div>
+      ),
+    },
+    {
+      key: "type",
+      header: "Type",
+      render: (category: CategoryTypes) => (
+        <span
+          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getTypeColor(category.type)}`}
+        >
+          {category.type}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <div className="font-afacad font-light text-2xl">
-            Categories
-            <CardDescription className="text-base">
-              Manage categories for rentals, partners, and other items.
-            </CardDescription>
-          </div>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatsCard
+          title="Total Categories"
+          value={stats.total}
+          icon={<FolderTree className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Category Types"
+          value={stats.types}
+          icon={<Layers className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Rental Categories"
+          value={stats.rental}
+          icon={<Tag className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Partner Categories"
+          value={stats.partner}
+          icon={<Tag className="w-5 h-5" />}
+        />
+      </div>
 
-          <div className="flex gap-x-3">
-            <div className="relative w-fit">
-              <Input
-                placeholder="Search a category"
-                className="w-fit font-light pr-8"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-              <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-            </div>
+      {/* Page Header */}
+      <PageHeader
+        title="Categories"
+        description="Manage categories for rentals, partners, and other items"
+        searchPlaceholder="Search by name or type..."
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        actionLabel="Add Category"
+        actionIcon={<Plus className="w-4 h-4" />}
+        onAction={() => router.push("/categories/add-category")}
+      />
 
-            <Button
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
-              onClick={() => router.push("/categories/add-category")}
-            >
-              <Plus className="mr-2" />
-              Add Category
-            </Button>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {filteredCategories.length === 0 ? (
-          <div className="py-12 text-center text-gray-500">
-            No categories found matching your search criteria.
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Category Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCategories.map((category) => (
-                <TableRow
-                  key={category.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(category.id)}
-                >
-                  <TableCell className="font-medium">{category.name}</TableCell>
-                  <TableCell>{category.type}</TableCell>
-                  <TableCell
-                    className="hover:underline cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRowClick(category.id);
-                    }}
-                  >
-                    Edit
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </CardContent>
-    </Card>
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={filteredCategories}
+        loading={loading}
+        error={error || null}
+        emptyTitle="No categories found"
+        emptyDescription="No categories match your search criteria. Try adjusting your search or add a new category."
+        emptyIcon={<FolderTree className="w-10 h-10 text-gray-400" />}
+        onRowClick={(category: CategoryTypes) =>
+          router.push(`/categories/${category.id}`)
+        }
+        keyExtractor={(category: CategoryTypes) => category.id}
+      />
+    </div>
   );
 };
 
-export default Page;
+export default CategoriesPage;

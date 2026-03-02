@@ -1,43 +1,47 @@
 "use client";
+
 import React, { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Calendar, Users, PartyPopper } from "lucide-react";
+import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS_OWNER } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
-import StatusLabel from "@/components/StatusLabel";
 
-const page = () => {
+const BookingsPage = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const { data, loading, error } = useQuery(GET_ALL_EVENTS_OWNER, {
     client: apolloClientPartner,
   });
 
-  // Filter and sort events
-  const filteredAndSortedEvents = useMemo(() => {
-    if (!data?.getEvents) return [];
+  const { filteredEvents, stats } = useMemo(() => {
+    if (!data?.getEvents)
+      return {
+        filteredEvents: [],
+        stats: { total: 0, upcoming: 0, thisMonth: 0 },
+      };
+
+    const events = data.getEvents;
+    const now = new Date();
+    const thisMonth = now.getMonth();
+    const thisYear = now.getFullYear();
+
+    // Calculate stats
+    const stats = {
+      total: events.length,
+      upcoming: events.filter((e: any) => new Date(e.eventDate) > now).length,
+      thisMonth: events.filter((e: any) => {
+        const eventDate = new Date(e.eventDate);
+        return (
+          eventDate.getMonth() === thisMonth &&
+          eventDate.getFullYear() === thisYear
+        );
+      }).length,
+    };
 
     // Filter by search (customer name or event name)
-    let filtered = data.getEvents.filter((event: any) => {
+    let filtered = events.filter((event: any) => {
       const customerName = event.customer
         ? `${event.customer.firstName} ${event.customer.lastName}`.toLowerCase()
         : "";
@@ -55,100 +59,113 @@ const page = () => {
       return dateA - dateB;
     });
 
-    return filtered;
+    return { filteredEvents: filtered, stats };
   }, [data, search]);
 
-  const handleRowClick = (id: string) => {
-    router.push(`/bookings/${id}`);
-  };
+  const columns = [
+    {
+      key: "name",
+      header: "Customer Name",
+      render: (event: any) => (
+        <div className="font-medium text-gray-900">{event.name || "N/A"}</div>
+      ),
+    },
+    {
+      key: "package",
+      header: "Event Package",
+      render: (event: any) => (
+        <span className="text-gray-600">
+          {event.pax?.eventPackages?.name || "N/A"}
+        </span>
+      ),
+    },
+    {
+      key: "pax",
+      header: "Pax",
+      render: (event: any) => (
+        <span className="inline-flex items-center gap-1.5 text-gray-600">
+          <Users className="w-3.5 h-3.5" />
+          {event.pax?.name || "N/A"}
+        </span>
+      ),
+    },
+    {
+      key: "eventDate",
+      header: "Event Date",
+      render: (event: any) => {
+        const eventDate = event.eventDate ? new Date(event.eventDate) : null;
+        const isUpcoming = eventDate && eventDate > new Date();
+        return (
+          <div className="flex items-center gap-2">
+            <Calendar
+              className={`w-3.5 h-3.5 ${isUpcoming ? "text-camouflage-500" : "text-gray-400"}`}
+            />
+            <span className={isUpcoming ? "text-gray-900 font-medium" : "text-gray-500"}>
+              {eventDate
+                ? eventDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "N/A"}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      key: "eventStatus",
+      header: "Status",
+      render: (event: any) => (
+        <StatusBadge status={event.eventStatus || "Pending"} />
+      ),
+    },
+  ];
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="font-afacad font-light text-2xl">
-              Event Bookings
-              <CardDescription className="text-base">
-                Click an event booking row to view its details.
-              </CardDescription>
-            </div>
-            <div className="flex gap-x-3">
-              <div className="relative w-fit">
-                <Input
-                  placeholder="Search by customer or event name"
-                  className="w-fit font-light pr-8"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              </div>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Event Package</TableHead>
-                <TableHead>Pax</TableHead>
-                <TableHead>Event Date</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading && (
-                <TableRow>
-                  <TableCell colSpan={4}>Loading...</TableCell>
-                </TableRow>
-              )}
-              {error && (
-                <TableRow>
-                  <TableCell colSpan={4}>Error loading events.</TableCell>
-                </TableRow>
-              )}
-              {filteredAndSortedEvents.length === 0 && !loading && !error && (
-                <TableRow>
-                  <TableCell colSpan={4}>No event bookings found.</TableCell>
-                </TableRow>
-              )}
-              {filteredAndSortedEvents.map((event: any) => (
-                <TableRow
-                  key={event.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(event.id)}
-                >
-                  <TableCell>{event.name || "N/A"}</TableCell>
-                  <TableCell>{event.pax?.eventPackages?.name || "N/A"}</TableCell>
-                  <TableCell>
-                    {event.pax?.name ? event.pax.name : "N/A"}
-                  </TableCell>
-                  <TableCell>
-                    {event.eventDate
-                      ? new Date(event.eventDate).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell>
-                    {/* Use your StatusLabel component if available */}
-                    {event.eventStatus ? (
-                      <StatusLabel label={event.eventStatus} />
-                    ) : (
-                      "N/A"
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatsCard
+          title="Total Bookings"
+          value={stats.total}
+          icon={<PartyPopper className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Upcoming Events"
+          value={stats.upcoming}
+          icon={<Calendar className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="This Month"
+          value={stats.thisMonth}
+          icon={<Users className="w-5 h-5" />}
+        />
+      </div>
+
+      {/* Page Header */}
+      <PageHeader
+        title="Event Bookings"
+        description="Click an event booking row to view its details"
+        searchPlaceholder="Search by customer or event name..."
+        searchValue={search}
+        onSearchChange={setSearch}
+      />
+
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={filteredEvents}
+        loading={loading}
+        error={error || null}
+        emptyTitle="No bookings found"
+        emptyDescription="No event bookings match your search criteria."
+        emptyIcon={<PartyPopper className="w-10 h-10 text-gray-400" />}
+        onRowClick={(event: any) => router.push(`/bookings/${event.id}`)}
+        keyExtractor={(event: any) => event.id}
+      />
+    </div>
   );
 };
 
-export default page;
+export default BookingsPage;

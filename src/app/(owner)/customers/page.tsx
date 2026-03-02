@@ -1,27 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Plus, Search, Tags, UserRoundPlus } from "lucide-react";
-import OnlineStatus from "@/components/OwnerPage/Customer/OnlineStatus";
+import { UserRoundPlus, Users, UserCheck, Mail, Phone } from "lucide-react";
+import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { toast } from "sonner";
 import { GET_ALL_CUSTOMERS } from "@/graphql/people";
@@ -38,14 +20,10 @@ interface CustomerTypes {
   isActive: boolean;
 }
 
-const page = () => {
+const CustomersPage = () => {
   const router = useRouter();
   const [customers, setCustomers] = useState<CustomerTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleRowClick = (id: string) => {
-    router.push(`/customers/${id}`);
-  };
 
   const {
     loading: customersLoading,
@@ -57,10 +35,6 @@ const page = () => {
   });
 
   useEffect(() => {
-
-    console.log("Customer data:", customersData);
-    
-
     try {
       if (customersData?.getCustomers) {
         setCustomers(customersData.getCustomers);
@@ -72,98 +46,127 @@ const page = () => {
     }
   }, [customersData, customersLoading]);
 
-  const filteredCustomers = customers.filter((customer) => {
-    const fullName = `${customer.firstName} ${customer.lastName}`.toLowerCase();
-    return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.contactNumber.includes(searchTerm)
-    );
-  });
+  const { filteredCustomers, stats } = useMemo(() => {
+    const filtered = customers.filter((customer) => {
+      const fullName = `${customer.firstName} ${customer.lastName}`.toLowerCase();
+      return (
+        fullName.includes(searchTerm.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.contactNumber.includes(searchTerm)
+      );
+    });
+
+    const stats = {
+      total: customers.length,
+      active: customers.filter((c) => c.isActive).length,
+      withBookings: customers.filter((c) => c.bookings > 0).length,
+    };
+
+    return { filteredCustomers: filtered, stats };
+  }, [customers, searchTerm]);
+
+  const columns = [
+    {
+      key: "name",
+      header: "Customer",
+      render: (customer: CustomerTypes) => (
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-camouflage-300 to-camouflage-500 flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-xs font-semibold">
+              {customer.firstName.charAt(0)}
+              {customer.lastName.charAt(0)}
+            </span>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900">
+              {customer.firstName} {customer.lastName}
+            </div>
+            <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+              <Mail className="w-3 h-3" />
+              {customer.email}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "contactNumber",
+      header: "Phone",
+      render: (customer: CustomerTypes) => (
+        <span className="inline-flex items-center gap-1.5 text-gray-600">
+          <Phone className="w-3.5 h-3.5" />
+          {customer.contactNumber}
+        </span>
+      ),
+    },
+    {
+      key: "bookings",
+      header: "Bookings",
+      render: (customer: CustomerTypes) => (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-camouflage-50 text-camouflage-700">
+          {customer.bookings} {customer.bookings === 1 ? "booking" : "bookings"}
+        </span>
+      ),
+    },
+    {
+      key: "isActive",
+      header: "Status",
+      render: (customer: CustomerTypes) => (
+        <StatusBadge status={customer.isActive ? "Active" : "Inactive"} />
+      ),
+    },
+  ];
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="font-afacad font-light text-2xl">
-              Customer Lists
-              <CardDescription className="text-base">
-                Click a customer row to view/edit customer details.
-              </CardDescription>
-            </div>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatsCard
+          title="Total Customers"
+          value={stats.total}
+          icon={<Users className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="Active Customers"
+          value={stats.active}
+          icon={<UserCheck className="w-5 h-5" />}
+        />
+        <StatsCard
+          title="With Bookings"
+          value={stats.withBookings}
+          description="Customers who have booked"
+          icon={<Users className="w-5 h-5" />}
+        />
+      </div>
 
-            <div className="flex gap-x-3">
-              <div className="relative w-fit">
-                <Input
-                  placeholder="Search customers"
-                  className="w-fit font-light pr-8"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              </div>
+      {/* Page Header */}
+      <PageHeader
+        title="Customer List"
+        description="Click a customer row to view/edit customer details"
+        searchPlaceholder="Search by name, email, or phone..."
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        actionLabel="Add Customer"
+        actionIcon={<UserRoundPlus className="w-4 h-4" />}
+        onAction={() => router.push("/customers/add-customer")}
+      />
 
-              <Button
-                onClick={() => router.push("/customers/add-customer")}
-                className="bg-camouflage-400 hover:bg-camouflage-400/80 font-afacad"
-              >
-                <UserRoundPlus />
-                Add Customer
-              </Button>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="">Customer Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Bookings</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCustomers.map((customer) => (
-                <TableRow
-                  key={customer.id}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleRowClick(customer.id)}
-                >
-                  <TableCell className="font-medium">
-                    {`${customer.firstName} ${customer.lastName}`}
-                  </TableCell>
-                  <TableCell>{customer.contactNumber}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-x-3 text-neutral-500">
-                      <Tags size={18} />
-                      <h1>{customer.bookings}</h1>
-                    </div>
-                  </TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>
-                    <OnlineStatus
-                      status={customer.isActive ? "Active" : "Inactive"}
-                    />
-                  </TableCell>
-                  <TableCell className="hover:underline cursor-pointer">
-                    Edit
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
-    </>
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={filteredCustomers}
+        loading={customersLoading}
+        error={customersError || null}
+        emptyTitle="No customers found"
+        emptyDescription="No customers match your search criteria. Try adjusting your search or add a new customer."
+        emptyIcon={<Users className="w-10 h-10 text-gray-400" />}
+        onRowClick={(customer: CustomerTypes) =>
+          router.push(`/customers/${customer.id}`)
+        }
+        keyExtractor={(customer: CustomerTypes) => customer.id}
+      />
+    </div>
   );
 };
 
-export default page;
+export default CustomersPage;
