@@ -34,8 +34,8 @@ import {
 const rentalSchema = z.object({
   name: z.string().min(1, "Rental name is required"),
   description: z.string().optional(),
-  currentQuantity: z.number().min(1, "Quantity must be at least 1"),
-  totalQuantity: z.number().min(1, "Quantity must be at least 1"),
+  currentQuantity: z.number().min(0, "Quantity cannot be negative"),
+  totalQuantity: z.number().min(0, "Quantity cannot be negative"),
   price: z.number().min(1, "Price must be at least 1 Pesos"),
   categoryId: z.string().min(1, "Category is required"),
 });
@@ -300,9 +300,9 @@ const EditRentalPage = () => {
                       </SelectItem>
                     ))}
                     {categories.length === 0 && !categoriesLoading && (
-                      <SelectItem value="" disabled>
+                      <div className="px-2 py-1.5 text-sm text-muted-foreground">
                         No categories found
-                      </SelectItem>
+                      </div>
                     )}
                   </SelectContent>
                 </Select>
