@@ -10,6 +10,28 @@ import OrderReceipt, { OrderReceiptData } from "@/components/ReceiptCard/OrderRe
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+type RentalListItem = {
+  id: string;
+  rentalTotal: number;
+  rentalQuantity: number;
+  rentals?: {
+    name?: string | null;
+    img?: string | null;
+  } | null;
+};
+
+type ServiceListItem = {
+  id: string;
+  serviceTotal: number;
+  serviceQuantity: number;
+  servicesItems?: {
+    name?: string | null;
+    services?: {
+      img?: string | null;
+    } | null;
+  } | null;
+};
+
 const Page = () => {
   const router = useRouter();
   const params = useParams();
@@ -62,7 +84,7 @@ const Page = () => {
 
   // Rentals and Services
   const rentalProducts =
-    order.rentalList?.map((item: any) => ({
+    order.rentalList?.map((item: RentalListItem) => ({
       id: item.id,
       name: item.rentals?.name,
       price: item.rentalTotal,
@@ -72,7 +94,7 @@ const Page = () => {
     })) || [];
 
   const serviceProducts =
-    order.servicesList?.map((item: any) => ({
+    order.servicesList?.map((item: ServiceListItem) => ({
       id: item.id,
       name: item.servicesItems?.name,
       price: item.serviceTotal,
