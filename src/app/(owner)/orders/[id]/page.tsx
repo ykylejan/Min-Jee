@@ -165,7 +165,7 @@ const OrderDetailPage = () => {
             <CardTitle className="text-xl font-afacad_semibold text-gray-900">
               Product Details
             </CardTitle>
-            <Link href={`/orders/order-item/add-product?id=${order?.id}`}>
+            <Link href={`/orders/${order?.id}/add-product`}>
               <Button
                 size="sm"
                 className="bg-camouflage-400 hover:bg-camouflage-500"
@@ -194,7 +194,7 @@ const OrderDetailPage = () => {
               <p className="text-gray-500 max-w-sm mb-4">
                 Click "Add Product" to start adding items to this order.
               </p>
-              <Link href={`/orders/order-item/add-product?id=${order?.id}`}>
+              <Link href={`/orders/${order?.id}/add-product`}>
                 <Button
                   variant="outline"
                   className="border-camouflage-300 text-camouflage-700 hover:bg-camouflage-50"

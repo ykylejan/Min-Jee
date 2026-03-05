@@ -49,4 +49,19 @@ export const GET_CATEGORY_BY_ID = gql`
   }
 `;
 
-
+export const GET_SERVICES_WITH_ITEMS = gql`
+  query getServicesWithItems {
+    getServicesWithItems {
+      id
+      name
+      img
+      serviceItems {
+        id
+        name
+        price
+        description
+        serviceId
+      }
+    }
+  }
+`;
