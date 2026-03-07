@@ -119,12 +119,12 @@ const Navbar = () => {
                 ) : (
                   <>
                     <ScrollArea className="w-full flex-1">
-                      {cartItems.map((item: any) => (
+                      {cartItems.map((item) => (
                         <OrderSideItem
                           id={item.id}
                           key={item.id}
                           name={item.name}
-                          category={item.category}
+                          category={item.category ?? ""}
                           quantity={item.quantity}
                           price={item.price * item.quantity}
                           image={item.image}
@@ -135,8 +135,7 @@ const Navbar = () => {
                     <div className="mt-auto pt-4">
                       <Subtotal
                         amount={cartItems.reduce(
-                          (total: number, item: any) =>
-                            total + item.price * item.quantity,
+                          (total, item) => total + item.price * item.quantity,
                           0
                         )}
                       />
@@ -168,57 +167,61 @@ const Navbar = () => {
 
         <Sheet>
           <SheetTrigger>
-            <ShoppingBasket
-              size={25}
-              strokeWidth={1.5}
-              className="hover:text-[#778768] cursor-pointer"
-            />
+            <div className="relative inline-block">
+              <ShoppingBasket
+                size={25}
+                strokeWidth={1.5}
+                className="hover:text-[#778768] cursor-pointer"
+              />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#778768] text-white text-[10px] leading-none rounded-full px-1.5 py-0.5 min-w-[16px] flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </div>
           </SheetTrigger>
           <SheetContent>
             <SheetHeader>
               <SheetTitle>My Basket</SheetTitle>
 
-              {cartItems.length <= 0 ? (
-                <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
-                  <Bird className="text-neutral-400" size={60} />
-                  <h1 className="text-neutral-500 text-xl">
-                    Basket is currently empty
-                  </h1>
-                  <h1 className="text-neutral-500 text-xs mb-5">
-                    It is looking real empty at the moment, care to browse the
-                    shops?
-                  </h1>
-                  <a href="/shop">
-                    <Button className="bg-[#0F172A] text-white w-full rounded-full">
-                      Browse Catalog
-                    </Button>
-                  </a>
-                </div>
-              ) : (
-                <ScrollArea className="w-full h-[450px]">
-                  {cartItems.map((item: any) => (
-                    <OrderSideItem
-                      id={item.id}
-                      key={item.id}
-                      name={item.name}
-                      category={item.category}
-                      quantity={item.quantity}
-                      price={item.price * item.quantity}
-                      image={item.image}
-                    />
-                  ))}
-                </ScrollArea>
-              )}
+                {cartItems.length <= 0 ? (
+                  <div className="flex flex-col justify-center items-center text-center font-afacad w-full h-screen pb-40 ">
+                    <Bird className="text-neutral-400" size={60} />
+                    <h1 className="text-neutral-500 text-xl">
+                      Basket is currently empty
+                    </h1>
+                    <h1 className="text-neutral-500 text-xs mb-5">
+                      It is looking real empty at the moment, care to browse the
+                      shops?
+                    </h1>
+                    <Link href="/shop">
+                      <Button className="bg-[#0F172A] text-white w-full rounded-full">
+                        Browse Catalog
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <ScrollArea className="w-full h-[450px]">
+                    {cartItems.map((item) => (
+                      <OrderSideItem
+                        id={item.id}
+                        key={item.id}
+                        name={item.name}
+                        category={item.category ?? ""}
+                        quantity={item.quantity}
+                        price={item.price * item.quantity}
+                        image={item.image}
+                      />
+                    ))}
+                  </ScrollArea>
+                )}
             </SheetHeader>
 
             <SheetFooter>
-              {cartItems.length <= 0 ? (
-                ""
-              ) : (
+              {cartItems.length > 0 && (
                 <Subtotal
                   amount={cartItems.reduce(
-                    (total: number, item: any) =>
-                      total + item.price * item.quantity,
+                    (total, item) => total + item.price * item.quantity,
                     0
                   )}
                 />

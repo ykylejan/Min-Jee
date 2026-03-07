@@ -12,11 +12,11 @@ const BasketList = () => {
   return (
     <div className="bg-white border border-[#545557] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
       <div className="font-afacad mb-2">
-        <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
-          <span>Basket List </span>
+        <h1 className="flex items-center gap-2 text-lg sm:text-xl md:text-2xl font-afacad_medium">
+          <span>Basket List</span>
           {cartItems.length > 0 && (
-            <span className="text-[#6B7280] text-sm sm:text-base font-normal">
-              ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})
+            <span className="inline-flex items-center justify-center rounded-full bg-[#778768] text-white text-xs sm:text-sm px-2 py-0.5">
+              {cartItems.length}
             </span>
           )}
         </h1>

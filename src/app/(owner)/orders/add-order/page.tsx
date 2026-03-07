@@ -26,7 +26,7 @@ import { GET_ALL_CUSTOMERS } from '@/graphql/people'
 import apolloClientPartner from '@/graphql/apolloClientPartners'
 import { toast } from 'sonner'
 import api from '@/app/utils/api'
-import { format } from 'date-fns'
+import { parse, format } from 'date-fns'
 
 interface CustomerType {
   id: string
@@ -113,39 +113,54 @@ const AddOrderPage = () => {
     console.log('Selected customer:', selectedCustomer)
     
     try {
-      // Format order_time as "HH:mm:ss" (Python time format)
-      const orderTime = formData.orderTime
-        ? `${formData.orderTime}:00`
-        : `${format(new Date(), 'HH:mm')}:00`
+      // Format order_time as "HH:mm:ss.SSS'Z'" to match backend expectations
+      const order_time =
+        formData.orderDate && formData.orderTime
+          ? format(
+              parse(
+                `${formData.orderDate} ${formData.orderTime}`,
+                'yyyy-MM-dd HH:mm',
+                new Date()
+              ),
+              "HH:mm:ss.SSS'Z'"
+            )
+          : ''
+
+      // We don't collect a separate return time on this form,
+      // so we leave return_time empty for now.
+      const return_time = ''
 
       // Build the customer name from the selected customer
       const customerName = selectedCustomer
         ? `${selectedCustomer.firstName} ${selectedCustomer.lastName}`
         : ''
 
-      // Build the payload matching backend schema
-      const orderPayload = {
-        order_data: {
-          name: customerName,
-          location: formData.location,
-          order_total: 0,
-          order_date: formData.orderDate,
-          order_time: orderTime,
-          order_status: formData.orderStatus,
-          return_date: formData.returnDate || formData.orderDate,
-          overdue_days: 0,
-          is_shipped: formData.obtainmentMethod === 'shipped',
-          delivery_price: parseFloat(formData.deliveryPrice) || 0,
-          deposit_price: parseFloat(formData.depositPrice) || 0,
-          customer_id: formData.customerId,
-        },
-        services: [],
-        rentals: [],
+      // Build the payload matching backend schema (mirrors customer checkout shape)
+      const order_data = {
+        name: customerName,
+        location: formData.location,
+        order_total: 0,
+        order_date: formData.orderDate,
+        order_time,
+        order_status: formData.orderStatus,
+        return_date: formData.returnDate || formData.orderDate,
+        return_time,
+        overdue_days: 0,
+        is_shipped: formData.obtainmentMethod === 'shipped',
+        delivery_price: parseFloat(formData.deliveryPrice) || 0,
+        deposit_price: parseFloat(formData.depositPrice) || 0,
+        customer_id: formData.customerId,
       }
 
-      console.log('Submitting order payload:', JSON.stringify(orderPayload, null, 2))
+      const body = {
+        order_data,
+        services: [] as any[],
+        rentals: [] as any[],
+      }
 
-      const response = await api.post('/o/order/', orderPayload, {
+      console.log('Submitting owner order payload:', JSON.stringify(body, null, 2))
+
+      const response = await api.post('http://localhost:8000/api/v1/o/order/', body, {
         headers: {
           'Content-Type': 'application/json',
         },
