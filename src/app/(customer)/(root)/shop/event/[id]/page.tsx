@@ -29,6 +29,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Slash } from "lucide-react";
 import { CalendarDays, Clock, MapPin, User, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -288,6 +289,7 @@ const Page = ({ params }: PageProps) => {
   const handleBookEvent = async (form: any) => {
     setIsSubmitting(true);
     if (!isAuthenticated || role !== "customer" || !accessToken) {
+      localStorage.setItem("postLoginRedirect", `/shop/event/${id}`);
       toast.error("Please login as a customer to book an event.");
       router.push("/login");
       return;
@@ -365,7 +367,54 @@ const Page = ({ params }: PageProps) => {
   if (!isMounted) return null;
   if (loading)
     return (
-      <div className="min-h-screen bg-[#FFFBF5] px-5 pt-28 sm:px-8 md:px-16 lg:px-24 lg:pt-44">Loading...</div>
+      <div className="min-h-screen bg-[#FFFBF5] px-5 pt-28 sm:px-8 md:px-16 lg:px-24 lg:pt-44">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-x-12 justify-center">
+          {/* Image skeleton */}
+          <div className="w-full lg:w-auto flex justify-center">
+            <Skeleton className="aspect-square w-full max-w-[500px] sm:h-[400px] lg:h-[500px] rounded-md" />
+          </div>
+
+          {/* Details skeleton */}
+          <div className="w-full lg:w-1/2 px-0 lg:px-10 space-y-6">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-4 w-4 rounded-full" />
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+
+            {/* Title & Price */}
+            <div className="space-y-3">
+              <Skeleton className="h-10 w-3/4" />
+              <Skeleton className="h-8 w-40" />
+            </div>
+
+            {/* Pax selector */}
+            <div className="mt-8 space-y-3">
+              <Skeleton className="h-4 w-10" />
+              <Skeleton className="h-12 w-full sm:w-80 rounded-md" />
+              <Skeleton className="h-4 w-16 mt-4" />
+            </div>
+
+            {/* Book button */}
+            <Skeleton className="h-12 w-full rounded-3xl mt-5" />
+
+            {/* Description */}
+            <div className="mt-8 space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
+
+            {/* Categories */}
+            <div className="mt-8 space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+          </div>
+        </div>
+      </div>
     );
   if (error)
     return (
