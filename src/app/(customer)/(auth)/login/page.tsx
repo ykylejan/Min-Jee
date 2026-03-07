@@ -17,7 +17,7 @@ import { loginSuccess } from "@/redux/slices/authSlice"; // import loginSuccess 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"; // import your custom hook
 import Cookies from "js-cookie";
 import { RootState } from "@/redux/store";
-import { updateUserId } from "@/redux/slices/cartSlice";
+import { addToCart, updateUserId } from "@/redux/slices/cartSlice";
 // Validation schema remains the same
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -80,15 +80,46 @@ const LoginPage = () => {
           role: decodedToken.role,
         })
       );
+
+      // Ensure cart is associated with this user before adding any pending item
+      dispatch(updateUserId(decodedToken.sub));
       // axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       Cookies.set("accessToken", access_token, { expires: 7 });
       // api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       // Cookies.set("role", decodedToken.role, { expires: 7 });
 
+      // If user was trying to add an item before logging in, restore it
+      if (decodedToken.role === "customer" && typeof window !== "undefined") {
+        try {
+          const pending = localStorage.getItem("pendingCartItem");
+          if (pending) {
+            const item = JSON.parse(pending);
+            dispatch(addToCart(item));
+            localStorage.removeItem("pendingCartItem");
+            toast("Item added to basket", {
+              description: "We added the item you selected before logging in.",
+              className: "bg-green-500/80 border border-none text-white",
+            });
+          }
+        } catch {
+          // ignore JSON/storage issues
+        }
+      }
+
       toast("Login Successful", {
         description: "You have been logged in successfully.",
         className: "bg-green-500/80 border border-none text-white",
       });
+
+      // Prefer redirecting customers back to the page they came from
+      if (decodedToken.role === "customer" && typeof window !== "undefined") {
+        const redirectPath = localStorage.getItem("postLoginRedirect");
+        if (redirectPath) {
+          localStorage.removeItem("postLoginRedirect");
+          router.push(redirectPath);
+          return;
+        }
+      }
 
       if (decodedToken.role === "owner") {
         router.push("/orders");

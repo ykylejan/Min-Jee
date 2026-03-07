@@ -5,6 +5,7 @@ import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Slash } from "lucide-react";
 import { IoMdHome } from "react-icons/io";
 import { MdContentCopy } from "react-icons/md";
@@ -42,6 +43,8 @@ const Page = ({ params }: PageProps) => {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { isAuthenticated, role } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -97,16 +100,33 @@ const Page = ({ params }: PageProps) => {
       return;
     }
 
-    dispatch(
-      addToCart({
-        id: selectedItem.id,
-        name: `${service.name} - ${selectedItem.name}`,
-        price: selectedItem.price,
-        quantity: 1,
-        image: service.img,
-        category: "service",
-      })
-    );
+    const cartItemPayload = {
+      id: selectedItem.id,
+      name: `${service.name} - ${selectedItem.name}`,
+      price: selectedItem.price,
+      quantity: 1,
+      image: service.img,
+      category: "service" as const,
+    };
+
+    if (!isAuthenticated || role !== "customer") {
+      try {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("pendingCartItem", JSON.stringify(cartItemPayload));
+          localStorage.setItem(
+            "postLoginRedirect",
+            window.location.pathname + window.location.search
+          );
+        }
+      } catch {
+        // ignore storage errors
+      }
+      toast.error("Please log in to add items to your basket.");
+      router.push("/login");
+      return;
+    }
+
+    dispatch(addToCart(cartItemPayload));
     toast.success(`${selectedItem.name} added to cart`);
   };
 
