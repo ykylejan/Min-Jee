@@ -14,10 +14,12 @@ const statusStyles: Record<
     verified: { bg: "#A6E7D8", border: "#00B087", text: "#008767" },
     rejected: { bg: "#FFC5C5", border: "#DF0404", text: "#DF0404" },
     completed: { bg: "#F9FBFF", border: "#D2D6DA", text: "#6B7280" },
+    cancelled: { bg: "#F5F5F5", border: "#D2D6DA", text: "#9CA3AF" },
 };
 
 const StatusLabel = ({ label, size = "default" }: StatusProps) => {
-    const styles = statusStyles[label.toLowerCase()] || statusStyles["pending"]; // Default if the label doesn't match (aka customer didnt place order yet)
+    const styles = statusStyles[label.toLowerCase()] || statusStyles["pending"];
+    const displayLabel = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
 
     const sizeClasses = size === "sm" 
         ? "px-2.5 py-0.5 text-xs" 
@@ -32,7 +34,7 @@ const StatusLabel = ({ label, size = "default" }: StatusProps) => {
                 className={`font-interbold whitespace-nowrap`}
                 style={{ color: styles.text }}
             >
-                {label}
+                {displayLabel}
             </span>
         </div>
     );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import OrderItem from "./OrderItem";
 import StatusLabel from "../StatusLabel";
@@ -7,8 +7,12 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS_CUSTOMER } from "@/graphql/people";
 import apolloClientCustomer from "@/graphql/apolloClientCustomer";
 
+const ITEMS_PER_PAGE = 3;
+
 const EventsScreen = () => {
   const router = useRouter();
+  const [currentEventsPage, setCurrentEventsPage] = useState(1);
+  const [recentEventsPage, setRecentEventsPage] = useState(1);
 
   // Fetch all events for the current customer
   const { data, loading, error } = useQuery(GET_ALL_EVENTS_CUSTOMER, {
@@ -76,7 +80,49 @@ const EventsScreen = () => {
         </div>
       ) : (
         <div>
-          <h1 className="text-lg font-poppins_medium mb-2">Current Events</h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-poppins_medium">Current Events</h1>
+            {Math.ceil(currentEvents.length / ITEMS_PER_PAGE) > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setCurrentEventsPage((p) => Math.max(1, p - 1))}
+                  disabled={currentEventsPage === 1}
+                  className="px-1.5 py-0.5 text-xs text-[#9CA3AF] disabled:opacity-30 hover:text-[#6B7280] transition-colors duration-150"
+                >
+                  &lt;
+                </button>
+                {Array.from(
+                  { length: Math.ceil(currentEvents.length / ITEMS_PER_PAGE) },
+                  (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setCurrentEventsPage(i + 1)}
+                      className={`px-1.5 py-0.5 rounded text-xs transition-colors duration-150 ${
+                        currentEventsPage === i + 1
+                          ? "text-[#0F172A] font-semibold"
+                          : "text-[#9CA3AF] hover:text-[#6B7280]"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={() =>
+                    setCurrentEventsPage((p) =>
+                      Math.min(Math.ceil(currentEvents.length / ITEMS_PER_PAGE), p + 1)
+                    )
+                  }
+                  disabled={
+                    currentEventsPage === Math.ceil(currentEvents.length / ITEMS_PER_PAGE)
+                  }
+                  className="px-1.5 py-0.5 text-xs text-[#9CA3AF] disabled:opacity-30 hover:text-[#6B7280] transition-colors duration-150"
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
+          </div>
           {currentEvents.length === 0 ? (
             <div>
               <h1 className="text-base text-neutral-500 text-center my-5">
@@ -85,26 +131,71 @@ const EventsScreen = () => {
               <hr />
             </div>
           ) : (
-            <>
-              {currentEvents.map((event: any) => (
-                <OrderItem
-                  key={event.id}
-                  onClick={() =>
-                    router.push(`/account/event-details/${event.id}`)
-                  }
-                  name={event.name}
-                  date={event.eventDate}
-                  address={event.eventAddress || event.location}
-                >
-                  {getStatusLabel(event.eventStatus)}
-                </OrderItem>
-              ))}
-            </>
+            <div className="transition-opacity duration-200 ease-in-out">
+              {currentEvents
+                .slice(
+                  (currentEventsPage - 1) * ITEMS_PER_PAGE,
+                  currentEventsPage * ITEMS_PER_PAGE
+                )
+                .map((event: any) => (
+                  <OrderItem
+                    key={event.id}
+                    onClick={() =>
+                      router.push(`/account/event-details/${event.id}`)
+                    }
+                    name={event.name}
+                    date={event.eventDate}
+                    address={event.eventAddress || event.location}
+                  >
+                    {getStatusLabel(event.eventStatus)}
+                  </OrderItem>
+                ))}
+            </div>
           )}
 
-          <h1 className="text-lg font-poppins_medium mt-8 mb-2">
-            Recent Events
-          </h1>
+          <div className="flex items-center justify-between mt-8 mb-2">
+            <h1 className="text-lg font-poppins_medium">Recent Events</h1>
+            {Math.ceil(recentEvents.length / ITEMS_PER_PAGE) > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setRecentEventsPage((p) => Math.max(1, p - 1))}
+                  disabled={recentEventsPage === 1}
+                  className="px-1.5 py-0.5 text-xs text-[#9CA3AF] disabled:opacity-30 hover:text-[#6B7280] transition-colors duration-150"
+                >
+                  &lt;
+                </button>
+                {Array.from(
+                  { length: Math.ceil(recentEvents.length / ITEMS_PER_PAGE) },
+                  (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setRecentEventsPage(i + 1)}
+                      className={`px-1.5 py-0.5 rounded text-xs transition-colors duration-150 ${
+                        recentEventsPage === i + 1
+                          ? "text-[#0F172A] font-semibold"
+                          : "text-[#9CA3AF] hover:text-[#6B7280]"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={() =>
+                    setRecentEventsPage((p) =>
+                      Math.min(Math.ceil(recentEvents.length / ITEMS_PER_PAGE), p + 1)
+                    )
+                  }
+                  disabled={
+                    recentEventsPage === Math.ceil(recentEvents.length / ITEMS_PER_PAGE)
+                  }
+                  className="px-1.5 py-0.5 text-xs text-[#9CA3AF] disabled:opacity-30 hover:text-[#6B7280] transition-colors duration-150"
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
+          </div>
           {recentEvents.length === 0 ? (
             <div>
               <h1 className="text-base text-neutral-500 text-center my-5">
@@ -113,21 +204,26 @@ const EventsScreen = () => {
               <hr />
             </div>
           ) : (
-            <>
-              {recentEvents.map((event: any) => (
-                <OrderItem
-                  key={event.id}
-                  onClick={() =>
-                    router.push(`/account/event-details/${event.id}`)
-                  }
-                  name={event.name}
-                  date={event.eventDate}
-                  address={event.eventAddress || event.location}
-                >
-                  {getStatusLabel(event.eventStatus)}
-                </OrderItem>
-              ))}
-            </>
+            <div className="transition-opacity duration-200 ease-in-out">
+              {recentEvents
+                .slice(
+                  (recentEventsPage - 1) * ITEMS_PER_PAGE,
+                  recentEventsPage * ITEMS_PER_PAGE
+                )
+                .map((event: any) => (
+                  <OrderItem
+                    key={event.id}
+                    onClick={() =>
+                      router.push(`/account/event-details/${event.id}`)
+                    }
+                    name={event.name}
+                    date={event.eventDate}
+                    address={event.eventAddress || event.location}
+                  >
+                    {getStatusLabel(event.eventStatus)}
+                  </OrderItem>
+                ))}
+            </div>
           )}
         </div>
       )}

@@ -63,9 +63,9 @@ const Page = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-48">
+      <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-48">
         <h1 className="text-2xl font-intermedium py-2">Account</h1>
-        <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-14 flex justify-center">
+        <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-6 md:p-14 flex justify-center">
           <p>Loading your profile...</p>
         </div>
       </div>
@@ -74,9 +74,9 @@ const Page = () => {
 
   if (!customerData) {
     return (
-      <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-48">
+      <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-48">
         <h1 className="text-2xl font-intermedium py-2">Account</h1>
-        <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-14 flex justify-center">
+        <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-6 md:p-14 flex justify-center">
           <p className="text-red-500">Failed to load profile data</p>
         </div>
       </div>
@@ -84,14 +84,14 @@ const Page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-48">
+    <div className="min-h-screen bg-[#FFFBF5] pt-[120px] pb-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-48">
       <h1 className="text-2xl font-intermedium py-2">Account</h1>
 
-      <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-14 flex">
-        <div className="font-poppins space-y-8 pr-48">
+      <div className="bg-white border border-[#D2D6DA] w-full h-auto rounded-lg p-6 md:p-14 flex flex-col md:flex-row">
+        <div className="font-poppins flex md:block gap-4 md:gap-0 md:space-y-8 md:pr-48 border-b md:border-b-0 pb-4 md:pb-0 mb-6 md:mb-0 overflow-x-auto">
           <h1
             onClick={() => setIsScreen("Profile")}
-            className={`hover:cursor-pointer ${
+            className={`hover:cursor-pointer whitespace-nowrap ${
               isScreen == "Profile" ? "font-poppins_bold" : ""
             }`}
           >
@@ -99,7 +99,7 @@ const Page = () => {
           </h1>
           <h1
             onClick={() => setIsScreen("Orders")}
-            className={`hover:cursor-pointer ${
+            className={`hover:cursor-pointer whitespace-nowrap ${
               isScreen == "Orders" ? "font-poppins_bold" : ""
             }`}
           >
@@ -107,26 +107,28 @@ const Page = () => {
           </h1>
           <h1
             onClick={() => setIsScreen("Events")}
-            className={`hover:cursor-pointer ${
+            className={`hover:cursor-pointer whitespace-nowrap ${
               isScreen == "Events" ? "font-poppins_bold" : ""
             }`}
           >
             Events
           </h1>
-          <h1 onClick={handleLogout} className="underline hover:cursor-pointer">
+          <h1 onClick={handleLogout} className="underline hover:cursor-pointer whitespace-nowrap">
             Logout
           </h1>
         </div>
 
-        {isScreen === "Profile" ? (
-          <ProfileScreen customerData={customerData} />
-        ) : isScreen === "Orders" ? (
-          <OrdersScreen />
-        ) : isScreen === "Events" ? (
-          <EventsScreen />
-        ) : (
-          <div className="">nothing</div>
-        )}
+        <div className="w-full min-w-0">
+          {isScreen === "Profile" ? (
+            <ProfileScreen customerData={customerData} />
+          ) : isScreen === "Orders" ? (
+            <OrdersScreen />
+          ) : isScreen === "Events" ? (
+            <EventsScreen />
+          ) : (
+            <div className="">nothing</div>
+          )}
+        </div>
       </div>
     </div>
   );
