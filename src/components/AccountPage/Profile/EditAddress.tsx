@@ -51,7 +51,7 @@ const EditAddress = ({ address }: EditAccountProps) => {
             </div>
             <Button
               onClick={() => setIsEdit(true)}
-              className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200"
+              className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-5 sm:px-10 py-2 sm:py-5 text-sm hover:bg-gray-100 transition-colors duration-200 shrink-0"
             >
               EDIT
             </Button>
@@ -59,30 +59,29 @@ const EditAddress = ({ address }: EditAccountProps) => {
           <hr className="mt-6" />
         </div>
       ) : (
-        <div className="">
-          <div className="flex justify-between items-center">
-            <div className="w-full space-y-2">
-              <h1 className="text-base">Edit your address:</h1>
-              <Textarea
-                placeholder="03 Red Stone, Calinan, Davao City.."
-                className="w-1/2 shadow-none h-10"
-                value={newAddress}
-                onChange={(e) => setNewAddress(e.target.value)}
-              />
-            </div>
+        <div>
+          <div className="space-y-2">
+            <h1 className="text-base">Edit your address:</h1>
+            <Textarea
+              placeholder="03 Red Stone, Calinan, Davao City.."
+              className="w-full sm:w-1/2 shadow-none h-10"
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-3 mt-4">
             <Button
               onClick={handleSave}
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
+              className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-6 sm:px-10 py-2 sm:py-5 text-sm"
             >
               DONE
             </Button>
-
             <span
               onClick={() => {
                 setIsEdit(false);
                 setNewAddress(address);
               }}
-              className="text-xs cursor-pointer underline ml-4 text-gray-500"
+              className="text-xs cursor-pointer underline text-gray-500"
             >
               Cancel
             </span>

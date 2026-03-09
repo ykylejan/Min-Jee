@@ -61,7 +61,7 @@ const EditPassword = () => {
             </div>
             <Button
               onClick={() => setIsEdit(true)}
-              className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-10 py-5 hover:bg-gray-100 transition-colors duration-200"
+              className="bg-transparent border border-[#D2D6DA] shadow-none text-[#6B7280] px-5 sm:px-10 py-2 sm:py-5 text-sm hover:bg-gray-100 transition-colors duration-200 shrink-0"
             >
               EDIT
             </Button>
@@ -76,27 +76,27 @@ const EditPassword = () => {
               placeholder="Old Password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="w-1/2 shadow-none h-10"
+              className="w-full sm:w-1/2 shadow-none h-10"
             />
             <Input
               type="password"
               placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-1/2 shadow-none h-10"
+              className="w-full sm:w-1/2 shadow-none h-10"
             />
             <Input
               type="password"
               placeholder="Confirm New Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-1/2 shadow-none h-10"
+              className="w-full sm:w-1/2 shadow-none h-10"
             />
           </div>
-          <div className="flex items-center space-x-4 mt-4">
+          <div className="flex items-center gap-3 mt-4">
             <Button
               onClick={handleSave}
-              className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
+              className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-6 sm:px-10 py-2 sm:py-5 text-sm"
             >
               DONE
             </Button>

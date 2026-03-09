@@ -24,15 +24,15 @@ const EditEmail = ({ email }: EditAccountProps) => {
                     <hr className="mt-6" />
                 </div>
             ) : (
-                <div className="">
-                    <div className="flex justify-between items-center">
-                        <div className="w-full space-y-2">
-                            <h1 className="text-base">Edit your email:</h1>
-                            <Input
-                                placeholder="arkiart@gmail.com"
-                                className="w-1/2 shadow-none h-10"
-                            />
-                        </div>
+                <div>
+                    <div className="space-y-2">
+                        <h1 className="text-base">Edit your email:</h1>
+                        <Input
+                            placeholder="arkiart@gmail.com"
+                            className="w-full sm:w-1/2 shadow-none h-10"
+                        />
+                    </div>
+                    <div className="flex items-center gap-3 mt-4">
                         <Button
                             onClick={() => {
                                 setIsEdit(false);
@@ -43,14 +43,13 @@ const EditEmail = ({ email }: EditAccountProps) => {
                                         "bg-green-500/80 border border-none text-white",
                                 });
                             }}
-                            className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-10 py-5"
+                            className="bg-camouflage-400 hover:bg-camouflage-400/80 shadow-none text-white px-6 sm:px-10 py-2 sm:py-5 text-sm"
                         >
                             DONE
                         </Button>
-
                         <span
                             onClick={() => setIsEdit(false)}
-                            className="text-xs cursor-pointer underline ml-4 text-gray-500"
+                            className="text-xs cursor-pointer underline text-gray-500"
                         >
                             Cancel
                         </span>
