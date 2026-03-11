@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Tag, FolderTree, Layers } from "lucide-react";
-import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, DataTable, StatusBadge, StatsCard, TableFilters } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
@@ -18,6 +18,7 @@ const CategoriesPage: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
 
   const { loading, error, data } = useQuery(GET_ALL_CATEGORIES, {
     client: apolloClient,
@@ -29,11 +30,16 @@ const CategoriesPage: React.FC = () => {
     }
   }, [data]);
 
-  const { filteredCategories, stats } = useMemo(() => {
+  const { filteredCategories, stats, typeOptions } = useMemo(() => {
     const filtered = categories.filter(
-      (category) =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        category.type.toLowerCase().includes(searchTerm.toLowerCase())
+      (category) => {
+        const matchesSearch =
+          category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          category.type.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesType =
+          typeFilter === "all" || category.type.toLowerCase() === typeFilter.toLowerCase();
+        return matchesSearch && matchesType;
+      }
     );
 
     const typeCounts = categories.reduce(
@@ -44,6 +50,8 @@ const CategoriesPage: React.FC = () => {
       {}
     );
 
+    const typeOptions = [...new Set(categories.map((c) => c.type))];
+
     return {
       filteredCategories: filtered,
       stats: {
@@ -52,8 +60,9 @@ const CategoriesPage: React.FC = () => {
         rental: typeCounts["Rental"] || 0,
         partner: typeCounts["Partner"] || 0,
       },
+      typeOptions,
     };
-  }, [categories, searchTerm]);
+  }, [categories, searchTerm, typeFilter]);
 
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
@@ -130,6 +139,23 @@ const CategoriesPage: React.FC = () => {
         actionLabel="Add Category"
         actionIcon={<Plus className="w-4 h-4" />}
         onAction={() => router.push("/categories/add-category")}
+      />
+
+      {/* Filters */}
+      <TableFilters
+        filters={[
+          {
+            key: "type",
+            label: "Type",
+            value: typeFilter,
+            onChange: setTypeFilter,
+            options: [
+              { label: "All Types", value: "all" },
+              ...typeOptions.map((t) => ({ label: t, value: t.toLowerCase() })),
+            ],
+          },
+        ]}
+        onClearAll={() => setTypeFilter("all")}
       />
 
       {/* Data Table */}

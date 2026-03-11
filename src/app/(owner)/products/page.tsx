@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -14,10 +14,21 @@ import { Plus, Search, Package } from "lucide-react";
 import StockStatus from "@/components/OwnerPage/Products/StockStatus";
 import { AllProductsSample } from "@/constants";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Pagination } from "@/components/OwnerPage";
+
+const ITEMS_PER_PAGE = 10;
 
 
 const ProductsPage = () => {
     const router = useRouter();
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(AllProductsSample.length / ITEMS_PER_PAGE);
+    const paginatedProducts = useMemo(() => {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return AllProductsSample.slice(start, start + ITEMS_PER_PAGE);
+    }, [currentPage]);
+
     const handleRowClick = (id: string) => {
         router.push(`/products/${id}`);
     };
@@ -94,7 +105,7 @@ const ProductsPage = () => {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    AllProductsSample.map((data) => (
+                                    paginatedProducts.map((data) => (
                                         <TableRow
                                             key={data.id}
                                             className="hover:bg-gray-50/50 cursor-pointer transition-colors"
@@ -135,6 +146,13 @@ const ProductsPage = () => {
                             </TableBody>
                         </Table>
                     </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={AllProductsSample.length}
+                        itemsPerPage={ITEMS_PER_PAGE}
+                    />
                 </CardContent>
             </Card>
         </div>

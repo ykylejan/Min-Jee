@@ -20,8 +20,10 @@ import {
   Loader2,
   FileText,
 } from "lucide-react";
-import { PageHeader, StatsCard, StatusBadge } from "@/components/OwnerPage";
+import { PageHeader, StatsCard, StatusBadge, Pagination } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
+
+const ITEMS_PER_PAGE = 10;
 import {
   GET_TRANSACTIONS,
   GET_ALL_ORDERS,
@@ -33,6 +35,7 @@ import { useRouter } from "next/navigation";
 const HistoryPage = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: transactionsData,
@@ -101,6 +104,17 @@ const HistoryPage = () => {
 
     return { historyRows: rows, filteredRows: filtered, stats };
   }, [transactionsData, ordersData, eventsData, search]);
+
+  // Reset page when search changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  const totalPages = Math.ceil(filteredRows.length / ITEMS_PER_PAGE);
+  const paginatedRows = filteredRows.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const isLoading = transactionsLoading || ordersLoading || eventsLoading;
   const hasError = transactionsError || ordersError || eventsError;
@@ -193,7 +207,7 @@ const HistoryPage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredRows.map((data: any) => (
+                  {paginatedRows.map((data: any) => (
                     <TableRow
                       key={data.id}
                       className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
@@ -258,6 +272,13 @@ const HistoryPage = () => {
                 </TableBody>
               </Table>
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              totalItems={filteredRows.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+            />
           </CardContent>
         </Card>
       )}

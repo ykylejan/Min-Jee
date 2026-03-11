@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Utensils, Package, AlertTriangle } from "lucide-react";
-import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, DataTable, StatusBadge, StatsCard, TableFilters } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES, GET_ALL_RENTALS } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
@@ -28,6 +28,8 @@ const RentalsPage: React.FC = () => {
   const [rentals, setRentals] = useState<RentalTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categories, setCategories] = useState<CategoryTypes[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [stockFilter, setStockFilter] = useState("all");
 
   const { loading, error, data } = useQuery(GET_ALL_RENTALS, {
     client: apolloClient,
@@ -61,11 +63,23 @@ const RentalsPage: React.FC = () => {
 
   const { filteredRentals, stats } = useMemo(() => {
     const filtered = rentals.filter(
-      (rental) =>
-        rental.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getCategoryName(rental.categoryId)
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+      (rental) => {
+        const matchesSearch =
+          rental.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          getCategoryName(rental.categoryId)
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+
+        const matchesCategory =
+          categoryFilter === "all" || rental.categoryId === categoryFilter;
+
+        const stockStatus = getStockStatus(rental.currentQuantity, rental.totalQuantity);
+        const matchesStock =
+          stockFilter === "all" ||
+          stockStatus.toLowerCase().replace(/\s+/g, "-") === stockFilter;
+
+        return matchesSearch && matchesCategory && matchesStock;
+      }
     );
 
     const stats = {
@@ -80,7 +94,7 @@ const RentalsPage: React.FC = () => {
     };
 
     return { filteredRentals: filtered, stats };
-  }, [rentals, searchTerm, categories]);
+  }, [rentals, searchTerm, categories, categoryFilter, stockFilter]);
 
   const columns = [
     {
@@ -192,6 +206,38 @@ const RentalsPage: React.FC = () => {
         actionLabel="Add Rental"
         actionIcon={<Plus className="w-4 h-4" />}
         onAction={() => router.push("/rentals/add-rental")}
+      />
+
+      {/* Filters */}
+      <TableFilters
+        filters={[
+          {
+            key: "category",
+            label: "Category",
+            value: categoryFilter,
+            onChange: setCategoryFilter,
+            options: [
+              { label: "All Categories", value: "all" },
+              ...categories.map((cat) => ({ label: cat.name, value: cat.id })),
+            ],
+          },
+          {
+            key: "stock",
+            label: "Stock Status",
+            value: stockFilter,
+            onChange: setStockFilter,
+            options: [
+              { label: "All Stock", value: "all" },
+              { label: "In Stock", value: "in-stock" },
+              { label: "Low Stock", value: "low-stock" },
+              { label: "Out of Stock", value: "out-of-stock" },
+            ],
+          },
+        ]}
+        onClearAll={() => {
+          setCategoryFilter("all");
+          setStockFilter("all");
+        }}
       />
 
       {/* Data Table */}

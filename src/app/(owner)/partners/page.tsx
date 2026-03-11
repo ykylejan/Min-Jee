@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { UserRoundPlus, Contact, MapPin, Phone, Building2 } from "lucide-react";
-import { PageHeader, DataTable, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, DataTable, StatsCard, TableFilters } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import { GET_ALL_PARTNERS } from "@/graphql/people";
@@ -24,6 +24,7 @@ const PartnersPage = () => {
   const [partners, setPartners] = useState<PartnerTypes[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const {
     loading: partnersLoading,
@@ -69,12 +70,16 @@ const PartnersPage = () => {
   const { filteredPartners, stats } = useMemo(() => {
     const filtered = partners.filter((partner) => {
       const searchLower = searchTerm.toLowerCase();
-      return (
+      const matchesSearch =
         partner.name.toLowerCase().includes(searchLower) ||
         partner.address.toLowerCase().includes(searchLower) ||
         partner.contactNumber.includes(searchTerm) ||
-        getCategoryName(partner.categoryId).toLowerCase().includes(searchLower)
-      );
+        getCategoryName(partner.categoryId).toLowerCase().includes(searchLower);
+
+      const matchesCategory =
+        categoryFilter === "all" || partner.categoryId === categoryFilter;
+
+      return matchesSearch && matchesCategory;
     });
 
     const categoryCounts = partners.reduce(
@@ -93,7 +98,7 @@ const PartnersPage = () => {
         categories: Object.keys(categoryCounts).length,
       },
     };
-  }, [partners, searchTerm, categories]);
+  }, [partners, searchTerm, categories, categoryFilter]);
 
   const columns = [
     {
@@ -168,6 +173,23 @@ const PartnersPage = () => {
         actionLabel="Add Partner"
         actionIcon={<UserRoundPlus className="w-4 h-4" />}
         onAction={() => router.push("/partners/add-partner")}
+      />
+
+      {/* Filters */}
+      <TableFilters
+        filters={[
+          {
+            key: "category",
+            label: "Category",
+            value: categoryFilter,
+            onChange: setCategoryFilter,
+            options: [
+              { label: "All Categories", value: "all" },
+              ...categories.map((cat: any) => ({ label: cat.name, value: cat.id })),
+            ],
+          },
+        ]}
+        onClearAll={() => setCategoryFilter("all")}
       />
 
       {/* Data Table */}

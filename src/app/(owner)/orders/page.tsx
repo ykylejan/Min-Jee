@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PackagePlus, ShoppingCart, Clock, CheckCircle, XCircle } from "lucide-react";
-import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, DataTable, StatusBadge, StatsCard, TableFilters } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_ORDERS_OWNER } from "@/graphql/people";
 import apolloClientPartner from "@/graphql/apolloClientPartners";
@@ -11,6 +11,7 @@ import apolloClientPartner from "@/graphql/apolloClientPartners";
 const OrdersPage = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const { data, loading, error } = useQuery(GET_ALL_ORDERS_OWNER, {
     client: apolloClientPartner,
   });
@@ -30,12 +31,16 @@ const OrdersPage = () => {
       { pending: 0, verified: 0, completed: 0, rejected: 0 }
     );
 
-    // Filter by search (customer name)
+    // Filter by search (customer name) and status
     let filtered = orders.filter((order: any) => {
       const customerName = order.customer
         ? `${order.customer.firstName} ${order.customer.lastName}`.toLowerCase()
         : order.name?.toLowerCase() || "";
-      return customerName.includes(search.toLowerCase());
+      const matchesSearch = customerName.includes(search.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" ||
+        (order.orderStatus || "pending").toLowerCase() === statusFilter;
+      return matchesSearch && matchesStatus;
     });
 
     // Sort: verified first, then pending, then completed/rejected at the bottom, then by most recent orderDate
@@ -55,7 +60,7 @@ const OrdersPage = () => {
     });
 
     return { filteredOrders: filtered, stats };
-  }, [data, search]);
+  }, [data, search, statusFilter]);
 
   const columns = [
     {
@@ -145,6 +150,26 @@ const OrdersPage = () => {
         actionLabel="New Order"
         actionIcon={<PackagePlus className="w-4 h-4" />}
         onAction={() => router.push("/orders/add-order")}
+      />
+
+      {/* Filters */}
+      <TableFilters
+        filters={[
+          {
+            key: "status",
+            label: "Status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { label: "All Statuses", value: "all" },
+              { label: "Pending", value: "pending" },
+              { label: "Verified", value: "verified" },
+              { label: "Completed", value: "completed" },
+              { label: "Rejected", value: "rejected" },
+            ],
+          },
+        ]}
+        onClearAll={() => setStatusFilter("all")}
       />
 
       {/* Data Table */}

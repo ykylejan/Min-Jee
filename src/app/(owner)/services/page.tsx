@@ -18,8 +18,10 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_SERVICES } from "@/graphql/catalog";
 import { GET_ALL_CATEGORIES } from "@/graphql/products";
 import apolloClient from "@/graphql/apolloClient";
-import { PageHeader, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, StatsCard, Pagination } from "@/components/OwnerPage";
 import { cn } from "@/lib/utils";
+
+const ITEMS_PER_PAGE = 8;
 
 interface Category {
   id: string;
@@ -41,6 +43,7 @@ const ServicesPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     loading: servicesLoading,
@@ -113,6 +116,17 @@ const ServicesPage: React.FC = () => {
 
     return { filteredServices: filtered, stats };
   }, [services, searchTerm, selectedCategory]);
+
+  // Reset page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory]);
+
+  const totalPages = Math.ceil(filteredServices.length / ITEMS_PER_PAGE);
+  const paginatedServices = filteredServices.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const isLoading = servicesLoading || categoriesLoading;
 
@@ -210,7 +224,7 @@ const ServicesPage: React.FC = () => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredServices.map((service: Service) => (
+          {paginatedServices.map((service: Service) => (
             <Card
               key={service.id}
               className="overflow-hidden cursor-pointer group border-gray-200 hover:border-camouflage-300 hover:shadow-lg transition-all duration-300"
@@ -265,6 +279,19 @@ const ServicesPage: React.FC = () => {
               </CardFooter>
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && filteredServices.length > 0 && (
+        <div className="flex justify-end">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filteredServices.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
         </div>
       )}
     </div>

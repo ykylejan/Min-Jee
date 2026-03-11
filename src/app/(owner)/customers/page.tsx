@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { UserRoundPlus, Users, UserCheck, Mail, Phone } from "lucide-react";
-import { PageHeader, DataTable, StatusBadge, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, DataTable, StatusBadge, StatsCard, TableFilters } from "@/components/OwnerPage";
 import { useQuery } from "@apollo/client";
 import { toast } from "sonner";
 import { GET_ALL_CUSTOMERS } from "@/graphql/people";
@@ -24,6 +24,8 @@ const CustomersPage = () => {
   const router = useRouter();
   const [customers, setCustomers] = useState<CustomerTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [bookingFilter, setBookingFilter] = useState("all");
 
   const {
     loading: customersLoading,
@@ -49,11 +51,22 @@ const CustomersPage = () => {
   const { filteredCustomers, stats } = useMemo(() => {
     const filtered = customers.filter((customer) => {
       const fullName = `${customer.firstName} ${customer.lastName}`.toLowerCase();
-      return (
+      const matchesSearch =
         fullName.includes(searchTerm.toLowerCase()) ||
         customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.contactNumber.includes(searchTerm)
-      );
+        customer.contactNumber.includes(searchTerm);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" && customer.isActive) ||
+        (statusFilter === "inactive" && !customer.isActive);
+
+      const matchesBooking =
+        bookingFilter === "all" ||
+        (bookingFilter === "with-bookings" && customer.bookings > 0) ||
+        (bookingFilter === "no-bookings" && customer.bookings === 0);
+
+      return matchesSearch && matchesStatus && matchesBooking;
     });
 
     const stats = {
@@ -63,7 +76,7 @@ const CustomersPage = () => {
     };
 
     return { filteredCustomers: filtered, stats };
-  }, [customers, searchTerm]);
+  }, [customers, searchTerm, statusFilter, bookingFilter]);
 
   const columns = [
     {
@@ -149,6 +162,38 @@ const CustomersPage = () => {
         actionLabel="Add Customer"
         actionIcon={<UserRoundPlus className="w-4 h-4" />}
         onAction={() => router.push("/customers/add-customer")}
+      />
+
+      {/* Filters */}
+      <TableFilters
+        filters={[
+          {
+            key: "status",
+            label: "Status",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { label: "All Statuses", value: "all" },
+              { label: "Active", value: "active" },
+              { label: "Inactive", value: "inactive" },
+            ],
+          },
+          {
+            key: "bookings",
+            label: "Bookings",
+            value: bookingFilter,
+            onChange: setBookingFilter,
+            options: [
+              { label: "All Customers", value: "all" },
+              { label: "With Bookings", value: "with-bookings" },
+              { label: "No Bookings", value: "no-bookings" },
+            ],
+          },
+        ]}
+        onClearAll={() => {
+          setStatusFilter("all");
+          setBookingFilter("all");
+        }}
       />
 
       {/* Data Table */}

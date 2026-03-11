@@ -17,7 +17,9 @@ import { toast } from "sonner";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENT_PACKAGES } from "@/graphql/people";
 import apolloClient from "@/graphql/apolloClient";
-import { PageHeader, StatsCard } from "@/components/OwnerPage";
+import { PageHeader, StatsCard, Pagination } from "@/components/OwnerPage";
+
+const ITEMS_PER_PAGE = 8;
 
 interface EventPackage {
   id: string;
@@ -29,6 +31,7 @@ const EventsPage: React.FC = () => {
   const router = useRouter();
   const [eventPackages, setEventPackages] = useState<EventPackage[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     loading: packagesLoading,
@@ -61,6 +64,17 @@ const EventsPage: React.FC = () => {
       },
     };
   }, [eventPackages, searchTerm]);
+
+  // Reset page when search changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const totalPages = Math.ceil(filteredPackages.length / ITEMS_PER_PAGE);
+  const paginatedPackages = filteredPackages.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div className="space-y-6">
@@ -124,7 +138,7 @@ const EventsPage: React.FC = () => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredPackages.map((pkg: EventPackage) => (
+          {paginatedPackages.map((pkg: EventPackage) => (
             <Card
               key={pkg.id}
               className="overflow-hidden cursor-pointer group border-gray-200 hover:border-camouflage-300 hover:shadow-lg transition-all duration-300"
@@ -172,6 +186,19 @@ const EventsPage: React.FC = () => {
               </CardFooter>
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!packagesLoading && filteredPackages.length > 0 && (
+        <div className="flex justify-end">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filteredPackages.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
         </div>
       )}
     </div>

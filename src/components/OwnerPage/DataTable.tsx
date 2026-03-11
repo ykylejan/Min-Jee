@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Loader2, SearchX, PackageOpen } from "lucide-react";
+import Pagination from "./Pagination";
 
 interface Column<T> {
   key: string;
@@ -32,6 +33,8 @@ interface DataTableProps<T> {
   keyExtractor: (item: T) => string;
   loadingRows?: number;
   className?: string;
+  pageSize?: number;
+  rowsPerPageOptions?: number[];
 }
 
 function DataTable<T>({
@@ -46,7 +49,27 @@ function DataTable<T>({
   keyExtractor,
   loadingRows = 5,
   className,
+  pageSize: initialPageSize = 10,
+  rowsPerPageOptions = [5, 10, 20, 50],
 }: DataTableProps<T>) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(initialPageSize);
+
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return data.slice(start, start + pageSize);
+  }, [data, currentPage, pageSize]);
+
+  // Reset to page 1 when data changes (e.g. search filter)
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [data.length]);
+
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setCurrentPage(1);
+  };
   // Loading skeleton
   if (loading) {
     return (
@@ -149,7 +172,7 @@ function DataTable<T>({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item, index) => (
+              {paginatedData.map((item, index) => (
                 <TableRow
                   key={keyExtractor(item)}
                   onClick={() => onRowClick?.(item)}
@@ -165,7 +188,7 @@ function DataTable<T>({
                       className={cn("py-4 text-sm", column.className)}
                     >
                       {column.render
-                        ? column.render(item, index)
+                        ? column.render(item, (currentPage - 1) * pageSize + index)
                         : (item as any)[column.key]}
                     </TableCell>
                   ))}
@@ -174,6 +197,15 @@ function DataTable<T>({
             </TableBody>
           </Table>
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          totalItems={data.length}
+          itemsPerPage={pageSize}
+          onItemsPerPageChange={handlePageSizeChange}
+          rowsPerPageOptions={rowsPerPageOptions}
+        />
       </CardContent>
     </Card>
   );
