@@ -120,9 +120,9 @@ const HistoryPage = () => {
   const hasError = transactionsError || ordersError || eventsError;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <StatsCard
           title="Total Transactions"
           value={stats.total}
@@ -192,16 +192,16 @@ const HistoryPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50/80 hover:bg-gray-50/80 border-b border-gray-200">
-                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                    <TableHead className="font-semibold text-gray-600 text-xs py-2.5">
                       Customer
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                    <TableHead className="font-semibold text-gray-600 text-xs py-2.5">
                       Phone
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-600 text-sm py-4">
+                    <TableHead className="font-semibold text-gray-600 text-xs py-2.5">
                       Type
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-600 text-sm py-4 text-right">
+                    <TableHead className="font-semibold text-gray-600 text-xs py-2.5 text-right">
                       Receipt
                     </TableHead>
                   </TableRow>
@@ -212,7 +212,7 @@ const HistoryPage = () => {
                       key={data.id}
                       className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
                     >
-                      <TableCell className="py-4">
+                      <TableCell className="py-2.5">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-camouflage-300 to-camouflage-500 flex items-center justify-center flex-shrink-0">
                             <span className="text-white text-xs font-semibold">
@@ -228,13 +228,13 @@ const HistoryPage = () => {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="py-4">
+                      <TableCell className="py-2.5">
                         <span className="inline-flex items-center gap-1.5 text-gray-600">
                           <Phone className="w-3.5 h-3.5" />
                           {data.phoneNumber}
                         </span>
                       </TableCell>
-                      <TableCell className="py-4">
+                      <TableCell className="py-2.5">
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
                             data.category === "Order"
@@ -250,7 +250,7 @@ const HistoryPage = () => {
                           {data.category}
                         </span>
                       </TableCell>
-                      <TableCell className="py-4 text-right">
+                      <TableCell className="py-2.5 text-right">
                         {data.hasReceipt ? (
                           <Button
                             variant="outline"

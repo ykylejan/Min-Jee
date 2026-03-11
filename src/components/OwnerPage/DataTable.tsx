@@ -83,7 +83,7 @@ function DataTable<T>({
                     <TableHead
                       key={column.key}
                       className={cn(
-                        "font-semibold text-gray-600 text-sm py-4",
+                        "font-semibold text-gray-600 text-xs py-2.5",
                         column.className
                       )}
                     >
@@ -96,7 +96,7 @@ function DataTable<T>({
                 {Array.from({ length: loadingRows }).map((_, rowIndex) => (
                   <TableRow key={rowIndex}>
                     {columns.map((column, colIndex) => (
-                      <TableCell key={`${rowIndex}-${colIndex}`} className="py-4">
+                      <TableCell key={`${rowIndex}-${colIndex}`} className="py-2.5">
                         <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
                       </TableCell>
                     ))}
@@ -105,7 +105,7 @@ function DataTable<T>({
               </TableBody>
             </Table>
           </div>
-          <div className="flex items-center justify-center gap-2 py-4 text-gray-500 border-t bg-gray-50/50">
+          <div className="flex items-center justify-center gap-2 py-2.5 text-gray-500 border-t bg-gray-50/50">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span className="text-sm">Loading data...</span>
           </div>
@@ -162,7 +162,7 @@ function DataTable<T>({
                   <TableHead
                     key={column.key}
                     className={cn(
-                      "font-semibold text-gray-600 text-sm py-4 whitespace-nowrap",
+                      "font-semibold text-gray-600 text-xs py-2.5 whitespace-nowrap",
                       column.className
                     )}
                   >
@@ -185,7 +185,7 @@ function DataTable<T>({
                   {columns.map((column) => (
                     <TableCell
                       key={column.key}
-                      className={cn("py-4 text-sm", column.className)}
+                      className={cn("py-2.5 text-sm", column.className)}
                     >
                       {column.render
                         ? column.render(item, (currentPage - 1) * pageSize + index)

@@ -33,22 +33,18 @@ function TableFilters({ filters, onClearAll }: TableFiltersProps) {
   const hasActiveFilters = filters.some((f) => f.value !== "all");
 
   return (
-    <div className="flex flex-wrap items-center gap-3 p-3 bg-gray-50/80 border border-gray-200 rounded-lg">
-      <div className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
-        <ListFilter className="w-4 h-4" />
-        <span>Filters</span>
-      </div>
-      <div className="w-px h-6 bg-gray-200" />
+    <div className="flex flex-wrap items-center gap-2">
       {filters.map((filter) => (
         <Select key={filter.key} value={filter.value} onValueChange={filter.onChange}>
           <SelectTrigger
-            className={`h-8 w-auto min-w-[130px] text-xs gap-1.5 ${
+            className={`h-7 w-auto min-w-0 text-xs gap-1 px-2.5 rounded-full border ${
               filter.value !== "all"
                 ? "border-camouflage-300 bg-camouflage-50 text-camouflage-700"
-                : "bg-white"
+                : "border-gray-200 bg-white text-gray-500"
             }`}
           >
-            <span className="text-gray-500 font-medium">{filter.label}:</span>
+            <ListFilter className="w-3 h-3 shrink-0" />
+            <span className="font-medium">{filter.label}:</span>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -61,18 +57,15 @@ function TableFilters({ filters, onClearAll }: TableFiltersProps) {
         </Select>
       ))}
       {hasActiveFilters && onClearAll && (
-        <>
-          <div className="w-px h-6 bg-gray-200" />
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearAll}
-            className="h-8 text-xs text-gray-500 hover:text-gray-700 gap-1"
-          >
-            <X className="w-3.5 h-3.5" />
-            Clear filters
-          </Button>
-        </>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClearAll}
+          className="h-7 px-2 text-xs text-gray-400 hover:text-gray-600 gap-1 rounded-full"
+        >
+          <X className="w-3 h-3" />
+          Clear
+        </Button>
       )}
     </div>
   );

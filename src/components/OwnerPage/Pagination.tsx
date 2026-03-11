@@ -61,7 +61,7 @@ function Pagination({
       : undefined;
 
   return (
-    <div className="flex items-center justify-end gap-3 py-3 px-4 border-t border-gray-100">
+    <div className="flex items-center justify-end gap-3 py-2 px-4 border-t border-gray-100">
       {/* Rows per page selector */}
       {onItemsPerPageChange && itemsPerPage && (
         <div className="flex items-center gap-2 mr-auto">

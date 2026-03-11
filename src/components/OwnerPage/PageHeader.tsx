@@ -34,16 +34,16 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6",
+        "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
         className
       )}
     >
       {/* Title Section */}
       <div className="space-y-1">
-        <h2 className="text-2xl sm:text-3xl font-afacad_semibold text-gray-900">
+        <h2 className="text-2xl font-afacad_semibold text-gray-900">
           {title}
         </h2>
-        <p className="text-sm sm:text-base text-gray-500">{description}</p>
+        <p className="text-sm text-gray-500">{description}</p>
       </div>
 
       {/* Actions Section */}
@@ -54,7 +54,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder={searchPlaceholder}
-              className="pl-9 pr-4 h-10 bg-white border-gray-200 focus-visible:ring-camouflage-400/50 text-sm"
+              className="pl-9 pr-4 h-9 bg-white border-gray-200 focus-visible:ring-camouflage-400/50 text-sm"
               value={searchValue}
               onChange={(e) => onSearchChange(e.target.value)}
             />
@@ -68,7 +68,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         {actionLabel && onAction && (
           <Button
             onClick={onAction}
-            className="bg-camouflage-400 hover:bg-camouflage-500 text-white font-medium h-10 px-4 shadow-sm shadow-camouflage-400/20 transition-all hover:shadow-md hover:shadow-camouflage-400/30"
+            className="bg-camouflage-400 hover:bg-camouflage-500 text-white font-medium h-9 px-4 shadow-sm shadow-camouflage-400/20 transition-all hover:shadow-md hover:shadow-camouflage-400/30"
           >
             {actionIcon || <Plus className="w-4 h-4" />}
             <span className="ml-2">{actionLabel}</span>
