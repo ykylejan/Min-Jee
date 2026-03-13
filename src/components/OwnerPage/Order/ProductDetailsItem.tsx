@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 
 interface ProductDetailsItemProps {
   product: {
@@ -13,13 +14,25 @@ interface ProductDetailsItemProps {
     type?: string;
   };
   editable?: boolean;
+  isUpdating?: boolean;
+  isRemoving?: boolean;
+  onIncrement?: () => void;
+  onDecrement?: () => void;
+  onRemove?: () => void;
 }
 
 const ProductDetailsItem: React.FC<ProductDetailsItemProps> = ({
   product,
   editable = false, // default to false for order details page
+  isUpdating = false,
+  isRemoving = false,
+  onIncrement,
+  onDecrement,
+  onRemove,
 }) => {
   if (!product) return null;
+
+  const isBusy = isUpdating || isRemoving;
 
   return (
     <div className="w-full bg-neutral-50 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 border border-neutral-200">
@@ -51,9 +64,58 @@ const ProductDetailsItem: React.FC<ProductDetailsItemProps> = ({
             <p className="font-afacad text-xs sm:text-base text-neutral-500">
               Qty: {product.quantity}
             </p>
+            {editable && (
+              <div className="mt-3 flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={onDecrement}
+                  disabled={isBusy || product.quantity <= 1}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={onIncrement}
+                  disabled={isBusy}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={onRemove}
+                  disabled={isBusy}
+                >
+                  {isRemoving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
           <div className="font-afacad_semibold text-sm sm:text-xl text-primary sm:text-right flex-shrink-0">
-            PHP {Number(product.price || 0).toFixed(2)}
+            {isUpdating ? (
+              <Loader2 className="h-5 w-5 animate-spin ml-auto" />
+            ) : (
+              <>
+                <div>PHP {Number(product.price || 0).toFixed(2)}</div>
+                {editable && (
+                  <div className="text-xs sm:text-sm text-neutral-500 font-afacad">
+                    Line: PHP {(Number(product.price || 0) * product.quantity).toFixed(2)}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -22,15 +22,38 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import api from "@/app/utils/api";
+import { toast } from "sonner";
+
+type OrderProduct = {
+  listId: string;
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  img?: string;
+  type: "rental" | "service";
+};
 
 const OrderDetailPage = () => {
   const params = useParams();
   const orderId = params?.id as string;
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ORDER_BY_ID_OWNER, {
+  const {
+    data,
+    loading,
+    error,
+    refetch,
+  } = useQuery(GET_ORDER_BY_ID_OWNER, {
     variables: { id: orderId },
     client: apolloClientPartner,
   });
+  const [updatingItemKey, setUpdatingItemKey] = React.useState<string | null>(
+    null
+  );
+  const [removingItemKey, setRemovingItemKey] = React.useState<string | null>(
+    null
+  );
 
   if (loading) {
     return (
@@ -71,19 +94,21 @@ const OrderDetailPage = () => {
 
   const rentalProducts = order?.rentalList || [];
   const serviceProducts = order?.servicesList || [];
-  const selectedProducts = [
+  const selectedProducts: OrderProduct[] = [
     ...rentalProducts.map((item: any) => ({
-      id: item.rentals?.id,
+      listId: item.id,
+      productId: item.rentals?.id,
       name: item.rentals?.name,
-      price: item.rentals?.price,
+      price: Number(item.rentals?.price || 0),
       quantity: item.rentalQuantity,
       img: item.rentals?.img,
       type: "rental",
     })),
     ...serviceProducts.map((item: any) => ({
-      id: item.servicesItems?.id,
+      listId: item.id,
+      productId: item.servicesItems?.id,
       name: item.servicesItems?.name,
-      price: item.servicesItems?.price,
+      price: Number(item.servicesItems?.price || 0),
       quantity: item.serviceQuantity,
       img: item.servicesItems?.services?.img,
       type: "service",
@@ -93,6 +118,65 @@ const OrderDetailPage = () => {
   const totalPrice = selectedProducts.reduce((total, product) => {
     return total + (product.price || 0) * (product.quantity || 0);
   }, 0);
+
+  const getItemKey = (product: OrderProduct) =>
+    `${product.type}-${product.listId}`;
+
+  const handleQuantityChange = async (
+    product: OrderProduct,
+    nextQuantity: number
+  ) => {
+    if (nextQuantity < 1) return;
+
+    const itemKey = getItemKey(product);
+    setUpdatingItemKey(itemKey);
+
+    try {
+      if (product.type === "rental") {
+        await api.patch(`/o/order/${orderId}/rentals/${product.listId}`, {
+          rental_quantity: nextQuantity,
+          rental_total: product.price * nextQuantity,
+        });
+      } else {
+        await api.patch(`/o/order/${orderId}/services/${product.listId}`, {
+          service_quantity: nextQuantity,
+          service_total: product.price * nextQuantity,
+        });
+      }
+
+      await refetch();
+    } catch (mutationError: any) {
+      toast.error(
+        mutationError?.response?.data?.detail ||
+          "Failed to update product quantity."
+      );
+    } finally {
+      setUpdatingItemKey(null);
+    }
+  };
+
+  const handleRemoveProduct = async (product: OrderProduct) => {
+    const itemKey = getItemKey(product);
+    setRemovingItemKey(itemKey);
+
+    try {
+      if (product.type === "rental") {
+        await api.delete(`/o/order/${orderId}/rentals/${product.listId}`);
+      } else {
+        await api.delete(`/o/order/${orderId}/services/${product.listId}`);
+      }
+
+      await refetch();
+      toast.success(`${product.name} removed from order.`);
+    } catch (mutationError: any) {
+      toast.error(
+        mutationError?.response?.data?.detail ||
+          "Failed to remove product from order."
+      );
+    } finally {
+      setRemovingItemKey(null);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -180,7 +264,27 @@ const OrderDetailPage = () => {
           {selectedProducts.length > 0 ? (
             <div className="divide-y divide-gray-100">
               {selectedProducts.map((product) => (
-                <ProductDetailsItem key={product.id} product={product} />
+                <ProductDetailsItem
+                  key={`${product.type}-${product.listId}`}
+                  product={{
+                    id: product.productId,
+                    name: product.name,
+                    price: product.price,
+                    quantity: product.quantity,
+                    img: product.img,
+                    type: product.type,
+                  }}
+                  editable
+                  isUpdating={updatingItemKey === getItemKey(product)}
+                  isRemoving={removingItemKey === getItemKey(product)}
+                  onIncrement={() =>
+                    handleQuantityChange(product, product.quantity + 1)
+                  }
+                  onDecrement={() =>
+                    handleQuantityChange(product, product.quantity - 1)
+                  }
+                  onRemove={() => handleRemoveProduct(product)}
+                />
               ))}
             </div>
           ) : (
