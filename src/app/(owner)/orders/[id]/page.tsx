@@ -6,6 +6,15 @@ import ProductDetailsItem from "@/components/OwnerPage/Order/ProductDetailsItem"
 import { StatusBadge } from "@/components/OwnerPage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 import React from "react";
 import { useParams } from "next/navigation";
@@ -20,6 +29,7 @@ import {
   Loader2,
   AlertCircle,
   ShoppingCart,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@/app/utils/api";
@@ -54,6 +64,8 @@ const OrderDetailPage = () => {
   const [removingItemKey, setRemovingItemKey] = React.useState<string | null>(
     null
   );
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [isDeletingOrder, setIsDeletingOrder] = React.useState(false);
 
   if (loading) {
     return (
@@ -118,6 +130,9 @@ const OrderDetailPage = () => {
   const totalPrice = selectedProducts.reduce((total, product) => {
     return total + (product.price || 0) * (product.quantity || 0);
   }, 0);
+  const deliveryPrice = Number(order?.deliveryPrice || 0);
+  const depositPrice = Number(order?.depositPrice || 0);
+  const grandTotal = Number(order?.orderTotal ?? totalPrice + deliveryPrice + depositPrice);
 
   const getItemKey = (product: OrderProduct) =>
     `${product.type}-${product.listId}`;
@@ -178,6 +193,23 @@ const OrderDetailPage = () => {
     }
   };
 
+  const handleDeleteOrder = async () => {
+    setIsDeletingOrder(true);
+
+    try {
+      await api.delete(`/o/order/${orderId}`);
+      toast.success("Order deleted successfully.");
+      router.push("/orders");
+    } catch (mutationError: any) {
+      toast.error(
+        mutationError?.response?.data?.detail || "Failed to delete order."
+      );
+    } finally {
+      setIsDeletingOrder(false);
+      setDeleteDialogOpen(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Card */}
@@ -225,6 +257,47 @@ const OrderDetailPage = () => {
                   Edit Order
                 </Button>
               </Link>
+              <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Order
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete Order</DialogTitle>
+                    <DialogDescription>
+                      This will permanently delete the order, its products, and any linked payment records. This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setDeleteDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDeleteOrder}
+                      disabled={isDeletingOrder}
+                    >
+                      {isDeletingOrder ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Deleting...
+                        </>
+                      ) : (
+                        "Delete"
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </CardContent>
@@ -321,12 +394,32 @@ const OrderDetailPage = () => {
         </CardHeader>
         <CardContent>
           <PaymentDetailsItem order={order} />
-          {selectedProducts.length > 0 && (
+          {(selectedProducts.length > 0 || deliveryPrice > 0 || depositPrice > 0) && (
             <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
-              <div className="text-right">
-                <p className="text-sm text-gray-500 mb-1">Total Amount</p>
+              <div className="text-right space-y-1">
+                <p className="text-sm text-gray-500">
+                  Items Subtotal: ₱
+                  {totalPrice.toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                  })}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Delivery: ₱
+                  {deliveryPrice.toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                  })}
+                </p>
+                <p className="text-sm text-gray-500 mb-1">
+                  Deposit: ₱
+                  {depositPrice.toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                  })}
+                </p>
                 <p className="text-2xl font-bold text-camouflage-600">
-                  ₱{totalPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+                  ₱
+                  {grandTotal.toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                  })}
                 </p>
               </div>
             </div>

@@ -64,6 +64,8 @@ const EditOrderPage = () => {
   const router = useRouter();
   const params = useParams();
   const orderId = params?.id as string;
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   const { data, loading, error } = useQuery(GET_ORDER_BY_ID_OWNER, {
     variables: { id: orderId },
@@ -142,7 +144,6 @@ const EditOrderPage = () => {
       const patchBody = {
         name: formData.customerName,
         location: formData.location,
-        order_total: 0, // You may want to calculate this
         order_date: formData.orderDate,
         order_time,
         order_status: formData.orderStatus,
@@ -167,6 +168,22 @@ const EditOrderPage = () => {
     }
   };
 
+  const onDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await api.delete(`/o/order/${orderId}`);
+      toast.success("Order deleted successfully!");
+      router.push("/orders");
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.detail || "Failed to delete order."
+      );
+    } finally {
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+    }
+  };
+
   const orderStatus = data?.getOrdersById?.orderStatus || "pending";
 
   return (
@@ -176,6 +193,13 @@ const EditOrderPage = () => {
       isLoading={loading}
       loadingText="Loading order details..."
       error={error ? "Error loading order." : null}
+      showDeleteButton
+      onDelete={onDelete}
+      isDeleting={isDeleting}
+      deleteDialogOpen={deleteDialogOpen}
+      setDeleteDialogOpen={setDeleteDialogOpen}
+      deleteTitle="Delete Order"
+      deleteDescription="This will permanently delete the order, its products, and any linked payment records. This action cannot be undone."
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-8">
