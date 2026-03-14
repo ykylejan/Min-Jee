@@ -33,6 +33,7 @@ const RentalsPage: React.FC = () => {
 
   const { loading, error, data } = useQuery(GET_ALL_RENTALS, {
     client: apolloClient,
+    fetchPolicy: "network-only",
   });
 
   const {
