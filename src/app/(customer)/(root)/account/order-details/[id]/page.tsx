@@ -164,6 +164,11 @@ const Page = () => {
       (sum: number, item: any) => sum + Number(item.serviceTotal || 0),
       0
     ) || 0);
+  const deliveryPrice = Number(order?.deliveryPrice || 0);
+  const depositPrice = Number(order?.depositPrice || 0);
+  const grandTotal = subtotal + deliveryPrice + depositPrice;
+  const hasPendingFeeSetup =
+    orderStatus === "pending" && (deliveryPrice <= 0 || depositPrice <= 0);
 
   const getButtonText = () => {
     if (orderStatus === "") return "Place Order";
@@ -186,7 +191,7 @@ const Page = () => {
         <h1 className="text-xl sm:text-2xl font-intermedium py-2 sm:py-4">Order Details</h1>
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-x-8 items-start">
           <div className="space-y-6 sm:space-y-10 w-full xl:flex-1 xl:max-w-[750px]">
-            <div className="bg-white border border-[#545557] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+            <div className="bg-white border border-[#778768] w-full rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
               <div className="font-afacad mb-2">
                 <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">
                   <span>Basket List </span>
@@ -293,7 +298,7 @@ const Page = () => {
                             required
                           />
                           <p className="text-xs text-neutral-500 mt-1.5">
-                            Order total: <span className="font-semibold text-[#0066DF]">PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}</span>
+                            Order total: <span className="font-semibold text-[#0066DF]">PHP {grandTotal.toFixed(2)}</span>
                           </p>
                         </div>
                       </div>
@@ -315,7 +320,7 @@ const Page = () => {
                               className="w-36 h-36 object-contain mx-auto"
                             />
                             <div className="mt-3 bg-[#0066DF] text-white text-center py-2 px-4 rounded-lg text-sm font-afacad_semibold">
-                              PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}
+                              PHP {grandTotal.toFixed(2)}
                             </div>
                           </div>
                           
@@ -442,7 +447,7 @@ const Page = () => {
               </div>
             ) : (
               // INTEGRATE THIS PART, POPULATE THE DETAILS WITH THE ORDER DATA
-              <div className="bg-white border border-[#545557] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
+              <div className="bg-white border border-[#778768] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
                 <div className="font-afacad">
                   <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Order Details</h1>
                   <h1 className="text-[#6B7280] text-sm sm:text-base">
@@ -571,7 +576,7 @@ const Page = () => {
                                 <RadioGroupItem
                                   value="pickup"
                                   id="option-one"
-                                  className="border border-[#D2D6DA]"
+                                  className="border border-[#778768]"
                                   disabled
                                 />
                                 <Label htmlFor="option-one">Pick Up</Label>
@@ -580,7 +585,7 @@ const Page = () => {
                                 <RadioGroupItem
                                   value="shipped"
                                   id="option-two"
-                                  className="border border-[#D2D6DA]"
+                                  className="border border-[#778768]"
                                   disabled
                                 />
                                 <Label htmlFor="option-two">Shipped</Label>
@@ -611,7 +616,7 @@ const Page = () => {
 
           {/* ORDER STATUS CARD HERE */}
 
-          <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+          <div className="bg-white border border-[#778768] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
             <div className="flex justify-between items-center px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
               <h1 className="text-sm sm:text-base">Order Status</h1>
               {/* Show the order status from the order data */}
@@ -620,6 +625,11 @@ const Page = () => {
               )}
             </div>
             <hr />
+            {hasPendingFeeSetup && (
+              <div className="mx-4 my-4 rounded-md border border-[#E7D3A1] bg-[#FFF9ED] px-3 py-2 text-xs text-[#8A6A1F] sm:mx-8 md:mx-12 xl:mx-6">
+                Delivery and deposit fees are still being reviewed. The final total may change once the owner finishes pricing your order.
+              </div>
+            )}
             <div className="py-4 sm:py-6">
               <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
                 <h1>Subtotal</h1>
@@ -627,14 +637,26 @@ const Page = () => {
               </div>
               <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
                 <h1>Delivery Fee</h1>
-                <h1>PHP {order.deliveryPrice}</h1>
+                <h1>
+                  {orderStatus === "pending" && deliveryPrice <= 0
+                    ? "To be set"
+                    : `PHP ${deliveryPrice.toFixed(2)}`}
+                </h1>
+              </div>
+              <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
+                <h1>Deposit Fee</h1>
+                <h1>
+                  {orderStatus === "pending" && depositPrice <= 0
+                    ? "To be set"
+                    : `PHP ${depositPrice.toFixed(2)}`}
+                </h1>
               </div>
             </div>
             <hr />
             <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6 text-sm sm:text-base font-semibold">
-              <h1>TOTAL</h1>
+              <h1>{hasPendingFeeSetup ? "ESTIMATED TOTAL" : "TOTAL"}</h1>
               <h1>
-                PHP {(subtotal + Number(order?.deliveryPrice || 0)).toFixed(2)}
+                PHP {grandTotal.toFixed(2)}
               </h1>
             </div>
             <hr />
@@ -649,7 +671,7 @@ const Page = () => {
               <Button 
                 onClick={handleCancelOrder}
                 disabled={orderStatus === "cancelled" || orderStatus === "completed"}
-                className="bg-transparent text-[#0F172A] hover:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+                className="bg-transparent text-[#0F172A] hover:bg-gray-100 disabled:text-gray-400 disabled:border-gray-300 disabled:cursor-not-allowed rounded-full shadow-none border border-[#778768] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
               >
                 {orderStatus === "cancelled" ? "Order Cancelled" : "Cancel Order"}
               </Button>

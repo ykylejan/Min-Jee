@@ -13,7 +13,7 @@ interface OrderDetailsProps {
 
 const OrderDetails = ({ register, errors }: OrderDetailsProps) => {
   return (
-    <div className="bg-white border border-[#545557] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
+    <div className="bg-white border border-[#778768] w-full h-auto rounded-lg px-3 sm:px-6 md:px-8 lg:px-12 py-4 sm:pt-6 sm:pb-12">
       <div className="font-afacad">
         <h1 className="text-lg sm:text-xl md:text-2xl font-afacad_medium">Order Details</h1>
         <h1 className="text-[#6B7280] text-sm sm:text-base">

@@ -39,6 +39,10 @@ const OrderStatus = ({
     (sum, item) => sum + Number(item.price) * item.quantity,
     0
   );
+  const deliveryPrice = 0;
+  const depositPrice = 0;
+  const estimatedTotal = subtotal + deliveryPrice + depositPrice;
+  const isPending = orderStatus === "Pending";
 
   const handleButtonClick = async () => {
     // Only validate and submit if on initial state
@@ -91,7 +95,7 @@ const OrderStatus = ({
   };
 
   return (
-    <div className="bg-white border border-[#545557] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
+    <div className="bg-white border border-[#778768] w-full xl:w-[380px] xl:flex-shrink-0 h-fit rounded-lg font-afacad py-3 xl:sticky xl:top-[130px]">
       <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6">
         <h1 className="text-sm sm:text-base">Order Status</h1>
         {orderStatus && children}
@@ -99,22 +103,36 @@ const OrderStatus = ({
 
       <hr />
 
+      {isPending && (
+        <div className="mx-4 my-4 rounded-md border border-[#E7D3A1] bg-[#FFF9ED] px-3 py-2 text-xs text-[#8A6A1F] sm:mx-8 md:mx-12 xl:mx-6">
+          Delivery and deposit fees will be set after the owner reviews your order.
+        </div>
+      )}
+
       <div className="py-4 sm:py-6">
         <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
           <h1>Subtotal</h1>
           <h1>PHP {subtotal.toFixed(2)}</h1>
         </div>
-        <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
-          <h1>Delivery Fee</h1>
-          <h1>PHP 250.00</h1>
-        </div>
+        {isPending && (
+          <>
+            <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
+              <h1>Delivery Fee</h1>
+              <h1>To be set</h1>
+            </div>
+            <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 text-sm sm:text-base">
+              <h1>Deposit Fee</h1>
+              <h1>To be set</h1>
+            </div>
+          </>
+        )}
       </div>
 
       <hr />
 
       <div className="flex justify-between px-4 sm:px-8 md:px-12 xl:px-6 py-4 sm:py-6 text-sm sm:text-base font-semibold">
-        <h1>TOTAL</h1>
-        <h1>PHP {(subtotal + 250).toFixed(2)}</h1>
+        <h1>{isPending ? "ESTIMATED TOTAL" : "TOTAL"}</h1>
+        <h1>PHP {estimatedTotal.toFixed(2)}</h1>
       </div>
 
       <hr />
@@ -129,7 +147,7 @@ const OrderStatus = ({
         </Button>
         <Button 
           onClick={handleCancelCheckout}
-          className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#545557] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
+          className="bg-transparent text-[#0F172A] hover:bg-gray-100 rounded-full shadow-none border border-[#778768] text-sm sm:text-base h-10 sm:h-11 font-medium transition-colors duration-200"
         >
           Cancel
         </Button>

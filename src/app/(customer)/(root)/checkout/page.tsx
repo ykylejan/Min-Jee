@@ -89,7 +89,7 @@ const Page = () => {
         return_time, // formatted as "HH:mm:ss.SSS'Z'"
         overdue_days: 0,
         is_shipped: data.obtainmentMethod === "shipped",
-        delivery_price: 250,
+        delivery_price: 0,
         deposit_price: 0,
       };
 
